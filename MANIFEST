@@ -7,6 +7,7 @@ activity/activity.info
 icons/rotate_anticlockwise.svg
 icons/rotate_clockwise.svg
 po/ImageViewer.pot
+po/fr.po
 NEWS
 AUTHORS
 COPYING
