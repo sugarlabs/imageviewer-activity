@@ -33,25 +33,21 @@ class ImageViewerActivity(activity.Activity):
         activity.Activity.__init__(self, handle)
 
         self.zoom = None
-
-
-        self.window.__unfullscreen_button_pressed = None
-
+        
         self.view = ImageView.ImageViewer()
 
         toolbox = activity.ActivityToolbox(self)
-
         self._view_toolbar = ImageViewerToolbar.ViewToolbar(self.view)
         toolbox.add_toolbar(_('View'), self._view_toolbar)
         self._view_toolbar.show()
-
-
         self.set_toolbox(toolbox)
         toolbox.show()
 
         self._view_toolbar.connect('go-fullscreen',
                 self.__view_toolbar_go_fullscreen_cb)
 
+        self.connect('window-state-event', 
+                self.__window_state_event_cb)
 
         vadj = gtk.Adjustment()
         hadj = gtk.Adjustment()
@@ -80,6 +76,7 @@ class ImageViewerActivity(activity.Activity):
         #    logging.error('write_file(): %s', e)
 
     def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
+        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
         # Zoom to fit screen if possible
         screen = self.get_screen()
         zoom = self.view.calculate_optimal_zoom(screen.get_width(), screen.get_height())
@@ -87,6 +84,7 @@ class ImageViewerActivity(activity.Activity):
         
         self.fullscreen()
 
-
-    
-
+    def __window_state_event_cb(self, window, event):
+        if event.changed_mask & gtk.gdk.WINDOW_STATE_FULLSCREEN:
+            if not self.window.get_state() & gtk.gdk.WINDOW_STATE_FULLSCREEN:
+                self.view.set_zoom(self._old_zoom)
