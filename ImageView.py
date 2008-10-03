@@ -105,7 +105,7 @@ class ImageViewer(gtk.DrawingArea):
 
         self._optimal_zoom_flag = True
 
-        return zoom - 0.02 #XXX: Hack
+        return zoom - 0.018 #XXX: Hack
 
     #def do_size_request(self, requisition):
     #    requisition.width = self.pixbuf.get_width()
