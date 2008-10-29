@@ -6,6 +6,8 @@ activity/activity-imageviewer.svg
 activity/activity.info
 icons/rotate_anticlockwise.svg
 icons/rotate_clockwise.svg
+locale/fr/activity.linfo
+locale/fr/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
 po/ImageViewer.pot
 po/fr.po
 NEWS
