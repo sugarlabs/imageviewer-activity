@@ -21,8 +21,9 @@ import logging
 
 from gettext import gettext as _
 
+import time
 import sys, os
-import gtk
+import gtk, gobject
 
 import ImageView
 import ImageViewerToolbar
@@ -33,7 +34,9 @@ class ImageViewerActivity(activity.Activity):
         activity.Activity.__init__(self, handle)
 
         self.zoom = None
-        
+        self._tempfile = None
+        self._close_requested = False
+
         self.view = ImageView.ImageViewer()
 
         toolbox = activity.ActivityToolbox(self)
@@ -60,20 +63,44 @@ class ImageViewerActivity(activity.Activity):
         self.sw.show_all()
 
 
+ 
     def read_file(self, file_path):
-        self.view.set_file_location(file_path)
+        tempfile = os.path.join(self.get_activity_root(), 'instance', \
+            'tmp%i' % time.time())
+       
+        os.link(file_path, tempfile)
+        self._tempfile = tempfile
+        
+        self.view.set_file_location(self._tempfile)
 
-        #self.zoom = int(self.metadata.get('zoom', '0'))
-        #if self.zoom == 0:
-        #    self.zoom = self.view.get_property('zoom')
-        #else:
-        #    self.view.set_zoom(self.zoom)
+        self.zoom = int(self.metadata.get('zoom', '0'))
+        if self.zoom > 0:
+            self.view.set_zoom(self.zoom)
 
-    #def write_file(self, file_path):
-        #try:
-        #    self.metadata['zoom'] = str(self.zoom)
-        #except Exception, e:
-        #    logging.error('write_file(): %s', e)
+    def write_file(self, file_path):
+        if self._tempfile is None:
+            # Stolen from Read to avoid Keep error
+            raise NotImplementedError
+
+        try:
+            self.metadata['zoom'] = str(self.zoom)
+        except Exception, e:
+            logging.error('write_file(): %s', e)
+
+        os.link(self._tempfile, file_path)
+
+        if self._close_requested:
+            os.unlink(self._tempfile)
+            self._tempfile = None
+
+    def can_close(self):
+        """
+        Prepare to cleanup on closing.                    
+        Called from self.close()
+        """
+        self._close_requested = True
+        return True
+
 
     def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
         self._old_zoom = self.view.get_property('zoom') #XXX: Hack
