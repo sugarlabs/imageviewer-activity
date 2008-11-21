@@ -10,6 +10,7 @@ locale/fr/activity.linfo
 locale/fr/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
 po/ImageViewer.pot
 po/fr.po
+po/bn_IN.po
 NEWS
 AUTHORS
 COPYING
