@@ -25,6 +25,8 @@ import time
 import sys, os
 import gtk, gobject
 
+from sugar.graphics.objectchooser import ObjectChooser
+
 import ImageView
 import ImageViewerToolbar
 
@@ -36,6 +38,7 @@ class ImageViewerActivity(activity.Activity):
         self.zoom = None
         self._tempfile = None
         self._close_requested = False
+        self._want_document = True
 
         self.view = ImageView.ImageViewer()
 
@@ -62,9 +65,31 @@ class ImageViewerActivity(activity.Activity):
         self.set_canvas(self.sw)
         self.sw.show_all()
 
+        self._show_object_picker = gobject.timeout_add(1000, \
+            self._show_picker_cb)
 
- 
+
+    def _show_picker_cb(self):
+        if not self._want_document:
+            return
+
+        chooser = ObjectChooser(_('Choose document'), self,
+            gtk.DIALOG_MODAL |
+            gtk.DIALOG_DESTROY_WITH_PARENT)
+
+        try:
+            result = chooser.run()
+            if result == gtk.RESPONSE_ACCEPT:
+                jobject = chooser.get_selected_object()
+                if jobject and jobject.file_path:
+                    self.read_file(jobject.file_path)
+        finally:
+            chooser.destroy()
+            del chooser
+
     def read_file(self, file_path):
+        self._want_document = False
+
         tempfile = os.path.join(self.get_activity_root(), 'instance', \
             'tmp%i' % time.time())
        
