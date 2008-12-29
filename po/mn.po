@@ -2,52 +2,51 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-12-29 00:22-0500\n"
+"Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "Зураг Үзэх"
 
 #: ImageViewerActivity.py:45
 msgid "View"
-msgstr ""
+msgstr "Харагдац"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
-msgstr ""
+msgstr "Холдуулах"
 
 #: ImageViewerToolbar.py:53
 msgid "Zoom in"
-msgstr ""
+msgstr "Ойртуулах"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr ""
+msgstr "Дэлгэцийн хэмжээ"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
-msgstr ""
+msgstr "Угийн хэмжээ"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "Цагийн эсрэг эргүүлэх"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Цагийн зүг рүү эргүүлэх"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
-msgstr ""
+msgstr "Бүтэн дэлгэц"
