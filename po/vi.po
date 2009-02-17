@@ -2,52 +2,51 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2009-02-13 07:25-0500\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "Bộ Xem Ảnh"
 
 #: ImageViewerActivity.py:45
 msgid "View"
-msgstr ""
+msgstr "Xem"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
-msgstr ""
+msgstr "Thu nhỏ"
 
 #: ImageViewerToolbar.py:53
 msgid "Zoom in"
-msgstr ""
+msgstr "Phóng to"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr ""
+msgstr "Vừa khít cửa sổ"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
-msgstr ""
+msgstr "Kích cỡ gốc"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "Xoay theo ngược chiều"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Xoay theo xuôi chiều"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
-msgstr ""
+msgstr "Toàn màn hình"
