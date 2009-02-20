@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2009-02-15 09:28-0500\n"
+"PO-Revision-Date: 2009-02-20 14:46-0500\n"
 "Last-Translator: Eduardo H. Silva <HoboPrimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "Visualizador de imagens"
+msgstr "Ver imagens"
 
 #: ImageViewerActivity.py:45
 msgid "View"
@@ -25,15 +25,15 @@ msgstr "Ver"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
-msgstr "Afastar Zoom"
+msgstr "Afastar zoom"
 
 #: ImageViewerToolbar.py:53
 msgid "Zoom in"
-msgstr "Aproximar Zoom"
+msgstr "Aproximar zoom"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr "Zoom até à janela"
+msgstr "Zoom até caber na janela"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
