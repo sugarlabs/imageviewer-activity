@@ -214,3 +214,15 @@ locale/bg/activity.linfo
 locale/bg/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
 locale/bi/activity.linfo
 locale/bi/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
+po/cpp.po
+po/ms.po
+po/mi.po
+po/ug.po
+locale/mi/activity.linfo
+locale/mi/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
+locale/cpp/activity.linfo
+locale/cpp/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
+locale/ms/activity.linfo
+locale/ms/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
+locale/ug/activity.linfo
+locale/ug/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
