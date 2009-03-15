@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2009-02-28 11:56-0500\n"
+"PO-Revision-Date: 2009-03-15 13:43-0400\n"
 "Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Vergrößern"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr "An Fester anpassen"
+msgstr "An Fenstergröße anpassen"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
@@ -41,7 +41,7 @@ msgstr "Originalgröße"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr "Im Gegenuhrzeigersinn drehen"
+msgstr "Gegen den Uhrzeigersinn drehen"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
