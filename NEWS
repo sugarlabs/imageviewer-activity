@@ -1,3 +1,8 @@
+7
+
+* Fix initial zoom level being extremely small: d.sl.o #486 (Tomeu)
+* New German translation
+
 6
 
 * Remove hacks needed because of d.sl.o #258 (Tomeu)
