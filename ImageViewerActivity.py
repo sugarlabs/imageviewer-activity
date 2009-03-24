@@ -93,12 +93,16 @@ class ImageViewerActivity(activity.Activity):
             'tmp%i' % time.time())
        
         os.link(file_path, tempfile)
-        
-        self.view.set_file_location(tempfile)
+        gobject.idle_add(self.__set_file_idle_cb, tempfile)
+
+    def __set_file_idle_cb(self, file_path):
+        self.view.set_file_location(file_path)
 
         self.zoom = int(self.metadata.get('zoom', '0'))
         if self.zoom > 0:
             self.view.set_zoom(self.zoom)
+
+        return True
 
     def write_file(self, file_path):
         self.metadata['zoom'] = str(self.zoom)
