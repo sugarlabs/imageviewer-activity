@@ -28,6 +28,7 @@ import gtk, gobject
 
 from sugar.graphics.alert import NotifyAlert
 from sugar.graphics.objectchooser import ObjectChooser
+from sugar import mime
 
 from sugar import network
 from sugar.datastore import datastore
@@ -145,7 +146,8 @@ class ImageViewerActivity(activity.Activity):
 
         chooser = ObjectChooser(_('Choose document'), self,
             gtk.DIALOG_MODAL |
-            gtk.DIALOG_DESTROY_WITH_PARENT)
+            gtk.DIALOG_DESTROY_WITH_PARENT, \
+            what_filter=mime.GENERIC_TYPE_IMAGE)
 
         try:
             result = chooser.run()
