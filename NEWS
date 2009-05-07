@@ -1,3 +1,8 @@
+10
+
+* Add filter to ObjectChooser. Fixes d.sl.o #713 (Simon)
+* Add sharing support
+
 6
 
 * Remove hacks needed because of d.sl.o #258 (Tomeu)
