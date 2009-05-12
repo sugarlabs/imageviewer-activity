@@ -17,6 +17,8 @@
 
 # The sharing bits have been taken from ReadEtexts
 
+from __future__ import division
+
 from sugar.activity import activity
 import logging
 
@@ -37,6 +39,7 @@ import dbus
 
 import ImageView
 import ImageViewerToolbar
+import ProgressDialog
 
 _logger = logging.getLogger('imageviewer-activity')
 
@@ -91,6 +94,7 @@ class ImageViewerActivity(activity.Activity):
         self._object_id = handle.object_id
 
         self.view = ImageView.ImageViewer()
+        self.progressdialog = None
 
         toolbox = activity.ActivityToolbox(self)
         self._view_toolbar = ImageViewerToolbar.ViewToolbar(self.view)
@@ -217,6 +221,9 @@ class ImageViewerActivity(activity.Activity):
 
         _logger.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
+
+        self.progressdialog.destroy()
+
         gobject.idle_add(self.__set_file_idle_cb, tempfile)
         self.save()
 
@@ -229,7 +236,11 @@ class ImageViewerActivity(activity.Activity):
             _logger.debug("Downloaded %u bytes from tube %u...",
                           bytes_downloaded, tube_id)
         total = self._download_content_length
-        # gtk.main_iteration()
+
+        fraction = bytes_downloaded/total
+        self.progressdialog.set_fraction(fraction)
+        
+        #gtk.main_iteration()
 
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
@@ -267,6 +278,7 @@ class ImageViewerActivity(activity.Activity):
         getter.start(path)
         self._download_content_length = getter.get_content_length()
         self._download_content_type = getter.get_content_type()
+
         return False
 
     def _get_document(self):
@@ -299,6 +311,10 @@ class ImageViewerActivity(activity.Activity):
         Get the shared document from another participant.
         """
         self.watch_for_tubes()
+        
+        self.progressdialog = ProgressDialog.ProgressDialog(self)
+        self.progressdialog.show_all()
+
         gobject.idle_add(self._get_document)
 
     def _share_document(self):
