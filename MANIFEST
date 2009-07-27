@@ -226,3 +226,4 @@ locale/ms/activity.linfo
 locale/ms/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
 locale/ug/activity.linfo
 locale/ug/LC_MESSAGES/org.laptop.ImageViewerActivity.mo
+ProgressDialog.py
