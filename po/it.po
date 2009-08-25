@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-29 17:35-0400\n"
-"PO-Revision-Date: 2009-04-30 09:16-0400\n"
+"POT-Creation-Date: 2009-07-28 00:30-0400\n"
+"PO-Revision-Date: 2009-08-25 13:09-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "Visualizzatore di Immagini"
 
-#: ImageViewerActivity.py:46
+#: ImageViewerActivity.py:101
 msgid "View"
 msgstr "Vista"
 
-#: ImageViewerActivity.py:75
+#: ImageViewerActivity.py:151
 msgid "Choose document"
 msgstr "Scegli documento"
 
@@ -56,3 +56,11 @@ msgstr "Rotazione oraria"
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
 msgstr "Schermo intero"
+
+#: ProgressDialog.py:6
+msgid "Downloading..."
+msgstr "Scaricando..."
+
+#: ProgressDialog.py:15
+msgid "Retrieving shared image, please wait..."
+msgstr "Recupero di una immagine condivisa in corso, si prega di attendere... "
