@@ -1,3 +1,11 @@
+11
+* Switch to new toolbar system
+* Show transfer progress
+* Updated translations for Arabic, Dutch, French, Italian, Japanese
+* New languages
+* Do not keep on (re)loading the file continuously
+* Misc. cleanups
+
 10
 
 * Add filter to ObjectChooser. Fixes d.sl.o #713 (Simon)
