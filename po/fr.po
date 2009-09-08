@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-29 17:35-0400\n"
-"PO-Revision-Date: 2009-05-01 14:28-0400\n"
+"PO-Revision-Date: 2009-09-08 08:08-0400\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -47,11 +47,11 @@ msgstr "Taille originale"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr "Rotation dans le sens horaire"
+msgstr "Rotation dans le sens anti-horaire"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr "Rotation dans le sens anti-horaire"
+msgstr "Rotation dans le sens horaire"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
