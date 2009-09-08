@@ -284,7 +284,7 @@ class ImageViewerActivity(activity.Activity):
         except:
             pass
 
-        return True
+        return False
 
     def write_file(self, file_path):
         self.metadata['zoom'] = str(self.zoom)
