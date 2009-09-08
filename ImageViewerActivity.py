@@ -31,6 +31,12 @@ import gtk, gobject
 from sugar.graphics.alert import NotifyAlert
 from sugar.graphics.objectchooser import ObjectChooser
 from sugar import mime
+from sugar.graphics.toolbutton import ToolButton
+from sugar.graphics.toolbarbox import ToolbarBox
+from sugar.graphics.toolbarbox import ToolbarButton
+from sugar.activity.widgets import ActivityToolbarButton
+from sugar.activity.widgets import StopButton
+from sugar.activity import activity
 
 from sugar import network
 from sugar.datastore import datastore
@@ -38,7 +44,6 @@ import telepathy
 import dbus
 
 import ImageView
-import ImageViewerToolbar
 import ProgressDialog
 
 _logger = logging.getLogger('imageviewer-activity')
@@ -96,15 +101,10 @@ class ImageViewerActivity(activity.Activity):
         self.view = ImageView.ImageViewer()
         self.progressdialog = None
 
-        toolbox = activity.ActivityToolbox(self)
-        self._view_toolbar = ImageViewerToolbar.ViewToolbar(self.view)
-        toolbox.add_toolbar(_('View'), self._view_toolbar)
-        self._view_toolbar.show()
-        self.set_toolbox(toolbox)
-        toolbox.show()
-
-        self._view_toolbar.connect('go-fullscreen',
-                self.__view_toolbar_go_fullscreen_cb)
+        toolbar_box = ToolbarBox()
+        self._add_toolbar_buttons(toolbar_box)
+        self.set_toolbar_box(toolbar_box)
+        toolbar_box.show()
 
         self.connect('window-state-event', 
                 self.__window_state_event_cb)
@@ -114,8 +114,7 @@ class ImageViewerActivity(activity.Activity):
         self.sw = gtk.ScrolledWindow(hadj, vadj)
 
         self.sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.sw.add_with_viewport(self.view)
-
+        self.sw.add(self.view)
         self.set_canvas(self.sw)
         self.sw.show_all()
 
@@ -143,6 +142,108 @@ class ImageViewerActivity(activity.Activity):
         elif self._object_id is None:
             self._show_object_picker = gobject.timeout_add(1000, \
                 self._show_picker_cb)
+
+    def _add_toolbar_buttons(self, toolbar_box):
+        activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(activity_button, 0)
+        activity_button.show()
+
+        self._zoom_out_button = ToolButton('zoom-out')
+        self._zoom_out_button.set_tooltip(_('Zoom out'))
+        self._zoom_out_button.connect('clicked', self.__zoom_out_cb)
+        toolbar_box.toolbar.insert(self._zoom_out_button, -1)
+        self._zoom_out_button.show()
+
+        self._zoom_in_button = ToolButton('zoom-in')
+        self._zoom_in_button.set_tooltip(_('Zoom in'))
+        self._zoom_in_button.connect('clicked', self.__zoom_in_cb)
+        toolbar_box.toolbar.insert(self._zoom_in_button, -1)
+        self._zoom_in_button.show()
+
+        zoom_tofit_button = ToolButton('zoom-best-fit')
+        zoom_tofit_button.set_tooltip(_('Fit to window'))
+        zoom_tofit_button.connect('clicked', self.__zoom_tofit_cb)
+        toolbar_box.toolbar.insert(zoom_tofit_button, -1)
+        zoom_tofit_button.show()
+        
+        zoom_original_button = ToolButton('zoom-original')
+        zoom_original_button.set_tooltip(_('Original size'))
+        zoom_original_button.connect('clicked', self.__zoom_original_cb)
+        toolbar_box.toolbar.insert(zoom_original_button, -1)
+        zoom_original_button.show()
+
+        spacer = gtk.SeparatorToolItem()
+        spacer.props.draw = False
+        toolbar_box.toolbar.insert(spacer, -1)
+        spacer.show()
+
+        rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
+        rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
+        rotate_anticlockwise_button.connect('clicked', self.__rotate_anticlockwise_cb)
+        toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
+        rotate_anticlockwise_button.show()
+
+        rotate_clockwise_button = ToolButton('rotate_clockwise')
+        rotate_clockwise_button.set_tooltip(_('Rotate clockwise'))
+        rotate_clockwise_button.connect('clicked', self.__rotate_clockwise_cb)
+        toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
+        rotate_clockwise_button.show()
+
+        spacer = gtk.SeparatorToolItem()
+        spacer.props.draw = False
+        toolbar_box.toolbar.insert(spacer, -1)
+        spacer.show()
+        
+        fullscreen_button = ToolButton('view-fullscreen')
+        fullscreen_button.set_tooltip(_('Fullscreen'))
+        fullscreen_button.connect('clicked', self.__fullscreen_cb)
+        toolbar_box.toolbar.insert(fullscreen_button, -1)
+        fullscreen_button.show()
+
+        separator = gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
+
+        stop_button = StopButton(self)
+        toolbar_box.toolbar.insert(stop_button, -1)
+        stop_button.show()
+
+    def __zoom_in_cb(self, button):
+        self._zoom_in_button.set_sensitive(self.view.zoom_in())
+        self._zoom_out_button.set_sensitive(True)
+
+    def __zoom_out_cb(self, button):
+        self._zoom_out_button.set_sensitive(self.view.zoom_out())
+        self._zoom_in_button.set_sensitive(True)
+
+    def __zoom_tofit_cb(self, button):
+        zoom = self.view.calculate_optimal_zoom()
+        self.view.set_zoom(zoom)
+        
+    def __zoom_original_cb(self, button):
+        self.view.set_zoom(1)
+
+    def __rotate_anticlockwise_cb(self, button):
+        angle = self.view.get_property('angle')
+        self.view.set_angle(angle + 90)
+        
+    def __rotate_clockwise_cb(self, button):
+        angle = self.view.get_property('angle')
+        if angle == 0:
+            angle = 360
+
+        self.view.set_angle(angle - 90)        
+    
+    def __fullscreen_cb(self, button):
+        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
+        # Zoom to fit screen if possible
+        screen = self.get_screen()
+        zoom = self.view.calculate_optimal_zoom(screen.get_width(), screen.get_height())
+        self.view.set_zoom(zoom)
+        
+        self.fullscreen()
 
     def _show_picker_cb(self):
         if not self._want_document:
@@ -187,15 +288,6 @@ class ImageViewerActivity(activity.Activity):
 
     def write_file(self, file_path):
         self.metadata['zoom'] = str(self.zoom)
-
-    def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
-        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
-        # Zoom to fit screen if possible
-        screen = self.get_screen()
-        zoom = self.view.calculate_optimal_zoom(screen.get_width(), screen.get_height())
-        self.view.set_zoom(zoom)
-        
-        self.fullscreen()
 
     def __window_state_event_cb(self, window, event):
         if event.changed_mask & gtk.gdk.WINDOW_STATE_FULLSCREEN:
