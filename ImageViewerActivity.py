@@ -87,7 +87,6 @@ class ImageViewerActivity(activity.Activity):
         activity.Activity.__init__(self, handle)
 
         self.zoom = None
-        self._close_requested = False
         self._object_id = handle.object_id
 
         self.view = ImageView.ImageViewer()
@@ -182,7 +181,19 @@ class ImageViewerActivity(activity.Activity):
         return False
 
     def write_file(self, file_path):
-        self.metadata['zoom'] = str(self.zoom)
+        if self._tempfile:
+            self.metadata['activity'] = self.get_bundle_id()
+            self.metadata['zoom'] = str(self.zoom)
+            if self._close_requested:
+                os.link(self._tempfile, file_path)
+                os.unlink(self._tempfile)
+                self._tempfile = None
+        else:
+            raise NotImplementedError
+
+    def can_close(self):
+        self._close_requested = True
+        return True
 
     def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
         self._old_zoom = self.view.get_property('zoom') #XXX: Hack
