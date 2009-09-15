@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-29 17:35-0400\n"
-"PO-Revision-Date: 2009-07-02 10:36-0400\n"
+"POT-Creation-Date: 2009-07-28 00:30-0400\n"
+"PO-Revision-Date: 2009-09-13 11:25-0400\n"
 "Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ja\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "画像ビューワ"
 
-#: ImageViewerActivity.py:46
+#: ImageViewerActivity.py:101
 msgid "View"
 msgstr "ビュー"
 
-#: ImageViewerActivity.py:75
+#: ImageViewerActivity.py:151
 msgid "Choose document"
 msgstr "文書を選ぶ"
 
@@ -56,3 +56,11 @@ msgstr "時計まわりに回転"
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
 msgstr "全画面"
+
+#: ProgressDialog.py:6
+msgid "Downloading..."
+msgstr "ダウンロードしています..."
+
+#: ProgressDialog.py:15
+msgid "Retrieving shared image, please wait..."
+msgstr "共有イメージを検索しています、しばらくお待ちください..."
