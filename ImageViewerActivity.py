@@ -110,7 +110,6 @@ class ImageViewerActivity(activity.Activity):
 
         self.sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.sw.add_with_viewport(self.view)
-
         self.set_canvas(self.sw)
         self.sw.show_all()
 
