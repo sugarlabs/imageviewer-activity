@@ -1,4 +1,11 @@
+12
+
+* Implement write_file() properly. Fixes dslo#1264
+* Use add_with_viewport() instead of add() (fixes scrollbar issues)
+* Update French and Japanese translations
+
 11
+
 * Switch to new toolbar system
 * Show transfer progress
 * Updated translations for Arabic, Dutch, French, Italian, Japanese
