@@ -1,3 +1,7 @@
+13
+
+* Updated translations for German, Portuguese and Mongolian
+
 12
 
 * Implement write_file() properly. Fixes dslo#1264
