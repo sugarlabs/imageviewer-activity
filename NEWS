@@ -1,3 +1,7 @@
+8
+
+* Backport fixes from master
+
 7
 
 * Fix initial zoom level being extremely small: d.sl.o #486 (Tomeu)
