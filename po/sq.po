@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-29 17:35-0400\n"
+"PO-Revision-Date: 2009-06-17 09:49-0400\n"
+"Last-Translator: Heroid Shehu <heroid@ayih.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: sq\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.2.1\n"
+
+#: activity/activity.info:2
+msgid "Image Viewer"
+msgstr "Shfaqësi i Fotografive"
+
+#: ImageViewerActivity.py:46
+msgid "View"
+msgstr "Shfaq"
+
+#: ImageViewerActivity.py:75
+msgid "Choose document"
+msgstr "Zgjidh Dokumentin"
+
+#: ImageViewerToolbar.py:47
+msgid "Zoom out"
+msgstr "Largohu"
+
+#: ImageViewerToolbar.py:53
+msgid "Zoom in"
+msgstr "Afrohu"
+
+#: ImageViewerToolbar.py:59
+msgid "Fit to window"
+msgstr "Përshtate me dritaren"
+
+#: ImageViewerToolbar.py:65
+msgid "Original size"
+msgstr "Madhësija origjinale"
+
+#: ImageViewerToolbar.py:76
+msgid "Rotate anticlockwise"
+msgstr "Rrotullo kundër orës"
+
+#: ImageViewerToolbar.py:82
+msgid "Rotate clockwise"
+msgstr "Rrotullo me orën"
+
+#: ImageViewerToolbar.py:93
+msgid "Fullscreen"
+msgstr "Ekran i plotë"
