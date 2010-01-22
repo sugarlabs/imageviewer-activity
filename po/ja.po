@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-28 00:30-0400\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
 "PO-Revision-Date: 2009-09-13 11:25-0400\n"
 "Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,41 +21,37 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "画像ビューワ"
 
-#: ImageViewerActivity.py:101
-msgid "View"
-msgstr "ビュー"
-
-#: ImageViewerActivity.py:151
-msgid "Choose document"
-msgstr "文書を選ぶ"
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
 msgstr "縮小"
 
-#: ImageViewerToolbar.py:53
+#: ImageViewerActivity.py:158
 msgid "Zoom in"
 msgstr "拡大"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
 msgstr "ウィンドウにあわせる"
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
 msgstr "元のサイズ"
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
 msgstr "反時計まわりに回転"
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
 msgstr "時計まわりに回転"
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
 msgstr "全画面"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "文書を選ぶ"
 
 #: ProgressDialog.py:6
 msgid "Downloading..."
@@ -64,3 +60,6 @@ msgstr "ダウンロードしています..."
 #: ProgressDialog.py:15
 msgid "Retrieving shared image, please wait..."
 msgstr "共有イメージを検索しています、しばらくお待ちください..."
+
+#~ msgid "View"
+#~ msgstr "ビュー"
