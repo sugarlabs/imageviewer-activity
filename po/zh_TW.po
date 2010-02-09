@@ -6,47 +6,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2008-12-19 10:02-0500\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
+"PO-Revision-Date: 2009-10-11 19:59-0400\n"
 "Last-Translator: Yuan Chao <yuanchao@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 1.2.1\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "瀏覽圖片"
 
-#: ImageViewerActivity.py:45
-msgid "View"
-msgstr "檢視"
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
 msgstr "縮小"
 
-#: ImageViewerToolbar.py:53
+#: ImageViewerActivity.py:158
 msgid "Zoom in"
 msgstr "放大"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
 msgstr "最適合大小"
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
 msgstr "原始大小"
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
 msgstr "反時針旋轉"
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
 msgstr "順時針旋轉"
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
 msgstr "全螢幕觀看"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "選擇文件"
+
+#: ProgressDialog.py:6
+msgid "Downloading..."
+msgstr "下載中…"
+
+#: ProgressDialog.py:15
+msgid "Retrieving shared image, please wait..."
+msgstr "正在取得分享的圖片，請稍待…"
+
+#~ msgid "View"
+#~ msgstr "檢視"
