@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-28 00:30-0400\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
 "PO-Revision-Date: 2009-08-28 03:42-0400\n"
 "Last-Translator: Emilianuspillai Amirthanathan Gnanaseelan "
 "<gnanaseelan2001@yahoo.com>\n"
@@ -22,41 +22,37 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "படம் பார்வை"
 
-#: ImageViewerActivity.py:101
-msgid "View"
-msgstr "பார்வை இடு"
-
-#: ImageViewerActivity.py:151
-msgid "Choose document"
-msgstr "ஆவணத்தைத் தெரிவுசெய்"
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
 msgstr "சிறிதாக்கிக் காட்டு"
 
-#: ImageViewerToolbar.py:53
+#: ImageViewerActivity.py:158
 msgid "Zoom in"
 msgstr "பெரிதாக்கிக் காட்டு"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
 msgstr "சரியான சாளரத்திற்கு மாற்றுக"
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
 msgstr "உண்மை அளவு"
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
 msgstr "மணிக்கூட்டு எதிர் திசையில் நிலைமாற்று "
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
 msgstr "மணிக்கூட்டு திசையில் நிலைமாற்று"
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
 msgstr "முழுத்திரை"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "ஆவணத்தைத் தெரிவுசெய்"
 
 #: ProgressDialog.py:6
 msgid "Downloading..."
@@ -67,3 +63,6 @@ msgid "Retrieving shared image, please wait..."
 msgstr ""
 " பங்கிடப்பட்ட படம் மீளப்பெறப்பட்டுக்கொண்டிருக்கிறது, தயவு செய்து "
 "காத்திருக்கவும்...."
+
+#~ msgid "View"
+#~ msgstr "பார்வை இடு"
