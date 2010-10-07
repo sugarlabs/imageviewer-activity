@@ -63,4 +63,4 @@ msgstr "Татаж байнаа"
 
 #: ProgressDialog.py:15
 msgid "Retrieving shared image, please wait..."
-msgstr ""
+msgstr "Хуваалцсан зургаа сэргээж байна, хүлээнэ үү..."
