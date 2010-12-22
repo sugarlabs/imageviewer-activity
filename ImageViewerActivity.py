@@ -25,18 +25,17 @@ import logging
 from gettext import gettext as _
 
 import time
-import sys, os
-import gtk, gobject
+import os
+import gtk
+import gobject
 
 from sugar.graphics.alert import NotifyAlert
 from sugar.graphics.objectchooser import ObjectChooser
 from sugar import mime
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.graphics.toolbarbox import ToolbarButton
 from sugar.activity.widgets import ActivityToolbarButton
 from sugar.activity.widgets import StopButton
-from sugar.activity import activity
 
 from sugar import network
 from sugar.datastore import datastore
@@ -48,6 +47,7 @@ import ProgressDialog
 
 _logger = logging.getLogger('imageviewer-activity')
 
+
 class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
     """HTTP Request Handler for transferring document while collaborating.
 
@@ -56,6 +56,7 @@ class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
     mainloop between chunks.
 
     """
+
     def translate_path(self, path):
         """Return the filepath to the shared document."""
         return self.server.filepath
@@ -63,6 +64,7 @@ class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
 
 class ImageViewerHTTPServer(network.GlibTCPServer):
     """HTTP Server for transferring document while collaborating."""
+
     def __init__(self, server_address, filepath):
         """Set up the GlibTCPServer with the ImageViewerHTTPRequestHandler.
 
@@ -91,11 +93,18 @@ IMAGEVIEWER_STREAM_SERVICE = 'imageviewer-activity-http'
 
 
 class ImageViewerActivity(activity.Activity):
+
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
         self.zoom = None
         self._object_id = handle.object_id
+
+        self._zoom_out_button = None
+        self._zoom_in_button = None
+        self._old_zoom = None
+        self._fileserver = None
+        self._fileserver_tube_id = None
 
         self.view = ImageView.ImageViewer()
         self.progressdialog = None
@@ -105,8 +114,7 @@ class ImageViewerActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        self.connect('window-state-event', 
-                self.__window_state_event_cb)
+        self.connect('window-state-event', self.__window_state_event_cb)
 
         vadj = gtk.Adjustment()
         hadj = gtk.Adjustment()
@@ -129,7 +137,7 @@ class ImageViewerActivity(activity.Activity):
         self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
-        
+
         if self._shared_activity and handle.object_id == None:
             # We're joining, and we don't already have the document.
             if self.get_shared():
@@ -141,6 +149,9 @@ class ImageViewerActivity(activity.Activity):
         elif self._object_id is None:
             self._show_object_picker = gobject.timeout_add(1000, \
                 self._show_picker_cb)
+
+    def handle_view_source(self):
+        pass
 
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)
@@ -164,7 +175,7 @@ class ImageViewerActivity(activity.Activity):
         zoom_tofit_button.connect('clicked', self.__zoom_tofit_cb)
         toolbar_box.toolbar.insert(zoom_tofit_button, -1)
         zoom_tofit_button.show()
-        
+
         zoom_original_button = ToolButton('zoom-original')
         zoom_original_button.set_tooltip(_('Original size'))
         zoom_original_button.connect('clicked', self.__zoom_original_cb)
@@ -178,7 +189,8 @@ class ImageViewerActivity(activity.Activity):
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
-        rotate_anticlockwise_button.connect('clicked', self.__rotate_anticlockwise_cb)
+        rotate_anticlockwise_button.connect('clicked',
+                self.__rotate_anticlockwise_cb)
         toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
         rotate_anticlockwise_button.show()
 
@@ -192,7 +204,7 @@ class ImageViewerActivity(activity.Activity):
         spacer.props.draw = False
         toolbar_box.toolbar.insert(spacer, -1)
         spacer.show()
-        
+
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
         fullscreen_button.connect('clicked', self.__fullscreen_cb)
@@ -220,28 +232,29 @@ class ImageViewerActivity(activity.Activity):
     def __zoom_tofit_cb(self, button):
         zoom = self.view.calculate_optimal_zoom()
         self.view.set_zoom(zoom)
-        
+
     def __zoom_original_cb(self, button):
         self.view.set_zoom(1)
 
     def __rotate_anticlockwise_cb(self, button):
         angle = self.view.get_property('angle')
         self.view.set_angle(angle + 90)
-        
+
     def __rotate_clockwise_cb(self, button):
         angle = self.view.get_property('angle')
         if angle == 0:
             angle = 360
 
-        self.view.set_angle(angle - 90)        
-    
+        self.view.set_angle(angle - 90)
+
     def __fullscreen_cb(self, button):
         self._old_zoom = self.view.get_property('zoom') #XXX: Hack
         # Zoom to fit screen if possible
         screen = self.get_screen()
-        zoom = self.view.calculate_optimal_zoom(screen.get_width(), screen.get_height())
+        zoom = self.view.calculate_optimal_zoom(
+                screen.get_width(), screen.get_height())
         self.view.set_zoom(zoom)
-        
+
         self.fullscreen()
 
     def _show_picker_cb(self):
@@ -268,19 +281,19 @@ class ImageViewerActivity(activity.Activity):
 
         tempfile = os.path.join(self.get_activity_root(), 'instance', \
             'tmp%i' % time.time())
-       
+
         os.link(file_path, tempfile)
         self._tempfile = tempfile
         gobject.idle_add(self.__set_file_idle_cb, tempfile)
 
     def __set_file_idle_cb(self, file_path):
         self.view.set_file_location(file_path)
-        
+
         try:
             self.zoom = int(self.metadata.get('zoom', '0'))
             if self.zoom > 0:
                 self.view.set_zoom(self.zoom)
-        except:
+        except Exception:
             pass
 
         return False
@@ -333,16 +346,16 @@ class ImageViewerActivity(activity.Activity):
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
         if self._download_content_length > 0:
             _logger.debug("Downloaded %u of %u bytes from tube %u...",
-                          bytes_downloaded, self._download_content_length, 
+                          bytes_downloaded, self._download_content_length,
                           tube_id)
         else:
             _logger.debug("Downloaded %u bytes from tube %u...",
                           bytes_downloaded, tube_id)
         total = self._download_content_length
 
-        fraction = bytes_downloaded/total
+        fraction = bytes_downloaded / total
         self.progressdialog.set_fraction(fraction)
-        
+
         #gtk.main_iteration()
 
     def _download_error_cb(self, getter, err, tube_id):
@@ -414,7 +427,7 @@ class ImageViewerActivity(activity.Activity):
         Get the shared document from another participant.
         """
         self.watch_for_tubes()
-        
+
         self.progressdialog = ProgressDialog.ProgressDialog(self)
         self.progressdialog.show_all()
 
@@ -432,7 +445,8 @@ class ImageViewerActivity(activity.Activity):
         # Make a tube for it
         chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
-        self._fileserver_tube_id = iface.OfferStreamTube(IMAGEVIEWER_STREAM_SERVICE,
+        self._fileserver_tube_id = \
+                iface.OfferStreamTube(IMAGEVIEWER_STREAM_SERVICE,
                 {},
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 ('127.0.0.1', dbus.UInt16(self.port)),
@@ -469,7 +483,7 @@ class ImageViewerActivity(activity.Activity):
     def _list_tubes_error_cb(self, e):
         """Handle ListTubes error by logging."""
         _logger.error('ListTubes() failed: %s', e)
- 
+
     def _shared_cb(self, activityid):
         """Callback when activity shared.
 
@@ -492,4 +506,3 @@ class ImageViewerActivity(activity.Activity):
 
     def _alert_cancel_cb(self, alert, response_id):
         self.remove_alert(alert)
-

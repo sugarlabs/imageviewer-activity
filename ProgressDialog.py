@@ -1,7 +1,9 @@
 import gtk
 from gettext import gettext as _
 
+
 class ProgressDialog(gtk.Dialog):
+
     def __init__(self, parent):
         gtk.Dialog.__init__(self, _('Downloading...'), parent, \
                 gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, \
@@ -20,7 +22,6 @@ class ProgressDialog(gtk.Dialog):
             self._activity.close()
         else:
             pass
-            
+
     def set_fraction(self, fraction):
         self._pb.set_fraction(fraction)
-

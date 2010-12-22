@@ -1,10 +1,19 @@
 [Activity]
-name = Image Viewer
+sweet     = imageviewer
+name      = Image Viewer
+summary   = The Image Viewer activity is a simple and fast image viewer tool
+description = It has features one would expect of a standard image viewer,
+            like zoom, rotate, etc. 
+homepage  = http://wiki.sugarlabs.org/go/Activities/Image_Viewer
+license   = GPLv2+
+
+icon      = activity-imageviewer
+exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
+mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
+
+version   = 15
+stability = testing
+
+# support original activity.info fields
+activity_version = %(version)s
 bundle_id = org.laptop.ImageViewerActivity
-class = ImageViewerActivity.ImageViewerActivity
-icon = activity-imageviewer
-activity_version = 15
-host_version = 14
-show_launcher = no
-mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff
-license = GPLv2+

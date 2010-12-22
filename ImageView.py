@@ -19,7 +19,6 @@ from __future__ import division
 
 import gtk
 from gtk import gdk
-import cairo
 import gobject
 
 import sys
@@ -27,28 +26,28 @@ import logging
 
 import random
 
+
 class ImageViewer(gtk.DrawingArea):
     __gsignals__ = {
-        'expose-event':   'override',
-        'zoom-changed': (gobject.SIGNAL_RUN_FIRST,
-                          gobject.TYPE_NONE,
-                          ([])),
-        'angle-changed': (gobject.SIGNAL_RUN_FIRST,
-                          gobject.TYPE_NONE,
-                          ([]))
-    }
+        'expose-event': (
+            'override'),
+        'zoom-changed': (
+            gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        'angle-changed': (
+            gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        }
 
     __gproperties__ = {
-        'zoom':    (gobject.TYPE_FLOAT, 
-            'Zoom Factor', 'Factor of zoom', 
+        'zoom': (
+            gobject.TYPE_FLOAT, 'Zoom Factor', 'Factor of zoom',
             0, 4, 1, gobject.PARAM_READWRITE),
-        'angle':    (gobject.TYPE_INT,
-            'Angle',    'Angle of rotation',
+        'angle': (
+            gobject.TYPE_INT, 'Angle', 'Angle of rotation',
             0, 360, 0, gobject.PARAM_READWRITE),
-        'file_location':   (gobject.TYPE_STRING,
-            'File Location', 'Location of the image file',
-            '', gobject.PARAM_READWRITE)
-    }
+        'file_location': (
+            gobject.TYPE_STRING, 'File Location', 'Location of the image file',
+            '', gobject.PARAM_READWRITE),
+        }
 
     def __init__(self):
         gtk.DrawingArea.__init__(self)
@@ -63,43 +62,43 @@ class ImageViewer(gtk.DrawingArea):
 
         self.angle = 0
 
-
-    def do_get_property(self, property):
-        if property.name == 'zoom':
+    def do_get_property(self, pspec):
+        if pspec.name == 'zoom':
             return self.zoom
-        elif property.name == 'angle':
+        elif pspec.name == 'angle':
             return self.angle
-        elif property.name == 'file_location':
+        elif pspec.name == 'file_location':
             return self.file_location
         else:
-            raise AttributeError, 'unknown property %s' % property.name
+            raise AttributeError('unknown property %s' % pspec.name)
 
-    def do_set_property(self, property, value):
-        if property.name == 'zoom':
+    def do_set_property(self, pspec, value):
+        if pspec.name == 'zoom':
             self.set_zoom(value)
-        elif property.name == 'angle':
+        elif pspec.name == 'angle':
             self.set_angle(value)
-        elif property.name == 'file_location':
+        elif pspec.name == 'file_location':
             self.set_file_location(value)
         else:
-            raise AttributeError, 'unknown property %s' % property.name
+            raise AttributeError('unknown property %s' % pspec.name)
 
-    def calculate_optimal_zoom(self, width = None, height = None, pixbuf = None):
+    def calculate_optimal_zoom(self, width=None, height=None, pixbuf=None):
         # This tries to figure out a best fit model
-        # If the image can fit in, we show it in 1:1, 
+        # If the image can fit in, we show it in 1:1,
         # in any other case we show it in a fit to screen way
 
         if pixbuf == None:
             pixbuf = self.pixbuf
 
         if width == None or height == None:
-            rect =  self.parent.get_allocation()
+            rect = self.parent.get_allocation()
             width = rect.width
             height = rect.height
 
         if width < pixbuf.get_width() or height < pixbuf.get_height():
             # Image is larger than allocated size
-            zoom = min(width/pixbuf.get_width(), height/pixbuf.get_height())
+            zoom = min(width / pixbuf.get_width(),
+                    height / pixbuf.get_height())
         else:
             zoom = 1
 
@@ -114,7 +113,7 @@ class ImageViewer(gtk.DrawingArea):
     def do_expose_event(self, event):
         ctx = self.window.cairo_create()
 
-        ctx.rectangle(event.area.x, event.area.y, 
+        ctx.rectangle(event.area.x, event.area.y,
             event.area.width, event.area.height)
         ctx.clip()
         self.draw(ctx)
@@ -124,10 +123,11 @@ class ImageViewer(gtk.DrawingArea):
             return
         if self.zoom == None:
             self.zoom = self.calculate_optimal_zoom()
-        
+
         if self._temp_pixbuf == None or self._image_changed_flag == True:
             width, height = self.rotate()
-            self._temp_pixbuf = self._temp_pixbuf.scale_simple(width, height, gtk.gdk.INTERP_TILES)
+            self._temp_pixbuf = self._temp_pixbuf.scale_simple(
+                    width, height, gtk.gdk.INTERP_TILES)
             self._image_changed_flag = False
 
         rect = self.get_allocation()
@@ -140,17 +140,17 @@ class ImageViewer(gtk.DrawingArea):
         if self.parent:
             rect = self.parent.get_allocation()
             if rect.width > width:
-                x = int(((rect.width - x) - width)/2)
+                x = int(((rect.width - x) - width) / 2)
 
             if rect.height > height:
-                y = int(((rect.height - y) - height)/2)
+                y = int(((rect.height - y) - height) / 2)
 
-        self.set_size_request(self._temp_pixbuf.get_width(),self._temp_pixbuf.get_height())
+        self.set_size_request(self._temp_pixbuf.get_width(),
+                self._temp_pixbuf.get_height())
 
         ctx.set_source_pixbuf(self._temp_pixbuf, x, y)
 
         ctx.paint()
-
 
     def set_zoom(self, zoom):
         self._image_changed_flag = True
@@ -159,7 +159,7 @@ class ImageViewer(gtk.DrawingArea):
 
         if self.window:
             alloc = self.get_allocation()
-            rect = gdk.Rectangle(alloc.x, alloc.y, 
+            rect = gdk.Rectangle(alloc.x, alloc.y,
                 alloc.width, alloc.height)
             self.window.invalidate_rect(rect, True)
             self.window.process_updates(True)
@@ -181,8 +181,6 @@ class ImageViewer(gtk.DrawingArea):
 
         self.emit('angle-changed')
 
-
-
     def rotate(self):
         if self.angle == 0:
             rotate = gtk.gdk.PIXBUF_ROTATE_NONE
@@ -197,14 +195,13 @@ class ImageViewer(gtk.DrawingArea):
             rotate = gtk.gdk.PIXBUF_ROTATE_NONE
         else:
             logging.warning('Got unsupported rotate angle')
-            pass
-            
+
         self._temp_pixbuf = self.pixbuf.rotate_simple(rotate)
         if self._optimal_zoom_flag == True:
-            self.zoom = self.calculate_optimal_zoom(pixbuf = self._temp_pixbuf)
-        
-        width = int(self._temp_pixbuf.get_width()*self.zoom)
-        height = int(self._temp_pixbuf.get_height()*self.zoom)
+            self.zoom = self.calculate_optimal_zoom(pixbuf=self._temp_pixbuf)
+
+        width = int(self._temp_pixbuf.get_width() * self.zoom)
+        height = int(self._temp_pixbuf.get_height() * self.zoom)
 
         return (width, height)
 
@@ -236,13 +233,12 @@ class ImageViewer(gtk.DrawingArea):
             self.window.process_updates(True)
 
 
-def update(view):
-    #return view.zoom_out()
-    angle = 90 * random.randint(0,4)
-    view.set_angle(angle)
+def update(view_object):
+    #return view_object.zoom_out()
+    angle = 90 * random.randint(0, 4)
+    view_object.set_angle(angle)
 
     return True
-
 
 
 if __name__ == '__main__':
@@ -263,11 +259,10 @@ if __name__ == '__main__':
     sw.add_with_viewport(view)
     window.add(sw)
 
-    window.set_size_request(800,600)
+    window.set_size_request(800, 600)
 
     window.show_all()
 
     gobject.timeout_add(1000, update, view)
 
     gtk.main()
-
