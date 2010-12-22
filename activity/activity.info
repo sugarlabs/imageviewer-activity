@@ -3,7 +3,7 @@ sweet     = imageviewer
 name      = Image Viewer
 summary   = The Image Viewer activity is a simple and fast image viewer tool
 description = It has features one would expect of a standard image viewer,
-            like zoom, rotate, etc. 
+            like zoom, rotate, etc.
 homepage  = http://wiki.sugarlabs.org/go/Activities/Image_Viewer
 license   = GPLv2+
 
