@@ -6,24 +6,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2009-04-22 12:37-0400\n"
-"Last-Translator: Sayamindu Dasgupta <sayamindu@gmail.com>\n"
+"POT-Creation-Date: 2009-04-29 17:35-0400\n"
+"PO-Revision-Date: 2010-02-07 07:06+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Visor de Imagenes"
 
-#: ImageViewerActivity.py:45
+#: ImageViewerActivity.py:46
 msgid "View"
 msgstr "Vision"
+
+#: ImageViewerActivity.py:75
+msgid "Choose document"
+msgstr "Elegir documento"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
@@ -43,7 +47,7 @@ msgstr "Tamaño original"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr "Rotar en contra del las manecillas del reloj."
+msgstr "Rotar en contra del las manecillas del reloj"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
