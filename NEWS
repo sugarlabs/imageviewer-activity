@@ -1,3 +1,10 @@
+16
+
+* Updated translations for es and mn
+* Rotation does not take zoom factor in account #1504 (Mukesh Gupta)
+* sugar-lint cleanups
+* Added HACKING file with instruction to contribute to the project
+
 15
 
 * Added translations for fil, tvl, update other translations
