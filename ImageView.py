@@ -197,10 +197,6 @@ class ImageViewer(gtk.DrawingArea):
             logging.warning('Got unsupported rotate angle')
 
         self._temp_pixbuf = self.pixbuf.rotate_simple(rotate)
-        self.set_zoom(self.zoom)
-        if self._optimal_zoom_flag == True:
-            self.zoom = self.calculate_optimal_zoom(pixbuf=self._temp_pixbuf)
-
         width = int(self._temp_pixbuf.get_width() * self.zoom)
         height = int(self._temp_pixbuf.get_height() * self.zoom)
 
