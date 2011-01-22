@@ -1,3 +1,9 @@
+17
+
+* Updated translations for de
+* Image Viewer consumes large amounts of memory and CPU, does not view images #2567
+* Restore zoom while switching back from fullscreen
+
 16
 
 * Updated translations for es and mn

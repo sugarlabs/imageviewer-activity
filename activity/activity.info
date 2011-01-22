@@ -11,8 +11,10 @@ icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
-version   = 16
+version   = 17
 stability = testing
+
+requires  = sugar >= 0.86
 
 # support original activity.info fields
 activity_version = %(version)s
