@@ -114,8 +114,6 @@ class ImageViewerActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        self.connect('window-state-event', self.__window_state_event_cb)
-
         vadj = gtk.Adjustment()
         hadj = gtk.Adjustment()
         self.sw = gtk.ScrolledWindow(hadj, vadj)
@@ -152,6 +150,19 @@ class ImageViewerActivity(activity.Activity):
 
     def handle_view_source(self):
         pass
+
+    def fullscreen(self):
+        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
+        # Zoom to fit screen if possible
+        screen = self.get_screen()
+        zoom = self.view.calculate_optimal_zoom(
+                screen.get_width(), screen.get_height())
+        self.view.set_zoom(zoom)
+        activity.Activity.fullscreen(self)
+
+    def unfullscreen(self):
+        self.view.set_zoom(self._old_zoom)
+        activity.Activity.unfullscreen(self)
 
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)
@@ -248,13 +259,6 @@ class ImageViewerActivity(activity.Activity):
         self.view.set_angle(angle - 90)
 
     def __fullscreen_cb(self, button):
-        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
-        # Zoom to fit screen if possible
-        screen = self.get_screen()
-        zoom = self.view.calculate_optimal_zoom(
-                screen.get_width(), screen.get_height())
-        self.view.set_zoom(zoom)
-
         self.fullscreen()
 
     def _show_picker_cb(self):
@@ -312,11 +316,6 @@ class ImageViewerActivity(activity.Activity):
     def can_close(self):
         self._close_requested = True
         return True
-
-    def __window_state_event_cb(self, window, event):
-        if event.changed_mask & gtk.gdk.WINDOW_STATE_FULLSCREEN:
-            if not self.window.get_state() & gtk.gdk.WINDOW_STATE_FULLSCREEN:
-                self.view.set_zoom(self._old_zoom)
 
     def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
         if self._download_content_type == 'text/html':
