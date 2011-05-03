@@ -2,51 +2,72 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2008-12-08 23:39-0500\n"
-"Last-Translator: Γιάννης Κασκαμανίδης <ttnfy17@yahoo.gr>\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
+"PO-Revision-Date: 2010-02-15 16:58+0200\n"
+"Last-Translator: Yannis <kiolalis@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Προβολέας εικόνων"
 
-#: ImageViewerActivity.py:45
-msgid "View"
-msgstr "Προβολή"
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
-msgstr "Μεγέθυνση"
-
-#: ImageViewerToolbar.py:53
-msgid "Zoom in"
 msgstr "Σμίκρυνση"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:158
+msgid "Zoom in"
+msgstr "Μεγέθυνση"
+
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
 msgstr "Ταίριασμα στο παράθυρο"
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
 msgstr "Αρχικό μέγεθος"
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
 msgstr "Περιστροφή αριστερά"
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
 msgstr "Περιστροφή δεξιά"
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
 msgstr "Πλήρης οθόνη"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "Επιλογή εγγράφου"
+
+#: ProgressDialog.py:6
+msgid "Downloading..."
+msgstr "Λήψη αρχείου..."
+
+#: ProgressDialog.py:15
+msgid "Retrieving shared image, please wait..."
+msgstr "Λήψη διαμοιραζόμενης εικόνας, παρακαλώ περιμένετε..."
+
+#~ msgid "View"
+#~ msgstr "Προβολή"

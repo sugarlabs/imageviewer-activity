@@ -2,11 +2,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-28 00:30-0400\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
 "PO-Revision-Date: 2009-08-29 04:27-0400\n"
 "Last-Translator: Zafimamy Gabriella Ralaivao <gabriella@intnet.mu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,41 +29,37 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "Fijerena Sary"
 
-#: ImageViewerActivity.py:101
-msgid "View"
-msgstr "Jereo"
-
-#: ImageViewerActivity.py:151
-msgid "Choose document"
-msgstr "Fidio ny tahiry"
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
 msgstr "tomory lavitra"
 
-#: ImageViewerToolbar.py:53
+#: ImageViewerActivity.py:158
 msgid "Zoom in"
 msgstr "tomory akaiky"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
 msgstr "Fintino ao anatin'ny efajery"
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
 msgstr "hadiry niandohana"
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
 msgstr "ahodino miankavia"
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
 msgstr "ahodino miankavanana"
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
 msgstr "Itaro mameno efajery"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "Fidio ny tahiry"
 
 #: ProgressDialog.py:6
 msgid "Downloading..."
@@ -64,3 +68,6 @@ msgstr "Eo am-pandrotsahana..."
 #: ProgressDialog.py:15
 msgid "Retrieving shared image, please wait..."
 msgstr "Eo am-pitadiavana sary zaraina, miandrasa azafady..."
+
+#~ msgid "View"
+#~ msgstr "Jereo"

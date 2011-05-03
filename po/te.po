@@ -2,12 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
+"POT-Creation-Date: 2009-09-09 00:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,36 +26,44 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "ప్రతిరూప  దర్శిని"
 
-#: ImageViewerActivity.py:45
-msgid "View"
-msgstr ""
-
-#: ImageViewerToolbar.py:47
+#: ImageViewerActivity.py:152
 msgid "Zoom out"
-msgstr ""
+msgstr "జూమ్‌ వెలుపల"
 
-#: ImageViewerToolbar.py:53
+#: ImageViewerActivity.py:158
 msgid "Zoom in"
-msgstr ""
+msgstr "జూమ్‌ లోపల"
 
-#: ImageViewerToolbar.py:59
+#: ImageViewerActivity.py:164
 msgid "Fit to window"
-msgstr ""
+msgstr "గవాక్షానికి అమర్చు "
 
-#: ImageViewerToolbar.py:65
+#: ImageViewerActivity.py:170
 msgid "Original size"
-msgstr ""
+msgstr "మూల పరిమాణము "
 
-#: ImageViewerToolbar.py:76
+#: ImageViewerActivity.py:181
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "అపసవ్య గమనంలో తిప్పుము "
 
-#: ImageViewerToolbar.py:82
+#: ImageViewerActivity.py:187
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "సవ్యగనంలో తిప్పుము "
 
-#: ImageViewerToolbar.py:93
+#: ImageViewerActivity.py:198
 msgid "Fullscreen"
-msgstr ""
+msgstr "తెర మొత్తం"
+
+#: ImageViewerActivity.py:252
+msgid "Choose document"
+msgstr "దస్తావేజును ఎంచుకొనుము "
+
+#: ProgressDialog.py:6
+msgid "Downloading..."
+msgstr "దిగుమతి..."
+
+#: ProgressDialog.py:15
+msgid "Retrieving shared image, please wait..."
+msgstr "పంచుకొనే ప్రతిరూపాన్ని  వెలికి తీస్తున్నది, దయచేసి వేచి చూడండి"

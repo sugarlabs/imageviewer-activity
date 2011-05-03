@@ -2,6 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -20,10 +28,6 @@ msgstr ""
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Зураг Үзэх"
-
-#: ImageViewerActivity.py:45
-msgid "View"
-msgstr "Харагдац"
 
 #: ImageViewerActivity.py:152
 msgid "Zoom out"
@@ -64,3 +68,6 @@ msgstr "Татаж байнаа"
 #: ProgressDialog.py:15
 msgid "Retrieving shared image, please wait..."
 msgstr "Хуваалцсан зургаа сэргээж байна, хүлээнэ үү..."
+
+#~ msgid "View"
+#~ msgstr "Харагдац"
