@@ -68,4 +68,4 @@ msgstr "Pobieranie..."
 
 #: ProgressDialog.py:15
 msgid "Retrieving shared image, please wait..."
-msgstr ""
+msgstr "Pobieranie współdzielonego obrazu, proszę czekać..."
