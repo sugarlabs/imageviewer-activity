@@ -149,7 +149,7 @@ class ImageViewerActivity(activity.Activity):
                 self._show_picker_cb)
 
     def handle_view_source(self):
-        pass
+        raise NotImplementedError
 
     def fullscreen(self):
         self._old_zoom = self.view.get_property('zoom') #XXX: Hack
