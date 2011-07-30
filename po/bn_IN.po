@@ -6,22 +6,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: 2008-10-30 00:07+0530\n"
-"Last-Translator: Sayamindu Dasgupta <sayamindu@gmail.com>\n"
+"POT-Creation-Date: 2009-04-29 17:35-0400\n"
+"PO-Revision-Date: 2009-09-04 05:33-0400\n"
+"Last-Translator: Sankarshan Mukhopadhyay <sankarshan.mukhopadhyay@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: bn_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.2.1\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "চিত্র প্রদর্শক"
 
-#: ImageViewerActivity.py:45
+#: ImageViewerActivity.py:46
 msgid "View"
 msgstr "প্রদর্শন"
+
+#: ImageViewerActivity.py:75
+msgid "Choose document"
+msgstr "ডকুমেন্ট নির্বাচন করুন"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
@@ -37,15 +43,15 @@ msgstr "সর্বোত্তম মাপ"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
-msgstr "স্বাভাবিক"
+msgstr "মূল মাপ"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr "বাঁদিকে"
+msgstr "ঘড়ির কাঁটার বিপরীতে ঘোরান"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr "ডানদিকে"
+msgstr "ঘড়ির কাঁটার দিশায় ঘোরান"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"

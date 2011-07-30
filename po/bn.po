@@ -1,16 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
+# Tisa <nktisa@gmail.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Fructose VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2009-04-29 17:35-0400\n"
+"PO-Revision-Date: 2009-06-13 20:51+0600\n"
+"Last-Translator: Tisa <nktisa@gmail.com>\n"
+"Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,36 +17,40 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "ছবি প্রদর্শক"
 
-#: ImageViewerActivity.py:45
+#: ImageViewerActivity.py:46
 msgid "View"
-msgstr ""
+msgstr "প্রদর্শন করো"
+
+#: ImageViewerActivity.py:75
+msgid "Choose document"
+msgstr "নথি বেছে নাও"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
-msgstr ""
+msgstr "ছোট করো"
 
 #: ImageViewerToolbar.py:53
 msgid "Zoom in"
-msgstr ""
+msgstr "বড় করো"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr ""
+msgstr "উইন্ডোর মাপসই করো"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
-msgstr ""
+msgstr "প্রকৃত আকার"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "বামাবর্তে ঘুরাও"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "দক্ষিনাবর্তে ঘুরাও"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
-msgstr ""
+msgstr "পর্দা জুড়ে প্রদর্শন"

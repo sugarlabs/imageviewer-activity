@@ -2,52 +2,57 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-29 20:53+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-04-29 17:35-0400\n"
+"PO-Revision-Date: 2009-07-02 13:59-0400\n"
+"Last-Translator: Keheliya Gallaba <keheliya.gallaba@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: si\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.2.1\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "පින්තූර දර්ශකය"
 
-#: ImageViewerActivity.py:45
+#: ImageViewerActivity.py:46
 msgid "View"
-msgstr ""
+msgstr "දර්ශනය කරන්න"
+
+#: ImageViewerActivity.py:75
+msgid "Choose document"
+msgstr "ලේඛනය තෝරන්න"
 
 #: ImageViewerToolbar.py:47
 msgid "Zoom out"
-msgstr ""
+msgstr "කුඩා කරබැලීම"
 
 #: ImageViewerToolbar.py:53
 msgid "Zoom in"
-msgstr ""
+msgstr "විශාල කර බැලීම"
 
 #: ImageViewerToolbar.py:59
 msgid "Fit to window"
-msgstr ""
+msgstr "කවුළුවට සරිලන පමණට"
 
 #: ImageViewerToolbar.py:65
 msgid "Original size"
-msgstr ""
+msgstr "පියවි ප්‍රමාණය"
 
 #: ImageViewerToolbar.py:76
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "වාමාවර්තව හරවන්න"
 
 #: ImageViewerToolbar.py:82
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "දක්ෂිණාවර්තව හරවන්න"
 
 #: ImageViewerToolbar.py:93
 msgid "Fullscreen"
-msgstr ""
+msgstr "පූර්ණ තිරය"
