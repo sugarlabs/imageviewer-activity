@@ -1,5 +1,5 @@
 [Activity]
-sweet     = imageviewer
+implement = imageviewer
 name      = Image Viewer
 summary   = The Image Viewer activity is a simple and fast image viewer tool
 description = It has features one would expect of a standard image viewer,
@@ -11,11 +11,11 @@ icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
-version   = 17
-stability = testing
+version   = %(activity_version)s
+stability = stable
 
 requires  = sdk/sugar >= 0.86
 
 # support original activity.info fields
-activity_version = %(version)s
+activity_version = 17
 bundle_id = org.laptop.ImageViewerActivity
