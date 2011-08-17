@@ -14,60 +14,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-09 00:31-0400\n"
+"POT-Creation-Date: 2011-08-04 13:31+0000\n"
 "PO-Revision-Date: 2009-09-08 08:10-0400\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: French\n"
-"Language: fr\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 1.2.1\n"
 
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Visualiseur d'image"
-
-#: ImageViewerActivity.py:152
+#: ImageViewerActivity.py:173
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: ImageViewerActivity.py:158
+#: ImageViewerActivity.py:179
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: ImageViewerActivity.py:164
+#: ImageViewerActivity.py:185
 msgid "Fit to window"
 msgstr "Ajuster à la taille de la fenêtre"
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:191
 msgid "Original size"
 msgstr "Taille originale"
 
-#: ImageViewerActivity.py:181
+#: ImageViewerActivity.py:202
 msgid "Rotate anticlockwise"
 msgstr "Rotation dans le sens anti-horaire"
 
-#: ImageViewerActivity.py:187
+#: ImageViewerActivity.py:209
 msgid "Rotate clockwise"
 msgstr "Rotation dans le sens horaire"
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:220
 msgid "Fullscreen"
 msgstr "Plein écran"
 
-#: ImageViewerActivity.py:252
+#: ImageViewerActivity.py:268
 msgid "Choose document"
 msgstr "Choisir un document"
 
-#: ProgressDialog.py:6
+#: ProgressDialog.py:8
 msgid "Downloading..."
 msgstr "Téléchargement en cours..."
 
-#: ProgressDialog.py:15
+#: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Récupération de l'image partagée en cours, patientez..."
+
+#: activity/activity.info:2
+msgid "Image Viewer"
+msgstr "Visualiseur d'image"
 
 #~ msgid "View"
 #~ msgstr "Vue"
