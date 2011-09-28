@@ -14,60 +14,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-09 00:31-0400\n"
+"POT-Creation-Date: 2011-08-04 13:31+0000\n"
 "PO-Revision-Date: 2010-02-15 16:58+0200\n"
 "Last-Translator: Yannis <kiolalis@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: el\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Προβολέας εικόνων"
-
-#: ImageViewerActivity.py:152
+#: ImageViewerActivity.py:173
 msgid "Zoom out"
 msgstr "Σμίκρυνση"
 
-#: ImageViewerActivity.py:158
+#: ImageViewerActivity.py:179
 msgid "Zoom in"
 msgstr "Μεγέθυνση"
 
-#: ImageViewerActivity.py:164
+#: ImageViewerActivity.py:185
 msgid "Fit to window"
 msgstr "Ταίριασμα στο παράθυρο"
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:191
 msgid "Original size"
 msgstr "Αρχικό μέγεθος"
 
-#: ImageViewerActivity.py:181
+#: ImageViewerActivity.py:202
 msgid "Rotate anticlockwise"
 msgstr "Περιστροφή αριστερά"
 
-#: ImageViewerActivity.py:187
+#: ImageViewerActivity.py:209
 msgid "Rotate clockwise"
 msgstr "Περιστροφή δεξιά"
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:220
 msgid "Fullscreen"
 msgstr "Πλήρης οθόνη"
 
-#: ImageViewerActivity.py:252
+#: ImageViewerActivity.py:268
 msgid "Choose document"
 msgstr "Επιλογή εγγράφου"
 
-#: ProgressDialog.py:6
+#: ProgressDialog.py:8
 msgid "Downloading..."
 msgstr "Λήψη αρχείου..."
 
-#: ProgressDialog.py:15
+#: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Λήψη διαμοιραζόμενης εικόνας, παρακαλώ περιμένετε..."
+
+#: activity/activity.info:2
+msgid "Image Viewer"
+msgstr "Προβολέας εικόνων"
 
 #~ msgid "View"
 #~ msgstr "Προβολή"
