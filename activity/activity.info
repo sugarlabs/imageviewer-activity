@@ -17,5 +17,5 @@ stability = stable
 requires  = sdk/sugar >= 0.86
 
 # support original activity.info fields
-activity_version = 17
+activity_version = 18
 bundle_id = org.laptop.ImageViewerActivity
