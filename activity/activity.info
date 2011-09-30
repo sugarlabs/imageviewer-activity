@@ -14,8 +14,6 @@ mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 version   = %(activity_version)s
 stability = stable
 
-requires  = sdk/sugar >= 0.86
-
 # support original activity.info fields
 activity_version = 18
 bundle_id = org.laptop.ImageViewerActivity
