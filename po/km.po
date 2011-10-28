@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-09 00:31-0400\n"
-"PO-Revision-Date: 2011-04-17 06:12+0200\n"
+"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"PO-Revision-Date: 2011-10-27 11:16+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: km\n"
@@ -23,51 +23,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ImageViewerActivity.py:173
+msgid "Zoom out"
+msgstr "បង្រួម"
+
+#: ImageViewerActivity.py:179
+msgid "Zoom in"
+msgstr "ពង្រីក"
+
+#: ImageViewerActivity.py:185
+msgid "Fit to window"
+msgstr "សម​ទៅ​នឹង​បង្អួច"
+
+#: ImageViewerActivity.py:191
+msgid "Original size"
+msgstr "ទំហំដើម"
+
+#: ImageViewerActivity.py:202
+msgid "Rotate anticlockwise"
+msgstr "បង្វិល​ច្រាស​ទ្រិចនាឡិកា"
+
+#: ImageViewerActivity.py:209
+msgid "Rotate clockwise"
+msgstr "បានបង្វិល​ស្រប​ទិសនាឡិកា"
+
+#: ImageViewerActivity.py:220
+msgid "Fullscreen"
+msgstr "ពេញអេក្រង់"
+
+#: ImageViewerActivity.py:268
+msgid "Choose document"
+msgstr ""
+
+#: ProgressDialog.py:8
+msgid "Downloading..."
+msgstr "កំពុង​ទាញយក..."
+
+#: ProgressDialog.py:17
+msgid "Retrieving shared image, please wait..."
+msgstr ""
 
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "អ្នកបង្ហាញរូបភាព"
-
-#: ImageViewerActivity.py:152
-msgid "Zoom out"
-msgstr "បង្រួម​"
-
-#: ImageViewerActivity.py:158
-msgid "Zoom in"
-msgstr "ពង្រីក​"
-
-#: ImageViewerActivity.py:164
-msgid "Fit to window"
-msgstr "សម​ទៅ​នឹង​បង្អួច"
-
-#: ImageViewerActivity.py:170
-msgid "Original size"
-msgstr "ទំហំដើម"
-
-#: ImageViewerActivity.py:181
-msgid "Rotate anticlockwise"
-msgstr "បង្វិល​ច្រាស​ទ្រិចនាឡិកា​"
-
-#: ImageViewerActivity.py:187
-msgid "Rotate clockwise"
-msgstr "បានបង្វិល​ស្រប​ទិសនាឡិកា"
-
-#: ImageViewerActivity.py:198
-msgid "Fullscreen"
-msgstr "ពេញអេក្រង់"
-
-#: ImageViewerActivity.py:252
-msgid "Choose document"
-msgstr ""
-
-#: ProgressDialog.py:6
-msgid "Downloading..."
-msgstr ""
-
-#: ProgressDialog.py:15
-msgid "Retrieving shared image, please wait..."
-msgstr ""
-
-#~ msgid "View"
-#~ msgstr "មើល"
