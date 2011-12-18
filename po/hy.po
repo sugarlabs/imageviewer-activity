@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-04 13:31+0000\n"
-"PO-Revision-Date: 2011-12-14 22:14+0200\n"
+"PO-Revision-Date: 2011-12-18 16:48+0200\n"
 "Last-Translator: Jasmine <udea_jasmine@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
@@ -67,4 +67,4 @@ msgstr "Առբերվում է մյուսների համար ևս հասանել�
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "Պատկերների դիտարկիչ"
+msgstr "Պատկերների դիտակ"
