@@ -15,15 +15,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-04 13:31+0000\n"
-"PO-Revision-Date: 2009-09-18 10:35-0400\n"
-"Last-Translator: Eduardo H. Silva <HoboPrimate@gmail.com>\n"
+"PO-Revision-Date: 2012-01-19 20:03+0200\n"
+"Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: ImageViewerActivity.py:173
 msgid "Zoom out"
@@ -63,7 +63,7 @@ msgstr "A transferir..."
 
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
-msgstr "A receber a imagem partilhada, por favor aguarde..."
+msgstr "A receber a imagem partilhada, por favor aguarda..."
 
 #: activity/activity.info:2
 msgid "Image Viewer"
