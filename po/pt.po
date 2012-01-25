@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-04 13:31+0000\n"
-"PO-Revision-Date: 2012-01-19 20:03+0200\n"
+"PO-Revision-Date: 2012-01-25 23:00+0200\n"
 "Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt\n"
@@ -51,7 +51,7 @@ msgstr "Rodar na direcção dos ponteiros do relógio"
 
 #: ImageViewerActivity.py:220
 msgid "Fullscreen"
-msgstr "Ecrã completo"
+msgstr "Ecrã inteiro"
 
 #: ImageViewerActivity.py:268
 msgid "Choose document"
