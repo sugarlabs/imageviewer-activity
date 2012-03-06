@@ -11,9 +11,12 @@ icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
-version   = 19
+version   = %(activity_version)s
 stability = stable
 
 # support original activity.info fields
 activity_version = 19
 bundle_id = org.laptop.ImageViewerActivity
+
+[Package]
+project   = SweetsDistribution:0.94
