@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-04 13:31+0000\n"
-"PO-Revision-Date: 2012-01-25 23:00+0200\n"
+"PO-Revision-Date: 2012-03-23 21:22+0200\n"
 "Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt\n"
@@ -35,7 +35,7 @@ msgstr "Aproximar zoom"
 
 #: ImageViewerActivity.py:185
 msgid "Fit to window"
-msgstr "Zoom até caber na janela"
+msgstr "Caber na janela"
 
 #: ImageViewerActivity.py:191
 msgid "Original size"
@@ -43,19 +43,19 @@ msgstr "Tamanho original"
 
 #: ImageViewerActivity.py:202
 msgid "Rotate anticlockwise"
-msgstr "Rodar ao contrário dos ponteiros do relógio"
+msgstr "Rodar para a esquerda"
 
 #: ImageViewerActivity.py:209
 msgid "Rotate clockwise"
-msgstr "Rodar na direcção dos ponteiros do relógio"
+msgstr "Rodar para a direita"
 
 #: ImageViewerActivity.py:220
 msgid "Fullscreen"
-msgstr "Ecrã inteiro"
+msgstr "Ecrã Inteiro"
 
 #: ImageViewerActivity.py:268
 msgid "Choose document"
-msgstr "Escolhe o documento"
+msgstr "Escolhe um documento"
 
 #: ProgressDialog.py:8
 msgid "Downloading..."
@@ -67,7 +67,7 @@ msgstr "A receber a imagem partilhada, por favor aguarda..."
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "Ver imagens"
+msgstr "Ver Imagem"
 
 #~ msgid "View"
 #~ msgstr "Ver"
