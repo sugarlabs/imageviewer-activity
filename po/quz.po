@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#  SOME DESCRIPTIVE TITLE.
+#  Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+#  This file is distributed under the same license as the PACKAGE package.
+#  FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,67 +17,56 @@ msgstr ""
 "X-Generator: Translate Toolkit 1.7.0\n"
 
 #  "Reducir"
-#  [es] "Alejarse"
 #: ImageViewerActivity.py:173
 msgid "Zoom out"
 msgstr "Kharuykachaspa huch'uyachiq"
 
 #  "Ampliar"
-#  [es] "Acercarse"
 #: ImageViewerActivity.py:179
 msgid "Zoom in"
 msgstr "Achuykachaspa hatunyachiq"
 
 #  "Ajustar a la ventana"
-#  [es] "Ajustar a la ventana"
 #: ImageViewerActivity.py:185
 msgid "Fit to window"
 msgstr "Qhawanaman t'akyachiy"
 
 #  "Tamaño original"
-#  [es] "Tamaño original"
 #: ImageViewerActivity.py:191
 msgid "Original size"
 msgstr "Kikin sayaynin"
 
 #  "Rotar en el sentido opuesto a las agujas del reloj"
-#  [es] "Rotar en el sentido opuesto a las agujas del reloj"
 #: ImageViewerActivity.py:202
 msgid "Rotate anticlockwise"
 msgstr "Lluq'iman muyuchiy"
 
 #  "Rotar en el sentido del reloj"
-#  [es] "Rotar en el sentido del reloj"
 #: ImageViewerActivity.py:209
 msgid "Rotate clockwise"
 msgstr "Pañaman muyuchiy"
 
 #  "Pantalla completa"
-#  [es] "Pantalla completa"
 #: ImageViewerActivity.py:220
 msgid "Fullscreen"
 msgstr "Hunt'asqa pantalla"
 
 #  "Elegir documento"
-#  [es] "Elegir documento"
 #: ImageViewerActivity.py:268
 msgid "Choose document"
 msgstr "Qillqa-khiputa akllay"
 
 #  "Descargando..."
-#  [es] "Descargando..."
 #: ProgressDialog.py:8
 msgid "Downloading..."
 msgstr "Uraykachichkan..."
 
 #  "Obteniendo la imagen compartida, espera por favor..."
-#  [es] "Obteniendo la imagen compartida, espera por favor..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Suyarikuyraq, wanki qunakusqaqa rikhurimunqañam..."
 
 #  "Visor de imagenes"
-#  [es] "Visor de imagenes"
 #: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Wankikuna rikuchiq"

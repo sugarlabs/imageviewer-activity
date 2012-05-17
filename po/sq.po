@@ -14,60 +14,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-09 00:31-0400\n"
+"POT-Creation-Date: 2011-08-04 13:31+0000\n"
 "PO-Revision-Date: 2010-02-14 18:54+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: sq\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Shikues Figure"
-
-#: ImageViewerActivity.py:152
+#: ImageViewerActivity.py:173
 msgid "Zoom out"
 msgstr "Largohu"
 
-#: ImageViewerActivity.py:158
+#: ImageViewerActivity.py:179
 msgid "Zoom in"
 msgstr "Afrohu"
 
-#: ImageViewerActivity.py:164
+#: ImageViewerActivity.py:185
 msgid "Fit to window"
 msgstr "Përshtat në dritare"
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:191
 msgid "Original size"
 msgstr "Madhësi origjinale"
 
-#: ImageViewerActivity.py:181
+#: ImageViewerActivity.py:202
 msgid "Rotate anticlockwise"
 msgstr "Rrotullo kundër akrepave të orës"
 
-#: ImageViewerActivity.py:187
+#: ImageViewerActivity.py:209
 msgid "Rotate clockwise"
 msgstr "Rrotullo në drejtim të akrepave të orës"
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:220
 msgid "Fullscreen"
 msgstr "Ekran të plotë"
 
-#: ImageViewerActivity.py:252
+#: ImageViewerActivity.py:268
 msgid "Choose document"
 msgstr "Zgjidhni dokumentin"
 
-#: ProgressDialog.py:6
+#: ProgressDialog.py:8
 msgid "Downloading..."
 msgstr "Duke shkarkuar..."
 
-#: ProgressDialog.py:15
+#: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Duke korrigjuar imazhin e përhapur, ju lutem prisni..."
+
+#: activity/activity.info:2
+msgid "Image Viewer"
+msgstr "Shikues Figure"
 
 #~ msgid "View"
 #~ msgstr "Shiko"
