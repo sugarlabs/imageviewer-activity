@@ -1,11 +1,16 @@
+21
+
+* Fix issue of not packaging .mo translation files
+* Update translations
+
 20
 
-- New translations for aym, quz and th languages
-- Update existing translations
+* New translations for aym, quz and th languages
+* Update existing translations
 
 19
 
-- Return langs back by generating locale/ directory
+* Return langs back by generating locale/ directory
 
 18
 
