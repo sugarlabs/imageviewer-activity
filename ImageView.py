@@ -82,29 +82,13 @@ class ImageViewer(gtk.DrawingArea):
         else:
             raise AttributeError('unknown property %s' % pspec.name)
 
-    def calculate_optimal_zoom(self, width=None, height=None, pixbuf=None):
-        # This tries to figure out a best fit model
-        # If the image can fit in, we show it in 1:1,
-        # in any other case we show it in a fit to screen way
-
-        if pixbuf == None:
-            pixbuf = self.pixbuf
-
-        if width == None or height == None:
-            rect = self.parent.get_allocation()
-            width = rect.width
-            height = rect.height
-
-        if width < pixbuf.get_width() or height < pixbuf.get_height():
-            # Image is larger than allocated size
-            zoom = min(width / pixbuf.get_width(),
-                    height / pixbuf.get_height())
-        else:
-            zoom = 1
-
+    def set_optimal_zoom(self):
         self._optimal_zoom_flag = True
+        self._set_zoom(self._calc_optimal_zoom())
 
-        return zoom - 0.018 #XXX: Hack
+    def update_optimal_zoom(self):
+        if self._optimal_zoom_flag:
+            self._set_zoom(self._calc_optimal_zoom())
 
     #def do_size_request(self, requisition):
     #    requisition.width = self.pixbuf.get_width()
@@ -121,13 +105,11 @@ class ImageViewer(gtk.DrawingArea):
     def draw(self, ctx):
         if not self.pixbuf:
             return
-        if self.zoom == None:
-            self.zoom = self.calculate_optimal_zoom()
+        if self.zoom is None:
+            self.zoom = self._calc_optimal_zoom()
 
-        if self._temp_pixbuf == None or self._image_changed_flag == True:
-            width, height = self.rotate()
-            self._temp_pixbuf = self._temp_pixbuf.scale_simple(
-                    width, height, gtk.gdk.INTERP_TILES)
+        if self._temp_pixbuf is None or self._image_changed_flag:
+            self._temp_pixbuf = self._convert_pixbuf(self.pixbuf)
             self._image_changed_flag = False
 
         rect = self.get_allocation()
@@ -153,18 +135,8 @@ class ImageViewer(gtk.DrawingArea):
         ctx.paint()
 
     def set_zoom(self, zoom):
-        self._image_changed_flag = True
         self._optimal_zoom_flag = False
-        self.zoom = zoom
-
-        if self.window:
-            alloc = self.get_allocation()
-            rect = gdk.Rectangle(alloc.x, alloc.y,
-                alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
-
-        self.emit('zoom-changed')
+        self._set_zoom(zoom)
 
     def set_angle(self, angle):
         self._image_changed_flag = True
@@ -180,27 +152,6 @@ class ImageViewer(gtk.DrawingArea):
             self.window.process_updates(True)
 
         self.emit('angle-changed')
-
-    def rotate(self):
-        if self.angle == 0:
-            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
-        elif self.angle == 90:
-            rotate = gtk.gdk.PIXBUF_ROTATE_COUNTERCLOCKWISE
-        elif self.angle == 180:
-            rotate = gtk.gdk.PIXBUF_ROTATE_UPSIDEDOWN
-        elif self.angle == 270:
-            rotate = gtk.gdk.PIXBUF_ROTATE_CLOCKWISE
-        elif self.angle == 360:
-            self.angle = 0
-            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
-        else:
-            logging.warning('Got unsupported rotate angle')
-
-        self._temp_pixbuf = self.pixbuf.rotate_simple(rotate)
-        width = int(self._temp_pixbuf.get_width() * self.zoom)
-        height = int(self._temp_pixbuf.get_height() * self.zoom)
-
-        return (width, height)
 
     def zoom_in(self):
         self.set_zoom(self.zoom + 0.2)
@@ -228,6 +179,66 @@ class ImageViewer(gtk.DrawingArea):
                 alloc.width, alloc.height)
             self.window.invalidate_rect(rect, True)
             self.window.process_updates(True)
+
+    def _calc_optimal_zoom(self):
+        # This tries to figure out a best fit model
+        # If the image can fit in, we show it in 1:1,
+        # in any other case we show it in a fit to screen way
+
+        if isinstance(self.parent, gtk.Viewport):
+            rect = self.parent.parent.get_allocation()
+        else:
+            rect = self.parent.get_allocation()
+        width = rect.width
+        height = rect.height
+
+        pixbuf = self.pixbuf
+        if width < pixbuf.get_width() or height < pixbuf.get_height():
+            # Image is larger than allocated size
+            zoom = min(width / pixbuf.get_width(),
+                    height / pixbuf.get_height())
+        else:
+            zoom = 1
+
+        return zoom
+
+    def _set_zoom(self, zoom):
+        self._image_changed_flag = True
+        self.zoom = zoom
+
+        if self.window:
+            alloc = self.get_allocation()
+            rect = gdk.Rectangle(alloc.x, alloc.y,
+                alloc.width, alloc.height)
+            self.window.invalidate_rect(rect, True)
+            self.window.process_updates(True)
+
+        self.emit('zoom-changed')
+
+    def _convert_pixbuf(self, pixbuf):
+        if self.angle == 0:
+            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
+        elif self.angle == 90:
+            rotate = gtk.gdk.PIXBUF_ROTATE_COUNTERCLOCKWISE
+        elif self.angle == 180:
+            rotate = gtk.gdk.PIXBUF_ROTATE_UPSIDEDOWN
+        elif self.angle == 270:
+            rotate = gtk.gdk.PIXBUF_ROTATE_CLOCKWISE
+        elif self.angle == 360:
+            self.angle = 0
+            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
+        else:
+            logging.warning('Got unsupported rotate angle')
+
+        if rotate != gtk.gdk.PIXBUF_ROTATE_NONE:
+            pixbuf = pixbuf.rotate_simple(rotate)
+
+        if self.zoom != 1:
+            width = int(pixbuf.get_width() * self.zoom)
+            height = int(pixbuf.get_height() * self.zoom)
+            pixbuf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_TILES)
+
+        return pixbuf
 
 
 def update(view_object):

@@ -102,7 +102,6 @@ class ImageViewerActivity(activity.Activity):
 
         self._zoom_out_button = None
         self._zoom_in_button = None
-        self._old_zoom = None
         self._fileserver = None
         self._fileserver_tube_id = None
 
@@ -120,6 +119,9 @@ class ImageViewerActivity(activity.Activity):
 
         self.sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.sw.add_with_viewport(self.view)
+        # Avoid needless spacing
+        self.view.parent.props.shadow_type = gtk.SHADOW_NONE
+
         self.set_canvas(self.sw)
         self.sw.show_all()
 
@@ -152,17 +154,12 @@ class ImageViewerActivity(activity.Activity):
         raise NotImplementedError
 
     def fullscreen(self):
-        self._old_zoom = self.view.get_property('zoom') #XXX: Hack
-        # Zoom to fit screen if possible
-        screen = self.get_screen()
-        zoom = self.view.calculate_optimal_zoom(
-                screen.get_width(), screen.get_height())
-        self.view.set_zoom(zoom)
+        self.view.update_optimal_zoom()
         activity.Activity.fullscreen(self)
 
     def unfullscreen(self):
-        self.view.set_zoom(self._old_zoom)
         activity.Activity.unfullscreen(self)
+        self.view.update_optimal_zoom()
 
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)
@@ -241,8 +238,7 @@ class ImageViewerActivity(activity.Activity):
         self._zoom_in_button.set_sensitive(True)
 
     def __zoom_tofit_cb(self, button):
-        zoom = self.view.calculate_optimal_zoom()
-        self.view.set_zoom(zoom)
+        self.view.set_optimal_zoom()
 
     def __zoom_original_cb(self, button):
         self.view.set_zoom(1)
