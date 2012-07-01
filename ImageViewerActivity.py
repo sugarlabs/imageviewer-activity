@@ -19,26 +19,26 @@
 
 from __future__ import division
 
-from sugar.activity import activity
+from sugar3.activity import activity
 import logging
 
 from gettext import gettext as _
 
 import time
 import os
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
-from sugar.graphics.alert import NotifyAlert
-from sugar.graphics.objectchooser import ObjectChooser
-from sugar import mime
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import ActivityToolbarButton
-from sugar.activity.widgets import StopButton
+from sugar3.graphics.alert import NotifyAlert
+from sugar3.graphics.objectchooser import ObjectChooser
+from sugar3 import mime
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.activity.widgets import StopButton
 
-from sugar import network
-from sugar.datastore import datastore
+from sugar3 import network
+from sugar3.datastore import datastore
 import telepathy
 import dbus
 
@@ -113,14 +113,15 @@ class ImageViewerActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        vadj = gtk.Adjustment()
-        hadj = gtk.Adjustment()
-        self.sw = gtk.ScrolledWindow(hadj, vadj)
+        vadj = Gtk.Adjustment()
+        hadj = Gtk.Adjustment()
+        self.sw = Gtk.ScrolledWindow(hadj, vadj)
+        self.view.parent = self.sw
 
-        self.sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.sw.add_with_viewport(self.view)
         # Avoid needless spacing
-        self.view.parent.props.shadow_type = gtk.SHADOW_NONE
+        self.view.parent.props.shadow_type = Gtk.ShadowType.NONE
 
         self.set_canvas(self.sw)
         self.sw.show_all()
@@ -138,7 +139,7 @@ class ImageViewerActivity(activity.Activity):
 
         self.is_received_document = False
 
-        if self._shared_activity and handle.object_id == None:
+        if self.shared_activity and handle.object_id == None:
             # We're joining, and we don't already have the document.
             if self.get_shared():
                 # Already joined for some reason, just get the document
@@ -147,7 +148,7 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
         elif self._object_id is None:
-            self._show_object_picker = gobject.timeout_add(1000, \
+            self._show_object_picker = GObject.timeout_add(1000, \
                 self._show_picker_cb)
 
     def handle_view_source(self):
@@ -190,7 +191,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
-        spacer = gtk.SeparatorToolItem()
+        spacer = Gtk.SeparatorToolItem()
         spacer.props.draw = False
         toolbar_box.toolbar.insert(spacer, -1)
         spacer.show()
@@ -208,7 +209,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        spacer = gtk.SeparatorToolItem()
+        spacer = Gtk.SeparatorToolItem()
         spacer.props.draw = False
         toolbar_box.toolbar.insert(spacer, -1)
         spacer.show()
@@ -219,7 +220,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(fullscreen_button, -1)
         fullscreen_button.show()
 
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
         toolbar_box.toolbar.insert(separator, -1)
@@ -262,13 +263,13 @@ class ImageViewerActivity(activity.Activity):
             return
 
         chooser = ObjectChooser(_('Choose document'), self,
-            gtk.DIALOG_MODAL |
-            gtk.DIALOG_DESTROY_WITH_PARENT, \
+            Gtk.DialogFlags.MODAL |
+            Gtk.DialogFlags.DESTROY_WITH_PARENT, \
             what_filter=mime.GENERIC_TYPE_IMAGE)
 
         try:
             result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
+            if result == Gtk.ResponseType.ACCEPT:
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
@@ -284,7 +285,7 @@ class ImageViewerActivity(activity.Activity):
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
-        gobject.idle_add(self.__set_file_idle_cb, tempfile)
+        GObject.idle_add(self.__set_file_idle_cb, tempfile)
 
     def __set_file_idle_cb(self, file_path):
         self.view.set_file_location(file_path)
@@ -335,7 +336,7 @@ class ImageViewerActivity(activity.Activity):
 
         self.progressdialog.destroy()
 
-        gobject.idle_add(self.__set_file_idle_cb, tempfile)
+        GObject.idle_add(self.__set_file_idle_cb, tempfile)
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
@@ -351,7 +352,7 @@ class ImageViewerActivity(activity.Activity):
         fraction = bytes_downloaded / total
         self.progressdialog.set_fraction(fraction)
 
-        #gtk.main_iteration()
+        #Gtk.main_iteration()
 
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
@@ -360,12 +361,12 @@ class ImageViewerActivity(activity.Activity):
         self._want_document = True
         self._download_content_length = 0
         self._download_content_type = None
-        gobject.idle_add(self._get_document)
+        GObject.idle_add(self._get_document)
 
     def _download_document(self, tube_id, path):
         # FIXME: should ideally have the CM listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
@@ -413,7 +414,7 @@ class ImageViewerActivity(activity.Activity):
 
         # Avoid trying to download the document multiple times at once
         self._want_document = False
-        gobject.idle_add(self._download_document, tube_id, path)
+        GObject.idle_add(self._download_document, tube_id, path)
         return False
 
     def _joined_cb(self, also_self):
@@ -426,7 +427,7 @@ class ImageViewerActivity(activity.Activity):
         self.progressdialog = ProgressDialog.ProgressDialog(self)
         self.progressdialog.show_all()
 
-        gobject.idle_add(self._get_document)
+        GObject.idle_add(self._get_document)
 
     def _share_document(self):
         """Share the document."""
@@ -438,7 +439,7 @@ class ImageViewerActivity(activity.Activity):
             self._tempfile)
 
         # Make a tube for it
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = \
                 iface.OfferStreamTube(IMAGEVIEWER_STREAM_SERVICE,
@@ -449,7 +450,7 @@ class ImageViewerActivity(activity.Activity):
 
     def watch_for_tubes(self):
         """Watch for new tubes."""
-        tubes_chan = self._shared_activity.telepathy_tubes_chan
+        tubes_chan = self.shared_activity.telepathy_tubes_chan
 
         tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube',
             self._new_tube_cb)
@@ -468,7 +469,7 @@ class ImageViewerActivity(activity.Activity):
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
             if self._want_document:
-                gobject.idle_add(self._get_document)
+                GObject.idle_add(self._get_document)
 
     def _list_tubes_reply_cb(self, tubes):
         """Callback when new tubes are available."""

@@ -1,24 +1,24 @@
-import gtk
+from gi.repository import Gtk
 from gettext import gettext as _
 
 
-class ProgressDialog(gtk.Dialog):
+class ProgressDialog(Gtk.Dialog):
 
     def __init__(self, parent):
-        gtk.Dialog.__init__(self, _('Downloading...'), parent, \
-                gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, \
-                (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
+        GObject.GObject.__init__(self, _('Downloading...'), parent, \
+                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, \
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
 
         self._activity = parent
 
         self.connect('response', self._response_cb)
 
-        self._pb = gtk.ProgressBar()
+        self._pb = Gtk.ProgressBar()
         self._pb.set_text(_('Retrieving shared image, please wait...'))
         self.vbox.add(self._pb)
 
     def _response_cb(self, dialog, response_id):
-        if response_id == gtk.RESPONSE_REJECT:
+        if response_id == Gtk.ResponseType.REJECT:
             self._activity.close()
         else:
             pass
