@@ -260,20 +260,14 @@ if __name__ == '__main__':
     sw = Gtk.ScrolledWindow(hadj, vadj)
 
     view = ImageViewer()
-
     view.set_file_location(sys.argv[1])
 
-
     sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-
-
     sw.add_with_viewport(view)
     window.add(sw)
 
     window.set_size_request(800, 600)
-
     window.show_all()
 
     GObject.timeout_add(1000, update, view)
-
     Gtk.main()

@@ -330,7 +330,6 @@ class ImageViewerActivity(activity.Activity):
         self._jobject.file_path = file_path
         datastore.write(self._jobject, transfer_ownership=True)
 
-
         _logger.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
 
