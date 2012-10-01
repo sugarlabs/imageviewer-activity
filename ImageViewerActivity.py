@@ -26,6 +26,7 @@ from gettext import gettext as _
 
 import time
 import os
+import math
 from gi.repository import Gtk
 from gi.repository import GObject
 
@@ -245,15 +246,12 @@ class ImageViewerActivity(activity.Activity):
         self.view.set_zoom(1)
 
     def __rotate_anticlockwise_cb(self, button):
-        angle = self.view.get_property('angle')
-        self.view.set_angle(angle + 90)
+        angle = self.view.angle + math.pi / 2
+        self.view.set_angle(angle)
 
     def __rotate_clockwise_cb(self, button):
-        angle = self.view.get_property('angle')
-        if angle == 0:
-            angle = 360
-
-        self.view.set_angle(angle - 90)
+        angle = self.view.angle - math.pi / 2
+        self.view.set_angle(angle)
 
     def __fullscreen_cb(self, button):
         self.fullscreen()

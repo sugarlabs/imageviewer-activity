@@ -20,13 +20,15 @@ from __future__ import division
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-from gi.repository import cairo
 from gi.repository import GObject
 
 import sys
 import logging
-
+import cairo
 import random
+import time
+
+ZOOM_IN_OUT = 0.1
 
 
 class ImageViewer(Gtk.DrawingArea):
@@ -55,15 +57,13 @@ class ImageViewer(Gtk.DrawingArea):
         GObject.GObject.__init__(self)
         self.set_app_paintable(True)
 
-        self.pixbuf = None
+        self.surface = None
         self.zoom = None
         self.parent = None
         self.file_location = None
-        self._temp_pixbuf = None
-        self._image_changed_flag = True
         self._optimal_zoom_flag = True
 
-        self.connect('draw', self.draw)
+        self.connect('draw', self.__draw_cb)
 
         self.angle = 0
 
@@ -95,89 +95,98 @@ class ImageViewer(Gtk.DrawingArea):
         if self._optimal_zoom_flag:
             self._set_zoom(self._calc_optimal_zoom())
 
-    def draw(self, widget, ctx):
-        if not self.pixbuf:
+    def __draw_cb(self, widget, ctx):
+        timeini = time.time()
+        logging.debug('ImageViewer.draw start')
+
+        if self.surface is None:
             return
+
         if self.zoom is None:
             self.zoom = self._calc_optimal_zoom()
 
-        if self._temp_pixbuf is None or self._image_changed_flag:
-            self._temp_pixbuf = self._convert_pixbuf(self.pixbuf)
-            self._image_changed_flag = False
+        w = int(self.surface.get_width() * self.zoom)
+        h = int(self.surface.get_height() * self.zoom)
+        logging.debug('W: %s, H: %s', w, h)
+
+        ctx.save()
+        if self.angle != 0:
+            logging.debug('Rotating: %s', -self.angle)
+            ctx.translate(0.5 * w, 0.5 * h)
+            ctx.rotate(-self.angle)
+            ctx.translate(-0.5 * w, -0.5 * h)
+
+        if self.zoom != 1:
+            logging.debug('Scaling: %s', self.zoom)
+            ctx.scale(self.zoom, self.zoom)
 
         rect = self.get_allocation()
         x = rect.x
         y = rect.y
 
-        width = self._temp_pixbuf.get_width()
-        height = self._temp_pixbuf.get_height()
-
         if self.parent:
             rect = self.parent.get_allocation()
-            if rect.width > width:
-                x = int(((rect.width - x) - width) / 2)
+            if rect.width > w:
+                x = int(((rect.width - x) - w) / 2)
+            if rect.height > h:
+                y = int(((rect.height - y) - h) / 2)
 
-            if rect.height > height:
-                y = int(((rect.height - y) - height) / 2)
+        # TODO: center the image into the canvas
+        # ctx.translate(x, y)
 
-        self.set_size_request(self._temp_pixbuf.get_width(),
-                self._temp_pixbuf.get_height())
-
-        Gdk.cairo_set_source_pixbuf(ctx, self._temp_pixbuf, x, y)
-
+        ctx.set_source_surface(self.surface, 0, 0)
         ctx.paint()
+        logging.debug('ImageViewer.draw end %f', (time.time() - timeini))
 
     def set_zoom(self, zoom):
         self._optimal_zoom_flag = False
         self._set_zoom(zoom)
 
     def set_angle(self, angle):
-        self._image_changed_flag = True
         self._optimal_zoom_flag = True
 
         self.angle = angle
-
-        if self.props.window:
-            alloc = self.get_allocation()
-            rect = cairo.RectangleInt()
-            rect.x = alloc.x
-            rect.y = alloc.y
-            rect.width = alloc.width
-            rect.height = alloc.height
-            self.props.window.invalidate_rect(rect, True)
-            self.props.window.process_updates(True)
-
+        self.queue_draw()
         self.emit('angle-changed')
 
     def zoom_in(self):
-        self.set_zoom(self.zoom + 0.2)
+        self.set_zoom(self.zoom + ZOOM_IN_OUT)
+        # TODO: this value is not valid
         if self.zoom > (4):
             return False
         else:
             return True
 
     def zoom_out(self):
-        self.set_zoom(self.zoom - 0.2)
+        self.set_zoom(self.zoom - ZOOM_IN_OUT)
+        # TODO: this value is not valid
         if self.zoom <= 0.2:
             return False
         else:
             return True
 
+    def _pixbuf_to_context(self, pixbuf, context, x=0, y=0):
+        # copy from the pixbuf to the drawing context
+        context.save()
+        context.translate(x, y)
+        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
+        context.paint()
+        context.restore()
+
     def set_file_location(self, file_location):
-        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
+        logging.debug('Loading image from: %s', file_location)
+
+        # http://cairographics.org/gdkpixbufpycairo/
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
+
+        self.surface = cairo.ImageSurface(
+            cairo.FORMAT_ARGB32, pixbuf.get_width(), pixbuf.get_height())
+        ctx = cairo.Context(self.surface)
+        self._pixbuf_to_context(pixbuf, ctx)
+
         self.file_location = file_location
         self.zoom = None
-        self._image_changed_flag = True
-
-        if self.props.window:
-            alloc = self.get_allocation()
-            rect = cairo.RectangleInt()
-            rect.x = alloc.x
-            rect.y = alloc.y
-            rect.width = alloc.width
-            rect.height = alloc.height
-            self.props.window.invalidate_rect(rect, True)
-            self.props.window.process_updates(True)
+        self.queue_draw()
 
     def _calc_optimal_zoom(self):
         # This tries to figure out a best fit model
@@ -191,57 +200,27 @@ class ImageViewer(Gtk.DrawingArea):
         width = rect.width
         height = rect.height
 
-        pixbuf = self.pixbuf
-        if width < pixbuf.get_width() or height < pixbuf.get_height():
+        if width < self.surface.get_width() or \
+                height < self.surface.get_height():
             # Image is larger than allocated size
-            zoom = min(width / pixbuf.get_width(),
-                    height / pixbuf.get_height())
+            zoom = min(width / self.surface.get_width(),
+                    height / self.surface.get_height())
         else:
             zoom = 1
 
+        logging.debug('Optimal zoom: %s', zoom)
         return zoom
 
     def _set_zoom(self, zoom):
-        self._image_changed_flag = True
         self.zoom = zoom
 
-        if self.props.window:
-            alloc = self.get_allocation()
-            rect = cairo.RectangleInt()
-            rect.x = alloc.x
-            rect.y = alloc.y
-            rect.width = alloc.width
-            rect.height = alloc.height
-            self.props.window.invalidate_rect(rect, True)
-            self.props.window.process_updates(True)
-
+        # README: this is a hack to not raise the 'draw' event (again)
+        # when we request more space to show the scroll bars
+        w = int(self.surface.get_width() * self.zoom)
+        h = int(self.surface.get_height() * self.zoom)
+        self.set_size_request(w, h)
+        # self.queue_draw()
         self.emit('zoom-changed')
-
-    def _convert_pixbuf(self, pixbuf):
-        if self.angle == 0:
-            rotate = GdkPixbuf.PixbufRotation.NONE
-        elif self.angle == 90:
-            rotate = GdkPixbuf.PixbufRotation.COUNTERCLOCKWISE
-        elif self.angle == 180:
-            rotate = GdkPixbuf.PixbufRotation.UPSIDEDOWN
-        elif self.angle == 270:
-            rotate = GdkPixbuf.PixbufRotation.CLOCKWISE
-        elif self.angle == 360:
-            self.angle = 0
-            rotate = GdkPixbuf.PixbufRotation.NONE
-        else:
-            logging.warning('Got unsupported rotate angle')
-
-        if rotate != GdkPixbuf.PixbufRotation.NONE:
-            pixbuf = pixbuf.rotate_simple(rotate)
-
-        if self.zoom != 1:
-            width = int(pixbuf.get_width() * self.zoom)
-            height = int(pixbuf.get_height() * self.zoom)
-            pixbuf = pixbuf.scale_simple(width, height,
-                                         GdkPixbuf.InterpType.TILES)
-
-        return pixbuf
 
 
 def update(view_object):
