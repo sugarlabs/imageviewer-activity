@@ -100,7 +100,16 @@ class ImageViewer(Gtk.DrawingArea):
         logging.debug('ImageViewer.draw start')
 
         if self.surface is None:
-            return
+            if self.file_location is None:
+                return
+
+            # http://cairographics.org/gdkpixbufpycairo/
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.file_location)
+            self.surface = ctx.get_target().create_similar(
+                    cairo.CONTENT_COLOR_ALPHA, pixbuf.get_width(),
+                    pixbuf.get_height())
+            ctx_surface = cairo.Context(self.surface)
+            self._pixbuf_to_context(pixbuf, ctx_surface)
 
         if self.zoom is None:
             self.zoom = self._calc_optimal_zoom()
@@ -175,14 +184,6 @@ class ImageViewer(Gtk.DrawingArea):
 
     def set_file_location(self, file_location):
         logging.debug('Loading image from: %s', file_location)
-
-        # http://cairographics.org/gdkpixbufpycairo/
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
-
-        self.surface = cairo.ImageSurface(
-            cairo.FORMAT_ARGB32, pixbuf.get_width(), pixbuf.get_height())
-        ctx = cairo.Context(self.surface)
-        self._pixbuf_to_context(pixbuf, ctx)
 
         self.file_location = file_location
         self.zoom = None
