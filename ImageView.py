@@ -133,17 +133,13 @@ class ImageViewer(Gtk.DrawingArea):
         x = rect.x
         y = rect.y
 
-        if self.parent:
-            rect = self.parent.get_allocation()
-            if rect.width > w:
-                x = int(((rect.width - x) - w) / 2)
-            if rect.height > h:
-                y = int(((rect.height - y) - h) / 2)
+        rect = self.get_allocation()
+        if rect.width > w:
+            x = int((rect.width - w) / 2)
+        if rect.height > h:
+            y = int((rect.height - h) / 2)
 
-        # TODO: center the image into the canvas
-        # ctx.translate(x, y)
-
-        ctx.set_source_surface(self.surface, 0, 0)
+        ctx.set_source_surface(self.surface, x, y)
         ctx.paint()
         logging.debug('ImageViewer.draw end %f', (time.time() - timeini))
 
