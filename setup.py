@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-from sugar.activity import bundlebuilder
+from sugar3.activity import bundlebuilder
 
 bundlebuilder.start()
