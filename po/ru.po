@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2010-09-22 13:50+0200\n"
 "Last-Translator: krom9ra <krom9ra@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,35 +26,49 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.3\n"
 
-#: ImageViewerActivity.py:173
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "Просмотр картинок"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "Отдалить"
 
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "Приблизить"
 
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "Уместить в окне"
 
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "Истинный размер"
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "Повернуть против часовой стрелки"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "Повернуть по часовой стрелке"
 
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "Выберите документ"
 
@@ -65,10 +79,6 @@ msgstr "Загрузка..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Получение изображений, подождите..."
-
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Просмотр картинок"
 
 #~ msgid "View"
 #~ msgstr "Просмотреть"

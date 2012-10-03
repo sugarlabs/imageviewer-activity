@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2011-11-19 16:48+0200\n"
 "Last-Translator: EdgarQuispeChambi <quispedgar@yahoo.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,58 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
+#  "Visor de imagenes"
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "Uñjasiwi unjayañataki"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
 #  "Reducir"
-#: ImageViewerActivity.py:173
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "Jisk'aptayaña"
 
 #  "Ampliar"
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "Jach'aptayaña"
 
 #  "Ajustar a la ventana"
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "Wakichataru khuskhachaña"
 
 #  "Tamaño original"
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "Tunu chani"
 
 #  "Rotar en el sentido opuesto a las agujas del reloj"
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "Kupi tuqiru muyuña"
 
 #  "Rotar en el sentido del reloj"
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "Ch'iqa tuqiru muyuña"
 
 #  "Pantalla completa"
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "Maypacha uñtawi"
 
 #  "Elegir documento"
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "Wakichata katuña"
 
@@ -66,8 +81,3 @@ msgstr "Apaqaskiwa..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Apaqaskiwa uñtasiwi, suyt'asma..."
-
-#  "Visor de imagenes"
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Uñjasiwi unjayañataki"

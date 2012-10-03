@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2011-07-03 13:54+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,35 +25,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
-#: ImageViewerActivity.py:173
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "படம் பார்வை"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "சிறிதாக்கிக் காட்டு"
 
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "பெரிதாக்கிக் காட்டு"
 
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "சரியான சாளரத்திற்கு மாற்றுக"
 
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "உண்மை அளவு"
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "மணிக்கூட்டு எதிர் திசையில் நிலைமாற்று"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "மணிக்கூட்டு திசையில் நிலைமாற்று"
 
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "முழுத்திரை"
 
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "ஆவணத்தைத் தெரிவுசெய்"
 
@@ -66,10 +80,6 @@ msgid "Retrieving shared image, please wait..."
 msgstr ""
 "பங்கிடப்பட்ட படம் மீளப்பெறப்பட்டுக்கொண்டிருக்கிறது, தயவு செய்து "
 "காத்திருக்கவும்...."
-
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "படம் பார்வை"
 
 #~ msgid "View"
 #~ msgstr "பார்வை இடு"
