@@ -35,8 +35,10 @@ from sugar3.graphics.objectchooser import ObjectChooser
 from sugar3 import mime
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.graphics.icon import Icon
 from sugar3.activity.widgets import ActivityToolbarButton
 from sugar3.activity.widgets import StopButton
+from sugar3.graphics import style
 
 from sugar3 import network
 from sugar3.datastore import datastore
@@ -119,13 +121,57 @@ class ImageViewerActivity(activity.Activity):
         self.sw = Gtk.ScrolledWindow(hadj, vadj)
         self.view.parent = self.sw
 
+        notebook = Gtk.Notebook()
+        notebook.set_show_tabs(False)
+
+        if not handle.object_id:
+            empty_widgets = Gtk.EventBox()
+            empty_widgets.modify_bg(Gtk.StateType.NORMAL,
+                                    style.COLOR_WHITE.get_gdk_color())
+
+            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            mvbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            vbox.pack_start(mvbox, True, False, 0)
+
+            image_icon = Icon(pixel_size=style.LARGE_ICON_SIZE,
+                              icon_name='imageviewer',
+                              stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
+                              fill_color=style.COLOR_TRANSPARENT.get_svg())
+            mvbox.pack_start(image_icon, False, False, style.DEFAULT_PADDING)
+
+            label = Gtk.Label('<span foreground="%s"><b>%s</b></span>' %
+                              (style.COLOR_BUTTON_GREY.get_html(),
+                              _('No image')))
+            label.set_use_markup(True)
+            mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
+
+            hbox = Gtk.Box()
+            open_image_btn = Gtk.Button()
+            open_image_btn.connect('clicked', self._show_picker_cb, notebook)
+            add_image = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
+                                                 Gtk.IconSize.BUTTON)
+            buttonbox = Gtk.Box()
+            buttonbox.pack_start(add_image, False, True, 0)
+            buttonbox.pack_end(Gtk.Label(_('Choose an image')), True, True, 5)
+            open_image_btn.add(buttonbox)
+            hbox.pack_start(open_image_btn, True, False, 0)
+            mvbox.pack_start(hbox, False, False, style.DEFAULT_PADDING)
+
+            empty_widgets.add(vbox)
+            vbox.show_all()
+
+            notebook.append_page(empty_widgets, None)
+            empty_widgets.show_all()
+
         self.sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.sw.add_with_viewport(self.view)
         # Avoid needless spacing
         self.view.parent.props.shadow_type = Gtk.ShadowType.NONE
 
-        self.set_canvas(self.sw)
-        self.sw.show_all()
+        notebook.append_page(self.sw, None)
+
+        self.set_canvas(notebook)
+        notebook.show_all()
 
         self.unused_download_tubes = set()
         self._want_document = True
@@ -150,7 +196,7 @@ class ImageViewerActivity(activity.Activity):
                 self.connect("joined", self._joined_cb)
         elif self._object_id is None:
             self._show_object_picker = GObject.timeout_add(1000, \
-                self._show_picker_cb)
+                self._show_picker_cb, notebook)
 
     def handle_view_source(self):
         raise NotImplementedError
@@ -256,7 +302,7 @@ class ImageViewerActivity(activity.Activity):
     def __fullscreen_cb(self, button):
         self.fullscreen()
 
-    def _show_picker_cb(self):
+    def _show_picker_cb(self, *args):
         if not self._want_document:
             return
 
@@ -269,6 +315,7 @@ class ImageViewerActivity(activity.Activity):
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
+                args[-1].set_current_page(-1)
         finally:
             chooser.destroy()
             del chooser
