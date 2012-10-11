@@ -42,6 +42,15 @@ from sugar3.graphics import style
 
 from sugar3 import network
 from sugar3.datastore import datastore
+
+try:
+    from gi.repository import SugarGestures
+    GESTURES_AVAILABLE = True
+except:
+    GESTURES_AVAILABLE = False
+
+ANGLE_THRESHOLD = 0.5  # 1.57 radians == 90 degrees
+
 import telepathy
 import dbus
 
@@ -98,8 +107,8 @@ IMAGEVIEWER_STREAM_SERVICE = 'imageviewer-activity-http'
 class ImageViewerActivity(activity.Activity):
 
     def __init__(self, handle):
+        logging.error('start activity')
         activity.Activity.__init__(self, handle)
-
         self.zoom = None
         self._object_id = handle.object_id
 
@@ -109,6 +118,14 @@ class ImageViewerActivity(activity.Activity):
         self._fileserver_tube_id = None
 
         self.view = ImageView.ImageViewer()
+
+        if GESTURES_AVAILABLE:
+            zoom_controller = SugarGestures.ZoomController()
+            zoom_controller.connect('scale-changed',
+                    self.__scale_changed_cb)
+            zoom_controller.attach(self,
+                    SugarGestures.EventControllerFlags.NONE)
+
         self.progressdialog = None
 
         toolbar_box = ToolbarBox()
@@ -120,11 +137,16 @@ class ImageViewerActivity(activity.Activity):
         hadj = Gtk.Adjustment()
         self.sw = Gtk.ScrolledWindow(hadj, vadj)
         self.view.parent = self.sw
+        # Avoid needless spacing
+        self.view.parent.props.shadow_type = Gtk.ShadowType.NONE
+        self.sw.set_policy(Gtk.PolicyType.AUTOMATIC,
+                Gtk.PolicyType.AUTOMATIC)
+        self.sw.add_with_viewport(self.view)
+        self.sw.show_all()
+        self._last_angle = 0.0
+        self._last_scale = 1.0
 
-        notebook = Gtk.Notebook()
-        notebook.set_show_tabs(False)
-
-        if not handle.object_id:
+        if self._object_id is None:
             empty_widgets = Gtk.EventBox()
             empty_widgets.modify_bg(Gtk.StateType.NORMAL,
                                     style.COLOR_WHITE.get_gdk_color())
@@ -147,7 +169,7 @@ class ImageViewerActivity(activity.Activity):
 
             hbox = Gtk.Box()
             open_image_btn = Gtk.Button()
-            open_image_btn.connect('clicked', self._show_picker_cb, notebook)
+            open_image_btn.connect('clicked', self._show_picker_cb)
             add_image = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
                                                  Gtk.IconSize.BUTTON)
             buttonbox = Gtk.Box()
@@ -158,20 +180,11 @@ class ImageViewerActivity(activity.Activity):
             mvbox.pack_start(hbox, False, False, style.DEFAULT_PADDING)
 
             empty_widgets.add(vbox)
-            vbox.show_all()
-
-            notebook.append_page(empty_widgets, None)
             empty_widgets.show_all()
-
-        self.sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        self.sw.add_with_viewport(self.view)
-        # Avoid needless spacing
-        self.view.parent.props.shadow_type = Gtk.ShadowType.NONE
-
-        notebook.append_page(self.sw, None)
-
-        self.set_canvas(notebook)
-        notebook.show_all()
+            logging.error('show empty widgets')
+            self.set_canvas(empty_widgets)
+        else:
+            self.set_canvas(self.sw)
 
         self.unused_download_tubes = set()
         self._want_document = True
@@ -194,9 +207,13 @@ class ImageViewerActivity(activity.Activity):
             else:
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
-        elif self._object_id is None:
-            self._show_object_picker = GObject.timeout_add(1000, \
-                self._show_picker_cb, notebook)
+
+    def __scale_changed_cb(self, controller, scale):
+        if scale != self._last_scale:
+            self._last_scale = scale
+            logging.error('Scale changed %f', scale)
+
+            self.view.set_zoom_relative(scale)
 
     def handle_view_source(self):
         raise NotImplementedError
@@ -302,7 +319,7 @@ class ImageViewerActivity(activity.Activity):
     def __fullscreen_cb(self, button):
         self.fullscreen()
 
-    def _show_picker_cb(self, *args):
+    def _show_picker_cb(self, button):
         if not self._want_document:
             return
 
@@ -315,7 +332,7 @@ class ImageViewerActivity(activity.Activity):
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
-                args[-1].set_current_page(-1)
+                    self.set_canvas(self.sw)
         finally:
             chooser.destroy()
             del chooser

@@ -66,6 +66,10 @@ class ImageViewer(Gtk.DrawingArea):
         self.connect('draw', self.__draw_cb)
 
         self.angle = 0
+        self._zoom_ori = 1.0
+        self._angle_ori = 0.0
+        self._fast = True
+        self._redraw_id = None
 
     def do_get_property(self, pspec):
         if pspec.name == 'zoom':
@@ -97,12 +101,12 @@ class ImageViewer(Gtk.DrawingArea):
 
     def __draw_cb(self, widget, ctx):
         timeini = time.time()
-        logging.debug('ImageViewer.draw start')
+        logging.error('ImageViewer.draw start')
 
         if self.surface is None:
             if self.file_location is None:
                 return
-
+            logging.error('init surface with image')
             # http://cairographics.org/gdkpixbufpycairo/
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.file_location)
             self.surface = ctx.get_target().create_similar(
@@ -116,17 +120,19 @@ class ImageViewer(Gtk.DrawingArea):
 
         w = int(self.surface.get_width() * self.zoom)
         h = int(self.surface.get_height() * self.zoom)
-        logging.debug('W: %s, H: %s', w, h)
+        logging.error('W: %s, H: %s', w, h)
 
         ctx.save()
+        if self._fast:
+            ctx.set_antialias(cairo.ANTIALIAS_NONE)
         if self.angle != 0:
-            logging.debug('Rotating: %s', -self.angle)
+            logging.error('Rotating: %s', self.angle)
             ctx.translate(0.5 * w, 0.5 * h)
-            ctx.rotate(-self.angle)
+            ctx.rotate(self.angle)
             ctx.translate(-0.5 * w, -0.5 * h)
 
         if self.zoom != 1:
-            logging.debug('Scaling: %s', self.zoom)
+            logging.error('Scaling: %s', self.zoom)
             ctx.scale(self.zoom, self.zoom)
 
         rect = self.get_allocation()
@@ -140,12 +146,36 @@ class ImageViewer(Gtk.DrawingArea):
             y = int((rect.height - h) / 2)
 
         ctx.set_source_surface(self.surface, x, y)
+        if self._fast:
+            ctx.get_source().set_filter(cairo.FILTER_NEAREST)
         ctx.paint()
-        logging.debug('ImageViewer.draw end %f', (time.time() - timeini))
+        logging.error('ImageViewer.draw end %f', (time.time() - timeini))
+
+        if not self._fast:
+            if self._redraw_id is not None:
+                GObject.source_remove(self._redraw_id)
+            self._redraw_id = GObject.timeout_add(200,
+                    self._redraw_high_quality)
+
+    def _redraw_high_quality(self):
+        self._fast = False
+        self._redraw_id = None
+        self.queue_draw()
+        return False
 
     def set_zoom(self, zoom):
         self._optimal_zoom_flag = False
         self._set_zoom(zoom)
+
+    def set_zoom_relative(self, scale):
+        if scale == 1.0:
+            self._zoom_ori = self.zoom
+        self._set_zoom(self._zoom_ori * scale)
+
+    def set_angle_relative(self, diff):
+        if diff == 0.0:
+            self._angle_ori = self.angle
+        self.set_angle(self._angle_ori + diff)
 
     def set_angle(self, angle):
         self._optimal_zoom_flag = True
@@ -210,13 +240,12 @@ class ImageViewer(Gtk.DrawingArea):
 
     def _set_zoom(self, zoom):
         self.zoom = zoom
-
-        # README: this is a hack to not raise the 'draw' event (again)
-        # when we request more space to show the scroll bars
+#        # README: this is a hack to not raise the 'draw' event (again)
+#        # when we request more space to show the scroll bars
+        self._fast = True
         w = int(self.surface.get_width() * self.zoom)
         h = int(self.surface.get_height() * self.zoom)
         self.set_size_request(w, h)
-        # self.queue_draw()
         self.emit('zoom-changed')
 
 
