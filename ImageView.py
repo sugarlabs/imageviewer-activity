@@ -70,6 +70,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._angle_ori = 0.0
         self._fast = True
         self._redraw_id = None
+        self._is_touching = False
 
     def do_get_property(self, pspec):
         if pspec.name == 'zoom':
@@ -131,21 +132,29 @@ class ImageViewer(Gtk.DrawingArea):
             ctx.rotate(self.angle)
             ctx.translate(-0.5 * w, -0.5 * h)
 
+        scrolled_window = self.get_parent()
+        rect = scrolled_window.get_allocation()
+        x = y = 0
+        if rect.width >= w:
+            x = int((rect.width - w) / 2)
+        elif self._is_touching:
+            hadj = int((w - rect.width) / 2)
+            hadjustment = scrolled_window.get_hadjustment()
+            hadjustment.set_value(hadj)
+
+        if rect.height >= h:
+            y = int((rect.height - h) / 2)
+        elif self._is_touching:
+            vadj = int((h - rect.height) / 2)
+            vadjustment = scrolled_window.get_vadjustment()
+            vadjustment.set_value(vadj)
+
         if self.zoom != 1:
             logging.error('Scaling: %s', self.zoom)
+            ctx.translate(x, y)
             ctx.scale(self.zoom, self.zoom)
 
-        rect = self.get_allocation()
-        x = rect.x
-        y = rect.y
-
-        rect = self.get_allocation()
-        if rect.width > w:
-            x = int((rect.width - w) / 2)
-        if rect.height > h:
-            y = int((rect.height - h) / 2)
-
-        ctx.set_source_surface(self.surface, x, y)
+        ctx.set_source_surface(self.surface, 0, 0)
         if self._fast:
             ctx.get_source().set_filter(cairo.FILTER_NEAREST)
         ctx.paint()
@@ -156,6 +165,8 @@ class ImageViewer(Gtk.DrawingArea):
                 GObject.source_remove(self._redraw_id)
             self._redraw_id = GObject.timeout_add(200,
                     self._redraw_high_quality)
+
+        self._is_touching = False
 
     def _redraw_high_quality(self):
         self._fast = False

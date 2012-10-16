@@ -213,6 +213,7 @@ class ImageViewerActivity(activity.Activity):
             self._last_scale = scale
             logging.error('Scale changed %f', scale)
 
+            self.view._is_touching = True
             self.view.set_zoom_relative(scale)
 
     def handle_view_source(self):
