@@ -14,46 +14,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
-"PO-Revision-Date: 2011-04-03 13:02+0200\n"
-"Last-Translator: <arief.utama@gmail.com>\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"PO-Revision-Date: 2012-09-29 16:58+0200\n"
+"Last-Translator: andika <andika@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: ImageViewerActivity.py:173
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "Penampil Gambar"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+"Aktivitas Penampil Gambar adalah alat penilik gambar yang cepat dan "
+"sederhana"
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+"Ini punya fitur yang diharapkan dari suatu penilik gambar seperti zum, "
+"rotasi, dsb."
+
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "Perkecil"
 
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "Perbesar"
 
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "Sebesar layar aplikasi"
 
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "Ukuran aslinya"
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "Putar berlawanan arah jarum jam"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "Putar searah jarum jam"
 
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "Tampilan penuh"
 
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "Pilih dokumen"
 
@@ -64,7 +82,3 @@ msgstr "Sedang mengunduh..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Sedang menerima kiriman gambar, harap tunggu..."
-
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Penampil Gambar"

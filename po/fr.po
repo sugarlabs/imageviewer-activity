@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2009-09-08 08:10-0400\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: French\n"
@@ -25,35 +25,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 1.2.1\n"
 
-#: ImageViewerActivity.py:173
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "Visualiseur d'image"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "Ajuster à la taille de la fenêtre"
 
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "Taille originale"
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "Rotation dans le sens anti-horaire"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "Rotation dans le sens horaire"
 
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "Plein écran"
 
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "Choisir un document"
 
@@ -64,10 +78,6 @@ msgstr "Téléchargement en cours..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "Récupération de l'image partagée en cours, patientez..."
-
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "Visualiseur d'image"
 
 #~ msgid "View"
 #~ msgstr "Vue"

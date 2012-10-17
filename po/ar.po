@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 13:31+0000\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2009-08-28 15:38-0400\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,35 +22,49 @@ msgstr ""
 "n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5;\n"
 "X-Generator: Pootle 1.2.1\n"
 
-#: ImageViewerActivity.py:173
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "عارض الصور"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
+#: ImageViewerActivity.py:170
 msgid "Zoom out"
 msgstr "بعّد"
 
-#: ImageViewerActivity.py:179
+#: ImageViewerActivity.py:176
 msgid "Zoom in"
 msgstr "قرّب"
 
-#: ImageViewerActivity.py:185
+#: ImageViewerActivity.py:182
 msgid "Fit to window"
 msgstr "لائم النافذة"
 
-#: ImageViewerActivity.py:191
+#: ImageViewerActivity.py:188
 msgid "Original size"
 msgstr "الحجم الأصلي"
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
 msgstr "دوّر عكس عقارب الساعة"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
 msgstr "دوّر مع عقارب الساعة"
 
-#: ImageViewerActivity.py:220
+#: ImageViewerActivity.py:217
 msgid "Fullscreen"
 msgstr "ملء الشاشة"
 
-#: ImageViewerActivity.py:268
+#: ImageViewerActivity.py:264
 msgid "Choose document"
 msgstr "اختر مستندا"
 
@@ -61,10 +75,6 @@ msgstr "يُنزّل..."
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
 msgstr "يجلب الصورة المُشاركة، انتظر من فضلك..."
-
-#: activity/activity.info:2
-msgid "Image Viewer"
-msgstr "عارض الصور"
 
 #~ msgid "View"
 #~ msgstr "عرض"
