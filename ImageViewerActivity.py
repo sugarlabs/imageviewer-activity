@@ -116,6 +116,7 @@ class ImageViewerActivity(activity.Activity):
         self._zoom_in_button = None
         self._fileserver = None
         self._fileserver_tube_id = None
+        self._scroll_pos = (0, 0)
 
         self.view = ImageView.ImageViewer()
 
@@ -134,7 +135,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.show()
 
         vadj = Gtk.Adjustment()
+        vadj.connect('value-changed', self._scrolledwindow_moved)
         hadj = Gtk.Adjustment()
+        hadj.connect('value-changed', self._scrolledwindow_moved)
         self.sw = Gtk.ScrolledWindow(hadj, vadj)
         self.view.parent = self.sw
         # Avoid needless spacing
@@ -208,6 +211,17 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
+    def _scrolledwindow_moved(self, adjustment):
+        hadj = self.sw.get_hadjustment()
+        vadj = self.sw.get_vadjustment()
+
+        if not self._is_touching:
+            self._scroll_pos = (hadj.get_value(), vadj.get_value())
+        else:
+            h, v = self._scroll_pos
+            hadj.set_value(h)
+            vadj.set_value(v)
+
     def __scale_changed_cb(self, controller, scale):
         if scale != self._last_scale:
             self._last_scale = scale
@@ -215,6 +229,7 @@ class ImageViewerActivity(activity.Activity):
 
             self.view._is_touching = True
             self.view.set_zoom_relative(scale)
+            self.view._is_touching = False
 
     def handle_view_source(self):
         raise NotImplementedError
