@@ -27,6 +27,7 @@ import logging
 import cairo
 import random
 import time
+import math
 
 ZOOM_IN_OUT = 0.1
 
@@ -71,6 +72,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._fast = True
         self._redraw_id = None
         self._is_touching = False
+        self._switched = False
 
     def do_get_property(self, pspec):
         if pspec.name == 'zoom':
@@ -123,35 +125,64 @@ class ImageViewer(Gtk.DrawingArea):
         h = int(self.surface.get_height() * self.zoom)
         logging.error('W: %s, H: %s', w, h)
 
-        ctx.save()
         if self._fast:
             ctx.set_antialias(cairo.ANTIALIAS_NONE)
-        if self.angle != 0:
-            logging.error('Rotating: %s', self.angle)
-            ctx.translate(0.5 * w, 0.5 * h)
-            ctx.rotate(self.angle)
-            ctx.translate(-0.5 * w, -0.5 * h)
 
         scrolled_window = self.get_parent()
         rect = scrolled_window.get_allocation()
         x = y = 0
-        if rect.width >= w:
-            x = int((rect.width - w) / 2)
-        elif self._is_touching:
-            hadj = int((w - rect.width) / 2)
-            hadjustment = scrolled_window.get_hadjustment()
-            hadjustment.set_value(hadj)
+        if self.angle != 0:
+            logging.error('Rotating: %s', self.angle)
+            ctx.rotate(self.angle)
 
-        if rect.height >= h:
-            y = int((rect.height - h) / 2)
-        elif self._is_touching:
-            vadj = int((h - rect.height) / 2)
-            vadjustment = scrolled_window.get_vadjustment()
-            vadjustment.set_value(vadj)
+            if self.angle == math.pi:
+                ctx.translate(-w, -h)
+
+                if rect.width > w:
+                    x = -(rect.width - w) / 2
+                if rect.height > h:
+                    y = -(rect.height - h) / 2
+
+            elif self.angle == math.pi / 2:
+                ctx.translate(0, -h)
+
+                # center the image
+                if rect.height > w:
+                    x = (rect.height - w) / 2
+                if rect.width > h:
+                    y = -(rect.width - h) / 2
+
+            elif self.angle == math.pi * 3 / 2:
+                ctx.translate(-w, 0)
+
+                if rect.height > w:
+                    x = -(rect.height - w) / 2
+                if rect.width > h:
+                    y = (rect.width - h) / 2
+
+        else:
+            if rect.width > w:
+                x = int((rect.width - w) / 2)
+            if rect.height > h:
+                y = int((rect.height - h) / 2)
+        ctx.translate(x, y)
+
+        if self._is_touching:
+            if self._switched:
+                w, h = h, w
+
+            if rect.height < h:
+                vadj = int((h - rect.height) / 2)
+                vadjustment = scrolled_window.get_vadjustment()
+                vadjustment.set_value(vadj)
+
+            if rect.width < w:
+                hadj = int((w - rect.width) / 2)
+                hadjustment = scrolled_window.get_hadjustment()
+                hadjustment.set_value(hadj)
 
         if self.zoom != 1:
             logging.error('Scaling: %s', self.zoom)
-            ctx.translate(x, y)
             ctx.scale(self.zoom, self.zoom)
 
         ctx.set_source_surface(self.surface, 0, 0)
@@ -171,8 +202,22 @@ class ImageViewer(Gtk.DrawingArea):
     def _redraw_high_quality(self):
         self._fast = False
         self._redraw_id = None
-        self.queue_draw()
+        self._redraw()
         return False
+
+    def _redraw(self):
+        # README: this is a hack to not raise the 'draw' event (again)
+        # when we request more space to show the scroll bars
+        w = int(self.surface.get_width() * self.zoom)
+        h = int(self.surface.get_height() * self.zoom)
+
+        self._switched = False
+        if (self.angle / (math.pi / 2)) % 2 == 1:
+            # change image dimensions if it's rotated
+            w, h = h, w
+            self._switched = True
+
+        self.set_size_request(w, h)
 
     def set_zoom(self, zoom):
         self._optimal_zoom_flag = False
@@ -191,8 +236,8 @@ class ImageViewer(Gtk.DrawingArea):
     def set_angle(self, angle):
         self._optimal_zoom_flag = True
 
-        self.angle = angle
-        self.queue_draw()
+        self.angle = angle % (2 * math.pi)
+        self._redraw()
         self.emit('angle-changed')
 
     def zoom_in(self):
@@ -238,11 +283,18 @@ class ImageViewer(Gtk.DrawingArea):
         width = rect.width
         height = rect.height
 
-        if width < self.surface.get_width() or \
-                height < self.surface.get_height():
+        surface_width = self.surface.get_width()
+        surface_height = self.surface.get_height()
+
+        if self._switched:
+            surface_width, surface_height = \
+                surface_height, surface_width
+
+        if width < surface_width or \
+                height < surface_height:
             # Image is larger than allocated size
-            zoom = min(width / self.surface.get_width(),
-                    height / self.surface.get_height())
+            zoom = min(width / surface_width,
+                    height / surface_height)
         else:
             zoom = 1
 
@@ -251,12 +303,7 @@ class ImageViewer(Gtk.DrawingArea):
 
     def _set_zoom(self, zoom):
         self.zoom = zoom
-#        # README: this is a hack to not raise the 'draw' event (again)
-#        # when we request more space to show the scroll bars
-        self._fast = True
-        w = int(self.surface.get_width() * self.zoom)
-        h = int(self.surface.get_height() * self.zoom)
-        self.set_size_request(w, h)
+        self._redraw()
         self.emit('zoom-changed')
 
 

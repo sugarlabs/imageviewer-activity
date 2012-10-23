@@ -310,11 +310,11 @@ class ImageViewerActivity(activity.Activity):
         self.view.set_zoom(1)
 
     def __rotate_anticlockwise_cb(self, button):
-        angle = self.view.angle + math.pi / 2
+        angle = self.view.angle - math.pi / 2
         self.view.set_angle(angle)
 
     def __rotate_clockwise_cb(self, button):
-        angle = self.view.angle - math.pi / 2
+        angle = self.view.angle + math.pi / 2
         self.view.set_angle(angle)
 
     def __fullscreen_cb(self, button):
