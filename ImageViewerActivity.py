@@ -199,7 +199,7 @@ class ImageViewerActivity(activity.Activity):
 
         self.is_received_document = False
 
-        if self.shared_activity and handle.object_id == None:
+        if self.shared_activity and handle.object_id is None:
             # We're joining, and we don't already have the document.
             if self.get_shared():
                 # Already joined for some reason, just get the document
@@ -339,7 +339,7 @@ class ImageViewerActivity(activity.Activity):
     def read_file(self, file_path):
         self._want_document = False
 
-        tempfile = os.path.join(self.get_activity_root(), 'instance', \
+        tempfile = os.path.join(self.get_activity_root(), 'instance',
             'tmp%i' % time.time())
 
         os.link(file_path, tempfile)
