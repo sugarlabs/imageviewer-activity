@@ -256,10 +256,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
-        spacer = Gtk.SeparatorToolItem()
-        spacer.props.draw = False
-        toolbar_box.toolbar.insert(spacer, -1)
-        spacer.show()
+        separator = Gtk.SeparatorToolItem()
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
@@ -274,10 +273,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        spacer = Gtk.SeparatorToolItem()
-        spacer.props.draw = False
-        toolbar_box.toolbar.insert(spacer, -1)
-        spacer.show()
+        separator = Gtk.SeparatorToolItem()
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
 
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
