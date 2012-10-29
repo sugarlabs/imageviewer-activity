@@ -123,6 +123,8 @@ class ImageViewerActivity(activity.Activity):
             zoom_controller = SugarGestures.ZoomController()
             zoom_controller.connect('scale-changed',
                     self.__scale_changed_cb)
+            zoom_controller.connect('began',
+                    self.__scale_began_cb)
             zoom_controller.attach(self,
                     SugarGestures.EventControllerFlags.NONE)
 
@@ -208,12 +210,16 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
+    def __scale_began_cb(self, controller):
+        self.view._zoom_ori = self.view.zoom
+
     def __scale_changed_cb(self, controller, scale):
         if scale != self._last_scale:
             self._last_scale = scale
             logging.error('Scale changed %f', scale)
 
             self.view._is_touching = True
+            self.view._touch_center = controller.get_center()
             self.view.set_zoom_relative(scale)
 
     def handle_view_source(self):

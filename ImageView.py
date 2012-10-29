@@ -71,8 +71,14 @@ class ImageViewer(Gtk.DrawingArea):
         self._angle_ori = 0.0
         self._fast = True
         self._redraw_id = None
-        self._is_touching = False
         self._switched = False
+
+        # zoom with fixed point
+        self._is_touching = False
+        self._touch_center = False
+        self._old_zoom = None
+        self._xofs = 0
+        self._yofs = 0
 
     def do_get_property(self, pspec):
         if pspec.name == 'zoom':
@@ -167,20 +173,6 @@ class ImageViewer(Gtk.DrawingArea):
                 y = int((rect.height - h) / 2)
         ctx.translate(x, y)
 
-        if self._is_touching:
-            if self._switched:
-                w, h = h, w
-
-            if rect.height < h:
-                vadj = int((h - rect.height) / 2)
-                vadjustment = scrolled_window.get_vadjustment()
-                vadjustment.set_value(vadj)
-
-            if rect.width < w:
-                hadj = int((w - rect.width) / 2)
-                hadjustment = scrolled_window.get_hadjustment()
-                hadjustment.set_value(hadj)
-
         if self.zoom != 1:
             logging.error('Scaling: %s', self.zoom)
             ctx.scale(self.zoom, self.zoom)
@@ -218,6 +210,69 @@ class ImageViewer(Gtk.DrawingArea):
             self._switched = True
 
         self.set_size_request(w, h)
+        self._scroll_image()
+
+    def _scroll_image(self):
+        # based on Eye Of GNOME code
+
+        w = int(self.surface.get_width() * self.zoom)
+        h = int(self.surface.get_height() * self.zoom)
+
+        old_width = int(self.surface.get_width() * self._old_zoom)
+        old_height = int(self.surface.get_height() * self._old_zoom)
+
+        scrolled_window = self.get_parent()
+        rect = scrolled_window.get_allocation()
+
+        if self._switched:
+            # TODO: zoom with fixed point does not work properly when
+            # the image is rotated
+            return
+
+        if self._is_touching:
+            zoom_x_anchor = self._touch_center[1] / rect.width
+            zoom_y_anchor = self._touch_center[2] / rect.height
+        else:
+            zoom_x_anchor = 0.5
+            zoom_y_anchor = 0.5
+
+        vadjustment = scrolled_window.get_vadjustment()
+        step_inc = vadjustment.get_step_increment()
+        page_inc = vadjustment.get_page_increment()
+
+        if old_height < rect.height:
+            cy = zoom_y_anchor * old_height / self._old_zoom
+        else:
+            cy = (self._yofs + zoom_y_anchor * rect.height) / self._old_zoom
+
+        if h < rect.height:
+            self._yofs = 0
+        else:
+            self._yofs = math.floor(cy * self.zoom - \
+                    zoom_y_anchor * rect.height + 0.5)
+
+        vadj = max(0, min(self._yofs, h - rect.height))
+        vadjustment.configure(vadj, 0, h, step_inc, page_inc,
+                              rect.height)
+
+        hadjustment = scrolled_window.get_hadjustment()
+        step_inc = hadjustment.get_step_increment()
+        page_inc = hadjustment.get_page_increment()
+
+        if old_width < rect.width:
+            cx = zoom_x_anchor * old_width / self._old_zoom
+        else:
+            cx = (self._xofs + zoom_x_anchor * rect.width) / self._old_zoom
+
+        if w < rect.width:
+            self._xofs = 0
+        else:
+            self._xofs = math.floor(cx * self.zoom - \
+                    zoom_x_anchor * rect.width + 0.5)
+
+        hadj = max(0, min(self._xofs, w - rect.width))
+        hadjustment.configure(hadj, 0, w, step_inc, page_inc,
+                              rect.width)
 
     def set_zoom(self, zoom):
         self._optimal_zoom_flag = False
@@ -302,6 +357,7 @@ class ImageViewer(Gtk.DrawingArea):
         return zoom
 
     def _set_zoom(self, zoom):
+        self._old_zoom = self.zoom
         self.zoom = zoom
         self._redraw()
         self.emit('zoom-changed')
