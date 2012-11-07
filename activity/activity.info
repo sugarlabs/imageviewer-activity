@@ -11,11 +11,11 @@ icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
-version   = 53
+version   = 54
 stability = stable
 
 # support original activity.info fields
-activity_version = 53
+activity_version = 54
 bundle_id = org.laptop.ImageViewerActivity
 
 [Package]
