@@ -6,7 +6,7 @@ from gettext import gettext as _
 class ProgressDialog(Gtk.Dialog):
 
     def __init__(self, parent):
-        GObject.GObject.__init__(self, _('Downloading...'), parent, \
+        Gtk.Dialog.__init__(self, _('Downloading...'), parent, \
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, \
                 (Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
 
