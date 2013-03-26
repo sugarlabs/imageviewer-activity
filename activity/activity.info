@@ -1,5 +1,5 @@
 [Activity]
-implement = imageviewer
+implement = %(bundle_id)s
 name      = Image Viewer
 summary   = The Image Viewer activity is a simple and fast image viewer tool
 description = It has features one would expect of a standard image viewer,
@@ -7,16 +7,13 @@ description = It has features one would expect of a standard image viewer,
 homepage  = http://wiki.sugarlabs.org/go/Activities/Image_Viewer
 license   = GPLv2+
 
+version   = %(activity_version)s
+stability = stable
+
 icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
-version   = %(activity_version)s
-stability = stable
-
-# support original activity.info fields
+# original activity.info options
 activity_version = 21
 bundle_id = org.laptop.ImageViewerActivity
-
-[Package]
-project   = SweetsDistribution:0.94
