@@ -15,5 +15,5 @@ exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
 # original activity.info options
-activity_version = 21
+activity_version = 22
 bundle_id = org.laptop.ImageViewerActivity
