@@ -209,14 +209,6 @@ class ImageViewerActivity(activity.Activity):
             self.view._touch_center = controller.get_center()
             self.view.set_zoom_relative(scale)
 
-    def fullscreen(self):
-        self.view.update_optimal_zoom()
-        activity.Activity.fullscreen(self)
-
-    def unfullscreen(self):
-        activity.Activity.unfullscreen(self)
-        self.view.update_optimal_zoom()
-
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, 0)
