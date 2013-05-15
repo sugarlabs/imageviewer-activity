@@ -77,17 +77,15 @@ class ImageViewer(Gtk.DrawingArea):
         # If the image can fit in, we show it in 1:1,
         # in any other case we show it in a fit to screen way
 
-        parent_allocation = self.get_parent().get_allocation()
-        parent_width = parent_allocation.width
-        parent_height = parent_allocation.height
+        alloc = self.get_allocation()
 
         surface_width = self._surface.get_width()
         surface_height = self._surface.get_height()
 
-        if parent_width < surface_width or parent_height < surface_height:
+        if alloc.width < surface_width or alloc.height < surface_height:
             # Image is larger than allocated size
-            self._zoom = min(parent_width * 1.0 / surface_width,
-                             parent_height * 1.0 / surface_height)
+            self._zoom = min(alloc.width * 1.0 / surface_width,
+                             alloc.height * 1.0 / surface_height)
         else:
             self._zoom = 1.0
         self.queue_draw()
@@ -117,12 +115,9 @@ class ImageViewer(Gtk.DrawingArea):
         scaled_width = int(self._surface.get_width() * self._zoom)
         scaled_height = int(self._surface.get_height() * self._zoom)
 
-        parent_allocation = self.get_parent().get_allocation()
-        parent_width = parent_allocation.width
-        parent_height = parent_allocation.height
-
-        x_offset = (parent_width * 1.0 - scaled_width) / 2
-        y_offset = (parent_height * 1.0 - scaled_height) / 2
+        alloc = self.get_allocation()
+        x_offset = (alloc.width * 1.0 - scaled_width) / 2
+        y_offset = (alloc.height * 1.0 - scaled_height) / 2
 
         ctx.translate(x_offset, y_offset)
         ctx.scale(self._zoom, self._zoom)
