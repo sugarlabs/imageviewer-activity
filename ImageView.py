@@ -40,6 +40,25 @@ def _surface_from_file(file_location, ctx):
     ctx_surface.paint()
     return surface
 
+def _rotate_surface(surface, direction):
+    ctx = cairo.Context(surface)
+    new_surface = ctx.get_target().create_similar(
+        cairo.CONTENT_COLOR_ALPHA, surface.get_height(),
+        surface.get_width())
+
+    ctx_surface = cairo.Context(new_surface)
+
+    if direction == 1:
+        ctx_surface.translate(surface.get_height(), 0)
+    else:
+        ctx_surface.translate(0, surface.get_width())
+
+    ctx_surface.rotate(math.pi / 2 * direction)
+
+    ctx_surface.set_source_surface(surface, 0, 0)
+    ctx_surface.paint()
+
+    return new_surface
 
 class ImageViewer(Gtk.DrawingArea):
     def __init__(self):
@@ -48,7 +67,6 @@ class ImageViewer(Gtk.DrawingArea):
         self._file_location = None
         self._surface = None
         self._zoom = None
-        self._angle = 0
         self._target_point = None
         self._anchor_point = None
 
@@ -183,11 +201,25 @@ class ImageViewer(Gtk.DrawingArea):
         self.queue_draw()
 
     def rotate_anticlockwise(self):
-        self._angle = self._angle - math.pi / 2
+        self._surface = _rotate_surface(self._surface, -1)
+
+        # Recalculate the anchor point to make it relative to the new
+        # top left corner.
+        self._anchor_point = (
+            self._anchor_point[1],
+            self._surface.get_height() - self._anchor_point[0])
+
         self.queue_draw()
 
     def rotate_clockwise(self):
-        self._angle = self._angle + math.pi / 2
+        self._surface = _rotate_surface(self._surface, 1)
+
+        # Recalculate the anchor point to make it relative to the new
+        # top left corner.
+        self._anchor_point = (
+            self._surface.get_width() - self._anchor_point[1],
+            self._anchor_point[0])
+
         self.queue_draw()
 
     def __draw_cb(self, widget, ctx):
@@ -220,9 +252,6 @@ class ImageViewer(Gtk.DrawingArea):
 
         zoom_absolute = self._zoom * self._zoomtouch_scale
         ctx.scale(zoom_absolute, zoom_absolute)
-
-        if self._angle != 0:
-            ctx.rotate(self._angle)
 
         ctx.translate(self._anchor_point[0] * -1, self._anchor_point[1] * -1)
 
