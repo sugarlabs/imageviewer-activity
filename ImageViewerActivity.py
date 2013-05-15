@@ -116,12 +116,13 @@ class ImageViewerActivity(activity.Activity):
 
         if GESTURES_AVAILABLE:
             zoom_controller = SugarGestures.ZoomController()
-            zoom_controller.connect('scale-changed',
-                    self.__scale_changed_cb)
-            zoom_controller.connect('began',
-                    self.__scale_began_cb)
             zoom_controller.attach(self,
                     SugarGestures.EventControllerFlags.NONE)
+
+            zoom_controller.connect('began', self.__zoomtouch_began_cb)
+            zoom_controller.connect('scale-changed',
+                                    self.__zoomtouch_changed_cb)
+            zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
 
         self.progressdialog = None
 
@@ -129,9 +130,6 @@ class ImageViewerActivity(activity.Activity):
         self._add_toolbar_buttons(toolbar_box)
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
-
-        self._last_angle = 0.0
-        self._last_scale = 1.0
 
         if self._object_id is None:
             empty_widgets = Gtk.EventBox()
@@ -195,16 +193,14 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
-    def __scale_began_cb(self, controller):
-        self.view._zoom_ori = self.view.zoom
+    def __zoomtouch_began_cb(self, controller):
+        self.view.start_zoomtouch(controller.get_center())
 
-    def __scale_changed_cb(self, controller, scale):
-        if scale != self._last_scale:
-            self._last_scale = scale
+    def __zoomtouch_changed_cb(self, controller, scale):
+        self.view.update_zoomtouch(controller.get_center(), scale)
 
-            self.view._is_touching = True
-            self.view._touch_center = controller.get_center()
-            self.view.set_zoom_relative(scale)
+    def __zoomtouch_ended_cb(self, controller):
+        self.view.finish_zoomtouch()
 
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)

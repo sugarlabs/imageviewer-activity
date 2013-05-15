@@ -15,6 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import logging
 import cairo
 
 from gi.repository import Gtk
@@ -46,6 +47,9 @@ class ImageViewer(Gtk.DrawingArea):
         self._file_location = None
         self._surface = None
         self._zoom = None
+
+        self._in_zoomtouch = False
+        self._zoomtouch_scale = 1
 
         self.connect('draw', self.__draw_cb)
 
@@ -102,6 +106,27 @@ class ImageViewer(Gtk.DrawingArea):
         self._zoom = 1
         self.queue_draw()
 
+    def start_zoomtouch(self, center):
+        logging.debug("start_zoomtouch %r", center)
+        self._in_zoomtouch = True
+        self._zoomtouch_scale = 1
+        self.queue_draw()
+
+    def update_zoomtouch(self, center, scale):
+        logging.debug("update_zoomtouch %r", (center, scale))
+        self._zoomtouch_scale = scale
+        self.queue_draw()
+
+    def finish_zoomtouch(self):
+        logging.debug("finish_zoomtouch")
+
+        # apply zoom
+        self._zoom = self._zoom * self._zoomtouch_scale
+
+        self._in_zoomtouch = False
+        self._zoomtouch_scale = 1
+        self.queue_draw()
+
     def __draw_cb(self, widget, ctx):
 
         # If the image surface is not set, it reads it from the file
@@ -120,15 +145,18 @@ class ImageViewer(Gtk.DrawingArea):
 
         # Scale and center the image according to the current zoom.
 
-        scaled_width = int(self._surface.get_width() * self._zoom)
-        scaled_height = int(self._surface.get_height() * self._zoom)
+        zoom_absolute = self._zoom * self._zoomtouch_scale
+
+        scaled_width = int(self._surface.get_width() * zoom_absolute)
+        scaled_height = int(self._surface.get_height() * zoom_absolute)
+
 
         alloc = self.get_allocation()
         x_offset = (alloc.width * 1.0 - scaled_width) / 2
         y_offset = (alloc.height * 1.0 - scaled_height) / 2
 
         ctx.translate(x_offset, y_offset)
-        ctx.scale(self._zoom, self._zoom)
+        ctx.scale(zoom_absolute, zoom_absolute)
         ctx.set_source_surface(self._surface, 0, 0)
 
         # FIXME investigate
