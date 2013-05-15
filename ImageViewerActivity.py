@@ -108,7 +108,6 @@ class ImageViewerActivity(activity.Activity):
 
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
-        self.zoom = None
         self._object_id = handle.object_id
 
         self._zoom_out_button = None
@@ -209,9 +208,6 @@ class ImageViewerActivity(activity.Activity):
             self.view._is_touching = True
             self.view._touch_center = controller.get_center()
             self.view.set_zoom_relative(scale)
-
-    def handle_view_source(self):
-        raise NotImplementedError
 
     def fullscreen(self):
         self.view.update_optimal_zoom()
@@ -326,6 +322,7 @@ class ImageViewerActivity(activity.Activity):
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
                     self.set_canvas(self.view)
+                    self.view.show()
         finally:
             chooser.destroy()
             del chooser
@@ -338,24 +335,17 @@ class ImageViewerActivity(activity.Activity):
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
-        GObject.idle_add(self.__set_file_idle_cb, tempfile)
 
-    def __set_file_idle_cb(self, file_path):
-        self.view.set_file_location(file_path)
+        self.view.set_file_location(tempfile)
 
-        try:
-            self.zoom = int(self.metadata.get('zoom', '0'))
-            if self.zoom > 0:
-                self.view.set_zoom(self.zoom)
-        except Exception:
-            pass
-
-        return False
+        zoom = self.metadata.get('zoom', None)
+        if zoom is not None:
+            self.view.set_zoom(float(zoom))
 
     def write_file(self, file_path):
         if self._tempfile:
             self.metadata['activity'] = self.get_bundle_id()
-            self.metadata['zoom'] = str(self.zoom)
+            self.metadata['zoom'] = str(self.view.get_zoom())
             if self._close_requested:
                 os.link(self._tempfile, file_path)
                 os.unlink(self._tempfile)

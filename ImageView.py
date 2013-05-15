@@ -53,6 +53,13 @@ class ImageViewer(Gtk.DrawingArea):
         self._file_location = file_location
         self.queue_draw()
 
+    def set_zoom(self, zoom):
+        self._zoom = zoom
+        self.queue_draw()
+
+    def get_zoom(self):
+        return self._zoom
+
     def zoom_in(self):
         if self._zoom + ZOOM_STEP > ZOOM_MAX:
             return
