@@ -273,19 +273,25 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
 
+    def _update_zoom_buttons(self):
+        self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
+        self._zoom_out_button.set_sensitive(self.view.can_zoom_out())
+
     def __zoom_in_cb(self, button):
-        self._zoom_in_button.set_sensitive(self.view.zoom_in())
-        self._zoom_out_button.set_sensitive(True)
+        self.view.zoom_in()
+        self._update_zoom_buttons()
 
     def __zoom_out_cb(self, button):
-        self._zoom_out_button.set_sensitive(self.view.zoom_out())
-        self._zoom_in_button.set_sensitive(True)
+        self.view.zoom_out()
+        self._update_zoom_buttons()
 
     def __zoom_tofit_cb(self, button):
         self.view.zoom_to_fit()
+        self._update_zoom_buttons()
 
     def __zoom_original_cb(self, button):
-        self.view.zoom_equal()
+        self.view.zoom_original()
+        self._update_zoom_buttons()
 
     def __rotate_anticlockwise_cb(self, button):
         angle = self.view.angle - math.pi / 2

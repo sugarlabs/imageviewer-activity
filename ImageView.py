@@ -54,20 +54,28 @@ class ImageViewer(Gtk.DrawingArea):
         self.queue_draw()
 
     def set_zoom(self, zoom):
+        if zoom < ZOOM_MIN or zoom > ZOOM_MAX:
+            return
         self._zoom = zoom
         self.queue_draw()
 
     def get_zoom(self):
         return self._zoom
 
+    def can_zoom_in(self):
+        return self._zoom + ZOOM_STEP < ZOOM_MAX
+
+    def can_zoom_out(self):
+        return self._zoom - ZOOM_STEP > ZOOM_MIN
+
     def zoom_in(self):
-        if self._zoom + ZOOM_STEP > ZOOM_MAX:
+        if not self.can_zoom_in():
             return
         self._zoom += ZOOM_STEP
         self.queue_draw()
 
     def zoom_out(self):
-        if self._zoom - ZOOM_STEP < ZOOM_MIN:
+        if not self.can_zoom_out():
             return
         self._zoom -= ZOOM_MIN
         self.queue_draw()
@@ -90,7 +98,7 @@ class ImageViewer(Gtk.DrawingArea):
             self._zoom = 1.0
         self.queue_draw()
 
-    def zoom_equal(self):
+    def zoom_original(self):
         self._zoom = 1
         self.queue_draw()
 
