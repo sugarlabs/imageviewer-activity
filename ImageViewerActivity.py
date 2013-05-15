@@ -57,8 +57,6 @@ import dbus
 import ImageView
 import ProgressDialog
 
-_logger = logging.getLogger('imageviewer-activity')
-
 
 class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
     """HTTP Request Handler for transferring document while collaborating.
@@ -360,12 +358,12 @@ class ImageViewerActivity(activity.Activity):
         self._tempfile = tempfile
         file_path = os.path.join(self.get_activity_root(), 'instance',
                                     '%i' % time.time())
-        _logger.debug("Saving file %s to datastore...", file_path)
+        logging.debug("Saving file %s to datastore...", file_path)
         os.link(tempfile, file_path)
         self._jobject.file_path = file_path
         datastore.write(self._jobject, transfer_ownership=True)
 
-        _logger.debug("Got document %s (%s) from tube %u",
+        logging.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
 
         self.progressdialog.destroy()
@@ -375,11 +373,11 @@ class ImageViewerActivity(activity.Activity):
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
         if self._download_content_length > 0:
-            _logger.debug("Downloaded %u of %u bytes from tube %u...",
+            logging.debug("Downloaded %u of %u bytes from tube %u...",
                           bytes_downloaded, self._download_content_length,
                           tube_id)
         else:
-            _logger.debug("Downloaded %u bytes from tube %u...",
+            logging.debug("Downloaded %u bytes from tube %u...",
                           bytes_downloaded, tube_id)
         total = self._download_content_length
 
@@ -389,7 +387,7 @@ class ImageViewerActivity(activity.Activity):
         #Gtk.main_iteration()
 
     def _download_error_cb(self, getter, err, tube_id):
-        _logger.debug("Error getting document from tube %u: %s",
+        logging.debug("Error getting document from tube %u: %s",
                       tube_id, err)
         self._alert('Failure', 'Error getting document from tube')
         self._want_document = True
@@ -406,7 +404,7 @@ class ImageViewerActivity(activity.Activity):
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
                 utf8_strings=True)
-        _logger.debug('Accepted stream tube: listening address is %r', addr)
+        logging.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
         assert isinstance(addr, dbus.Struct)
         assert len(addr) == 2
@@ -420,7 +418,7 @@ class ImageViewerActivity(activity.Activity):
         getter.connect("finished", self._download_result_cb, tube_id)
         getter.connect("progress", self._download_progress_cb, tube_id)
         getter.connect("error", self._download_error_cb, tube_id)
-        _logger.debug("Starting download to %s...", path)
+        logging.debug("Starting download to %s...", path)
         getter.start(path)
         self._download_content_length = getter.get_content_length()
         self._download_content_type = getter.get_content_type()
@@ -442,7 +440,7 @@ class ImageViewerActivity(activity.Activity):
         try:
             tube_id = self.unused_download_tubes.pop()
         except (ValueError, KeyError), e:
-            _logger.debug('No tubes to get the document from right now: %s',
+            logging.debug('No tubes to get the document from right now: %s',
                           e)
             return False
 
@@ -468,7 +466,7 @@ class ImageViewerActivity(activity.Activity):
         # FIXME: should ideally have the fileserver listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
 
-        _logger.debug('Starting HTTP server on port %d', self.port)
+        logging.debug('Starting HTTP server on port %d', self.port)
         self._fileserver = ImageViewerHTTPServer(("", self.port),
             self._tempfile)
 
@@ -495,11 +493,11 @@ class ImageViewerActivity(activity.Activity):
     def _new_tube_cb(self, tube_id, initiator, tube_type, service, params,
                      state):
         """Callback when a new tube becomes available."""
-        _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
+        logging.debug('New tube: ID=%d initator=%d type=%d service=%s '
                       'params=%r state=%d', tube_id, initiator, tube_type,
                       service, params, state)
         if service == IMAGEVIEWER_STREAM_SERVICE:
-            _logger.debug('I could download from that tube')
+            logging.debug('I could download from that tube')
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
             if self._want_document:
@@ -512,7 +510,7 @@ class ImageViewerActivity(activity.Activity):
 
     def _list_tubes_error_cb(self, e):
         """Handle ListTubes error by logging."""
-        _logger.error('ListTubes() failed: %s', e)
+        logging.error('ListTubes() failed: %s', e)
 
     def _shared_cb(self, activityid):
         """Callback when activity shared.
@@ -522,7 +520,7 @@ class ImageViewerActivity(activity.Activity):
         """
         # We initiated this activity and have now shared it, so by
         # definition we have the file.
-        _logger.debug('Activity became shared')
+        logging.debug('Activity became shared')
         self.watch_for_tubes()
         self._share_document()
 
