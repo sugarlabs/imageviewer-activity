@@ -49,7 +49,6 @@ try:
 except:
     GESTURES_AVAILABLE = False
 
-ANGLE_THRESHOLD = 0.5  # 1.57 radians == 90 degrees
 
 import telepathy
 import dbus
