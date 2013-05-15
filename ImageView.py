@@ -60,10 +60,14 @@ class ImageViewer(Gtk.DrawingArea):
         self._file_location = file_location
         self.queue_draw()
 
-    def _center_surface(self):
-        # Setting target point to None, the draw callback will center
-        # the image surface.
-        self._target_point = None
+    def _center_target_point(self):
+        alloc = self.get_allocation()
+        self._target_point = (alloc.width / 2, alloc.height / 2)
+
+    def _center_anchor_point(self):
+        self._anchor_point = (self._surface.get_width() / 2,
+                              self._surface.get_height() / 2)
+
 
     def set_zoom(self, zoom):
         if zoom < ZOOM_MIN or zoom > ZOOM_MAX:
@@ -109,7 +113,8 @@ class ImageViewer(Gtk.DrawingArea):
         else:
             self._zoom = 1.0
 
-        self._center_surface()
+        self._center_target_point()
+        self._center_anchor_point()
         self.queue_draw()
 
     def zoom_original(self):
@@ -119,9 +124,26 @@ class ImageViewer(Gtk.DrawingArea):
     def start_zoomtouch(self, center):
         self._zoomtouch_scale = 1
 
+        prev_target_point = self._target_point
+
         # Set target point to the relative coordinates of this view.
         alloc = self.get_allocation()
         self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
+
+        # Calculate the new anchor point.
+
+        prev_anchor_scaled = (self._anchor_point[0] * self._zoom,
+                              self._anchor_point[1] * self._zoom)
+
+        # This vector is the top left coordinate of the scaled image.
+        scaled_image_topleft = (prev_target_point[0] - prev_anchor_scaled[0],
+                                prev_target_point[1] - prev_anchor_scaled[1])
+
+        anchor_scaled = (self._target_point[0] - scaled_image_topleft[0],
+                         self._target_point[1] - scaled_image_topleft[1])
+
+        self._anchor_point = (int(anchor_scaled[0] * 1.0 / self._zoom),
+                              int(anchor_scaled[1] * 1.0 / self._zoom))
 
         self.queue_draw()
 
@@ -155,7 +177,8 @@ class ImageViewer(Gtk.DrawingArea):
         scaled_height = self._surface.get_height() * self._zoom
 
         if alloc.width >= scaled_width and alloc.height >= scaled_height:
-            self._center_surface()
+            self._center_target_point()
+            self._center_anchor_point()
 
         self.queue_draw()
 
@@ -168,7 +191,6 @@ class ImageViewer(Gtk.DrawingArea):
         self.queue_draw()
 
     def __draw_cb(self, widget, ctx):
-        alloc = self.get_allocation()
 
         # If the image surface is not set, it reads it from the file
         # location.  If the file location is not set yet, it just
@@ -181,29 +203,22 @@ class ImageViewer(Gtk.DrawingArea):
         if self._zoom is None:
             self.zoom_to_fit()
 
-        # FIXME investigate
-        ctx.set_antialias(cairo.ANTIALIAS_NONE)
-
         # If no target point was set via pinch-to-zoom, default to the
         # center of the screen.
         if self._target_point is None:
-            self._target_point = (alloc.width / 2, alloc.height / 2)
-
-        # Scale and center the image according to the current zoom.
-
-        zoom_absolute = self._zoom * self._zoomtouch_scale
-
-        scaled_width = int(self._surface.get_width() * zoom_absolute)
-        scaled_height = int(self._surface.get_height() * zoom_absolute)
+            self._center_target_point()
 
         # If no anchor point was set via pinch-to-zoom, default to the
         # center of the surface.
         if self._anchor_point is None:
-            self._anchor_point = (self._surface.get_width() / 2,
-                                  self._surface.get_height() / 2)
+            self._center_anchor_point()
+
+        # FIXME investigate
+        ctx.set_antialias(cairo.ANTIALIAS_NONE)
 
         ctx.translate(*self._target_point)
 
+        zoom_absolute = self._zoom * self._zoomtouch_scale
         ctx.scale(zoom_absolute, zoom_absolute)
 
         if self._angle != 0:
