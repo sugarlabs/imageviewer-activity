@@ -86,6 +86,18 @@ class ImageViewer(Gtk.DrawingArea):
         self._anchor_point = (self._surface.get_width() / 2,
                               self._surface.get_height() / 2)
 
+    def _center_if_small(self):
+        # If at the current size the image surface is smaller than the
+        # available space, center it on the canvas.
+
+        alloc = self.get_allocation()
+
+        scaled_width = self._surface.get_width() * self._zoom
+        scaled_height = self._surface.get_height() * self._zoom
+
+        if alloc.width >= scaled_width and alloc.height >= scaled_height:
+            self._center_target_point()
+            self._center_anchor_point()
 
     def set_zoom(self, zoom):
         if zoom < ZOOM_MIN or zoom > ZOOM_MAX:
@@ -112,6 +124,8 @@ class ImageViewer(Gtk.DrawingArea):
         if not self.can_zoom_out():
             return
         self._zoom -= ZOOM_MIN
+
+        self._center_if_small()
         self.queue_draw()
 
     def zoom_to_fit(self):
@@ -137,6 +151,7 @@ class ImageViewer(Gtk.DrawingArea):
 
     def zoom_original(self):
         self._zoom = 1
+        self._center_if_small()
         self.queue_draw()
 
     def start_zoomtouch(self, center):
@@ -186,18 +201,7 @@ class ImageViewer(Gtk.DrawingArea):
         elif self._zoom > ZOOM_MAX:
             self._zoom = ZOOM_MAX
 
-        # If at the current size the image surface is smaller than the
-        # available space, center it on the canvas.
-
-        alloc = self.get_allocation()
-
-        scaled_width = self._surface.get_width() * self._zoom
-        scaled_height = self._surface.get_height() * self._zoom
-
-        if alloc.width >= scaled_width and alloc.height >= scaled_height:
-            self._center_target_point()
-            self._center_anchor_point()
-
+        self._center_if_small()
         self.queue_draw()
 
     def rotate_anticlockwise(self):
