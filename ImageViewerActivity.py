@@ -107,7 +107,6 @@ IMAGEVIEWER_STREAM_SERVICE = 'imageviewer-activity-http'
 class ImageViewerActivity(activity.Activity):
 
     def __init__(self, handle):
-        logging.error('start activity')
         activity.Activity.__init__(self, handle)
         self.zoom = None
         self._object_id = handle.object_id
@@ -135,16 +134,6 @@ class ImageViewerActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        vadj = Gtk.Adjustment()
-        hadj = Gtk.Adjustment()
-        self.sw = Gtk.ScrolledWindow(hadj, vadj)
-        self.view.parent = self.sw
-        # Avoid needless spacing
-        self.view.parent.props.shadow_type = Gtk.ShadowType.NONE
-        self.sw.set_policy(Gtk.PolicyType.AUTOMATIC,
-                Gtk.PolicyType.AUTOMATIC)
-        self.sw.add_with_viewport(self.view)
-        self.sw.show_all()
         self._last_angle = 0.0
         self._last_scale = 1.0
 
@@ -183,10 +172,10 @@ class ImageViewerActivity(activity.Activity):
 
             empty_widgets.add(vbox)
             empty_widgets.show_all()
-            logging.error('show empty widgets')
             self.set_canvas(empty_widgets)
         else:
-            self.set_canvas(self.sw)
+            self.set_canvas(self.view)
+            self.view.show()
 
         self.unused_download_tubes = set()
         self._want_document = True
@@ -216,7 +205,6 @@ class ImageViewerActivity(activity.Activity):
     def __scale_changed_cb(self, controller, scale):
         if scale != self._last_scale:
             self._last_scale = scale
-            logging.error('Scale changed %f', scale)
 
             self.view._is_touching = True
             self.view._touch_center = controller.get_center()
@@ -308,10 +296,10 @@ class ImageViewerActivity(activity.Activity):
         self._zoom_in_button.set_sensitive(True)
 
     def __zoom_tofit_cb(self, button):
-        self.view.set_optimal_zoom()
+        self.view.zoom_to_fit()
 
     def __zoom_original_cb(self, button):
-        self.view.set_zoom(1)
+        self.view.zoom_equal()
 
     def __rotate_anticlockwise_cb(self, button):
         angle = self.view.angle - math.pi / 2
@@ -337,7 +325,7 @@ class ImageViewerActivity(activity.Activity):
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
-                    self.set_canvas(self.sw)
+                    self.set_canvas(self.view)
         finally:
             chooser.destroy()
             del chooser

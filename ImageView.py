@@ -15,378 +15,130 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from __future__ import division
+import cairo
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 
-import sys
-import logging
-import cairo
-import random
-import time
-import math
+ZOOM_STEP = 0.05
+ZOOM_MAX = 4
+ZOOM_MIN = 0.05
 
-ZOOM_IN_OUT = 0.1
+
+def _surface_from_file(file_location, ctx):
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
+    surface = ctx.get_target().create_similar(
+        cairo.CONTENT_COLOR_ALPHA, pixbuf.get_width(),
+        pixbuf.get_height())
+
+    ctx_surface = cairo.Context(surface)
+    Gdk.cairo_set_source_pixbuf(ctx_surface, pixbuf, 0, 0)
+    ctx_surface.paint()
+    return surface
 
 
 class ImageViewer(Gtk.DrawingArea):
-    __gsignals__ = {
-        #'expose-event': (
-        #    'override'),
-        'zoom-changed': (
-            GObject.SignalFlags.RUN_FIRST, None, []),
-        'angle-changed': (
-            GObject.SignalFlags.RUN_FIRST, None, []),
-        }
-
-    __gproperties__ = {
-        'zoom': (
-            GObject.TYPE_FLOAT, 'Zoom Factor', 'Factor of zoom',
-            0, 4, 1, GObject.PARAM_READWRITE),
-        'angle': (
-            GObject.TYPE_INT, 'Angle', 'Angle of rotation',
-            0, 360, 0, GObject.PARAM_READWRITE),
-        'file_location': (
-            GObject.TYPE_STRING, 'File Location', 'Location of the image file',
-            '', GObject.PARAM_READWRITE),
-        }
-
     def __init__(self):
-        GObject.GObject.__init__(self)
-        self.set_app_paintable(True)
+        Gtk.DrawingArea.__init__(self)
 
-        self.surface = None
-        self.zoom = None
-        self.parent = None
-        self.file_location = None
-        self._optimal_zoom_flag = True
+        self._file_location = None
+        self._surface = None
+        self._zoom = None
 
         self.connect('draw', self.__draw_cb)
 
-        self.angle = 0
-        self._zoom_ori = 1.0
-        self._angle_ori = 0.0
-        self._fast = True
-        self._redraw_id = None
-        self._switched = False
-
-        # zoom with fixed point
-        self._is_touching = False
-        self._touch_center = False
-        self._old_zoom = None
-        self._xofs = 0
-        self._yofs = 0
-
-    def do_get_property(self, pspec):
-        if pspec.name == 'zoom':
-            return self.zoom
-        elif pspec.name == 'angle':
-            return self.angle
-        elif pspec.name == 'file_location':
-            return self.file_location
-        else:
-            raise AttributeError('unknown property %s' % pspec.name)
-
-    def do_set_property(self, pspec, value):
-        if pspec.name == 'zoom':
-            self.set_zoom(value)
-        elif pspec.name == 'angle':
-            self.set_angle(value)
-        elif pspec.name == 'file_location':
-            self.set_file_location(value)
-        else:
-            raise AttributeError('unknown property %s' % pspec.name)
-
-    def set_optimal_zoom(self):
-        self._optimal_zoom_flag = True
-        self._set_zoom(self._calc_optimal_zoom())
-
-    def update_optimal_zoom(self):
-        if self._optimal_zoom_flag:
-            self._set_zoom(self._calc_optimal_zoom())
-
-    def __draw_cb(self, widget, ctx):
-        timeini = time.time()
-        logging.error('ImageViewer.draw start')
-
-        if self.surface is None:
-            if self.file_location is None:
-                return
-            logging.error('init surface with image')
-            # http://cairographics.org/gdkpixbufpycairo/
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.file_location)
-            self.surface = ctx.get_target().create_similar(
-                    cairo.CONTENT_COLOR_ALPHA, pixbuf.get_width(),
-                    pixbuf.get_height())
-            ctx_surface = cairo.Context(self.surface)
-            self._pixbuf_to_context(pixbuf, ctx_surface)
-
-        if self.zoom is None:
-            self.zoom = self._calc_optimal_zoom()
-
-        w = int(self.surface.get_width() * self.zoom)
-        h = int(self.surface.get_height() * self.zoom)
-        logging.error('W: %s, H: %s', w, h)
-
-        if self._fast:
-            ctx.set_antialias(cairo.ANTIALIAS_NONE)
-
-        scrolled_window = self.get_parent()
-        rect = scrolled_window.get_allocation()
-        x = y = 0
-        if self.angle != 0:
-            logging.error('Rotating: %s', self.angle)
-            ctx.rotate(self.angle)
-
-            if self.angle == math.pi:
-                ctx.translate(-w, -h)
-
-                if rect.width > w:
-                    x = -(rect.width - w) / 2
-                if rect.height > h:
-                    y = -(rect.height - h) / 2
-
-            elif self.angle == math.pi / 2:
-                ctx.translate(0, -h)
-
-                # center the image
-                if rect.height > w:
-                    x = (rect.height - w) / 2
-                if rect.width > h:
-                    y = -(rect.width - h) / 2
-
-            elif self.angle == math.pi * 3 / 2:
-                ctx.translate(-w, 0)
-
-                if rect.height > w:
-                    x = -(rect.height - w) / 2
-                if rect.width > h:
-                    y = (rect.width - h) / 2
-
-        else:
-            if rect.width > w:
-                x = int((rect.width - w) / 2)
-            if rect.height > h:
-                y = int((rect.height - h) / 2)
-        ctx.translate(x, y)
-
-        if self.zoom != 1:
-            logging.error('Scaling: %s', self.zoom)
-            ctx.scale(self.zoom, self.zoom)
-
-        ctx.set_source_surface(self.surface, 0, 0)
-        if self._fast:
-            ctx.get_source().set_filter(cairo.FILTER_NEAREST)
-        ctx.paint()
-        logging.error('ImageViewer.draw end %f', (time.time() - timeini))
-
-        if not self._fast:
-            if self._redraw_id is not None:
-                GObject.source_remove(self._redraw_id)
-            self._redraw_id = GObject.timeout_add(200,
-                    self._redraw_high_quality)
-
-        self._is_touching = False
-
-    def _redraw_high_quality(self):
-        self._fast = False
-        self._redraw_id = None
-        self._redraw()
-        return False
-
-    def _redraw(self):
-        # README: this is a hack to not raise the 'draw' event (again)
-        # when we request more space to show the scroll bars
-        w = int(self.surface.get_width() * self.zoom)
-        h = int(self.surface.get_height() * self.zoom)
-
-        self._switched = False
-        if (self.angle / (math.pi / 2)) % 2 == 1:
-            # change image dimensions if it's rotated
-            w, h = h, w
-            self._switched = True
-
-        self.set_size_request(w, h)
-        self._scroll_image()
-
-    def _scroll_image(self):
-        # based on Eye Of GNOME code
-
-        w = int(self.surface.get_width() * self.zoom)
-        h = int(self.surface.get_height() * self.zoom)
-
-        old_width = int(self.surface.get_width() * self._old_zoom)
-        old_height = int(self.surface.get_height() * self._old_zoom)
-
-        scrolled_window = self.get_parent()
-        rect = scrolled_window.get_allocation()
-
-        if self._switched:
-            # TODO: zoom with fixed point does not work properly when
-            # the image is rotated
-            return
-
-        if self._is_touching:
-            zoom_x_anchor = self._touch_center[1] / rect.width
-            zoom_y_anchor = self._touch_center[2] / rect.height
-        else:
-            zoom_x_anchor = 0.5
-            zoom_y_anchor = 0.5
-
-        vadjustment = scrolled_window.get_vadjustment()
-        step_inc = vadjustment.get_step_increment()
-        page_inc = vadjustment.get_page_increment()
-
-        if old_height < rect.height:
-            cy = zoom_y_anchor * old_height / self._old_zoom
-        else:
-            cy = (self._yofs + zoom_y_anchor * rect.height) / self._old_zoom
-
-        if h < rect.height:
-            self._yofs = 0
-        else:
-            self._yofs = math.floor(cy * self.zoom - \
-                    zoom_y_anchor * rect.height + 0.5)
-
-        vadj = max(0, min(self._yofs, h - rect.height))
-        vadjustment.configure(vadj, 0, h, step_inc, page_inc,
-                              rect.height)
-
-        hadjustment = scrolled_window.get_hadjustment()
-        step_inc = hadjustment.get_step_increment()
-        page_inc = hadjustment.get_page_increment()
-
-        if old_width < rect.width:
-            cx = zoom_x_anchor * old_width / self._old_zoom
-        else:
-            cx = (self._xofs + zoom_x_anchor * rect.width) / self._old_zoom
-
-        if w < rect.width:
-            self._xofs = 0
-        else:
-            self._xofs = math.floor(cx * self.zoom - \
-                    zoom_x_anchor * rect.width + 0.5)
-
-        hadj = max(0, min(self._xofs, w - rect.width))
-        hadjustment.configure(hadj, 0, w, step_inc, page_inc,
-                              rect.width)
-
-    def set_zoom(self, zoom):
-        self._optimal_zoom_flag = False
-        self._set_zoom(zoom)
-
-    def set_zoom_relative(self, scale):
-        if scale == 1.0:
-            self._zoom_ori = self.zoom
-        self._set_zoom(self._zoom_ori * scale)
-
-    def set_angle_relative(self, diff):
-        if diff == 0.0:
-            self._angle_ori = self.angle
-        self.set_angle(self._angle_ori + diff)
-
-    def set_angle(self, angle):
-        self._optimal_zoom_flag = True
-
-        self.angle = angle % (2 * math.pi)
-        self._redraw()
-        self.emit('angle-changed')
-
-    def zoom_in(self):
-        self.set_zoom(self.zoom + ZOOM_IN_OUT)
-        # TODO: this value is not valid
-        if self.zoom > (4):
-            return False
-        else:
-            return True
-
-    def zoom_out(self):
-        self.set_zoom(self.zoom - ZOOM_IN_OUT)
-        # TODO: this value is not valid
-        if self.zoom <= 0.2:
-            return False
-        else:
-            return True
-
-    def _pixbuf_to_context(self, pixbuf, context, x=0, y=0):
-        # copy from the pixbuf to the drawing context
-        context.save()
-        context.translate(x, y)
-        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
-        context.paint()
-        context.restore()
-
     def set_file_location(self, file_location):
-        logging.debug('Loading image from: %s', file_location)
-
-        self.file_location = file_location
-        self.zoom = None
+        self._file_location = file_location
         self.queue_draw()
 
-    def _calc_optimal_zoom(self):
+    def zoom_in(self):
+        if self._zoom + ZOOM_STEP > ZOOM_MAX:
+            return
+        self._zoom += ZOOM_STEP
+        self.queue_draw()
+
+    def zoom_out(self):
+        if self._zoom - ZOOM_STEP < ZOOM_MIN:
+            return
+        self._zoom -= ZOOM_MIN
+        self.queue_draw()
+
+    def zoom_to_fit(self):
         # This tries to figure out a best fit model
         # If the image can fit in, we show it in 1:1,
         # in any other case we show it in a fit to screen way
 
-        if isinstance(self.parent, Gtk.Viewport):
-            rect = self.parent.parent.get_allocation()
-        else:
-            rect = self.parent.get_allocation()
-        width = rect.width
-        height = rect.height
+        parent_allocation = self.get_parent().get_allocation()
+        parent_width = parent_allocation.width
+        parent_height = parent_allocation.height
 
-        surface_width = self.surface.get_width()
-        surface_height = self.surface.get_height()
+        surface_width = self._surface.get_width()
+        surface_height = self._surface.get_height()
 
-        if self._switched:
-            surface_width, surface_height = \
-                surface_height, surface_width
-
-        if width < surface_width or \
-                height < surface_height:
+        if parent_width < surface_width or parent_height < surface_height:
             # Image is larger than allocated size
-            zoom = min(width / surface_width,
-                    height / surface_height)
+            self._zoom = min(parent_width * 1.0 / surface_width,
+                             parent_height * 1.0 / surface_height)
         else:
-            zoom = 1
+            self._zoom = 1.0
+        self.queue_draw()
 
-        logging.debug('Optimal zoom: %s', zoom)
-        return zoom
+    def zoom_equal(self):
+        self._zoom = 1
+        self.queue_draw()
 
-    def _set_zoom(self, zoom):
-        self._old_zoom = self.zoom
-        self.zoom = zoom
-        self._redraw()
-        self.emit('zoom-changed')
+    def __draw_cb(self, widget, ctx):
 
+        # If the image surface is not set, it reads it from the file
+        # location.  If the file location is not set yet, it just
+        # returns.
+        if self._surface is None:
+            if self._file_location is None:
+                return
+            self._surface = _surface_from_file(self._file_location, ctx)
 
-def update(view_object):
-    #return view_object.zoom_out()
-    angle = 90 * random.randint(0, 4)
-    view_object.set_angle(angle)
+        if self._zoom is None:
+            self.zoom_to_fit()
 
-    return True
+        # FIXME investigate
+        ctx.set_antialias(cairo.ANTIALIAS_NONE)
+
+        # Scale and center the image according to the current zoom.
+
+        scaled_width = int(self._surface.get_width() * self._zoom)
+        scaled_height = int(self._surface.get_height() * self._zoom)
+
+        parent_allocation = self.get_parent().get_allocation()
+        parent_width = parent_allocation.width
+        parent_height = parent_allocation.height
+
+        x_offset = (parent_width * 1.0 - scaled_width) / 2
+        y_offset = (parent_height * 1.0 - scaled_height) / 2
+
+        ctx.translate(x_offset, y_offset)
+        ctx.scale(self._zoom, self._zoom)
+        ctx.set_source_surface(self._surface, 0, 0)
+
+        # FIXME investigate
+        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+
+        ctx.paint()
 
 
 if __name__ == '__main__':
-    window = Gtk.Window()
+    import sys
 
-    vadj = Gtk.Adjustment()
-    hadj = Gtk.Adjustment()
-    sw = Gtk.ScrolledWindow(hadj, vadj)
+    window = Gtk.Window()
+    window.connect("destroy", Gtk.main_quit)
 
     view = ImageViewer()
     view.set_file_location(sys.argv[1])
-
-    sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-    sw.add_with_viewport(view)
-    window.add(sw)
+    window.add(view)
+    view.show()
 
     window.set_size_request(800, 600)
-    window.show_all()
+    window.show()
 
-    GObject.timeout_add(1000, update, view)
     Gtk.main()
