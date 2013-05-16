@@ -112,7 +112,17 @@ class ImageViewerActivity(activity.Activity):
         self._fileserver = None
         self._fileserver_tube_id = None
 
+        self.scrolled_window = Gtk.ScrolledWindow()
+        self.scrolled_window.set_policy(Gtk.PolicyType.ALWAYS,
+                                        Gtk.PolicyType.ALWAYS)
+
+        # Don't use the default kinetic scrolling, let the view do the
+        # pinch to zoom logic.
+        self.scrolled_window.set_kinetic_scrolling(False)
+
         self.view = ImageView.ImageViewer()
+        self.scrolled_window.add_with_viewport(self.view)
+        self.view.show()
 
         if GESTURES_AVAILABLE:
             zoom_controller = SugarGestures.ZoomController()
@@ -168,8 +178,8 @@ class ImageViewerActivity(activity.Activity):
             empty_widgets.show_all()
             self.set_canvas(empty_widgets)
         else:
-            self.set_canvas(self.view)
-            self.view.show()
+            self.set_canvas(self.scrolled_window)
+            self.scrolled_window.show()
 
         self.unused_download_tubes = set()
         self._want_document = True
@@ -310,8 +320,8 @@ class ImageViewerActivity(activity.Activity):
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self.read_file(jobject.file_path)
-                    self.set_canvas(self.view)
-                    self.view.show()
+                    self.set_canvas(self.scrolled_window)
+                    self.scrolled_window.show()
         finally:
             chooser.destroy()
             del chooser

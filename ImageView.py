@@ -79,7 +79,7 @@ class ImageViewer(Gtk.DrawingArea):
         self.queue_draw()
 
     def _center_target_point(self):
-        alloc = self.get_allocation()
+        alloc = self.get_parent().get_allocation()
         self._target_point = (alloc.width / 2, alloc.height / 2)
 
     def _center_anchor_point(self):
@@ -90,7 +90,7 @@ class ImageViewer(Gtk.DrawingArea):
         # If at the current size the image surface is smaller than the
         # available space, center it on the canvas.
 
-        alloc = self.get_allocation()
+        alloc = self.get_parent().get_allocation()
 
         scaled_width = self._surface.get_width() * self._zoom
         scaled_height = self._surface.get_height() * self._zoom
@@ -98,12 +98,20 @@ class ImageViewer(Gtk.DrawingArea):
         if alloc.width >= scaled_width and alloc.height >= scaled_height:
             self._center_target_point()
             self._center_anchor_point()
+            self.queue_draw()
+
+    def _do_set_zoom(self, zoom):
+        self._zoom = zoom
+
+        # Update size and scroll window
+        width = int(self._surface.get_width() * self._zoom)
+        height = int(self._surface.get_height() * self._zoom)
+        self.set_size_request(width, height)
 
     def set_zoom(self, zoom):
         if zoom < ZOOM_MIN or zoom > ZOOM_MAX:
             return
-        self._zoom = zoom
-        self.queue_draw()
+        self._do_set_zoom(zoom)
 
     def get_zoom(self):
         return self._zoom
@@ -117,42 +125,39 @@ class ImageViewer(Gtk.DrawingArea):
     def zoom_in(self):
         if not self.can_zoom_in():
             return
-        self._zoom += ZOOM_STEP
-        self.queue_draw()
+        self._do_set_zoom(self._zoom + ZOOM_STEP)
 
     def zoom_out(self):
         if not self.can_zoom_out():
             return
-        self._zoom -= ZOOM_MIN
-
+        self._do_set_zoom(self._zoom - ZOOM_STEP)
         self._center_if_small()
-        self.queue_draw()
 
     def zoom_to_fit(self):
         # This tries to figure out a best fit model
         # If the image can fit in, we show it in 1:1,
         # in any other case we show it in a fit to screen way
 
-        alloc = self.get_allocation()
+        alloc = self.get_parent().get_allocation()
 
         surface_width = self._surface.get_width()
         surface_height = self._surface.get_height()
 
+        zoom = None
         if alloc.width < surface_width or alloc.height < surface_height:
             # Image is larger than allocated size
-            self._zoom = min(alloc.width * 1.0 / surface_width,
-                             alloc.height * 1.0 / surface_height)
+            zoom = min(alloc.width * 1.0 / surface_width,
+                       alloc.height * 1.0 / surface_height)
         else:
-            self._zoom = 1.0
-
+            zoom = 1.0
+        self._do_set_zoom(zoom)
         self._center_target_point()
         self._center_anchor_point()
         self.queue_draw()
 
     def zoom_original(self):
-        self._zoom = 1
+        self._do_set_zoom(1)
         self._center_if_small()
-        self.queue_draw()
 
     def start_zoomtouch(self, center):
         self._zoomtouch_scale = 1
@@ -160,7 +165,7 @@ class ImageViewer(Gtk.DrawingArea):
         prev_target_point = self._target_point
 
         # Set target point to the relative coordinates of this view.
-        alloc = self.get_allocation()
+        alloc = self.get_parent().get_allocation()
         self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
         # Calculate the new anchor point.
@@ -184,7 +189,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._zoomtouch_scale = scale
 
         # Set target point to the relative coordinates of this view.
-        alloc = self.get_allocation()
+        alloc = self.get_parent().get_allocation()
         self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
         self.queue_draw()
@@ -192,17 +197,17 @@ class ImageViewer(Gtk.DrawingArea):
     def finish_zoomtouch(self):
 
         # Apply zoom
-        self._zoom = self._zoom * self._zoomtouch_scale
+        zoom = self._zoom * self._zoomtouch_scale
         self._zoomtouch_scale = 1
 
         # Restrict zoom values
-        if self._zoom < ZOOM_MIN:
-            self._zoom = ZOOM_MIN
-        elif self._zoom > ZOOM_MAX:
-            self._zoom = ZOOM_MAX
+        if zoom < ZOOM_MIN:
+            zoom = ZOOM_MIN
+        elif zoom > ZOOM_MAX:
+            zoom = ZOOM_MAX
 
+        self._do_set_zoom(zoom)
         self._center_if_small()
-        self.queue_draw()
 
     def rotate_anticlockwise(self):
         self._surface = _rotate_surface(self._surface, -1)
@@ -265,20 +270,3 @@ class ImageViewer(Gtk.DrawingArea):
         ctx.get_source().set_filter(cairo.FILTER_NEAREST)
 
         ctx.paint()
-
-
-if __name__ == '__main__':
-    import sys
-
-    window = Gtk.Window()
-    window.connect("destroy", Gtk.main_quit)
-
-    view = ImageViewer()
-    view.set_file_location(sys.argv[1])
-    window.add(view)
-    view.show()
-
-    window.set_size_request(800, 600)
-    window.show()
-
-    Gtk.main()
