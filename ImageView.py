@@ -60,7 +60,21 @@ def _rotate_surface(surface, direction):
 
     return new_surface
 
-class ImageViewer(Gtk.DrawingArea):
+class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
+    __gtype_name__ = 'ImageViewer'
+
+    __gproperties__ = {
+        "hscroll-policy": (Gtk.ScrollablePolicy, "hscroll-policy",
+                           "hscroll-policy", Gtk.ScrollablePolicy.MINIMUM,
+                           GObject.PARAM_READWRITE),
+        "hadjustment": (Gtk.Adjustment, "hadjustment", "hadjustment",
+                        GObject.PARAM_READWRITE),
+        "vscroll-policy": (Gtk.ScrollablePolicy, "hscroll-policy",
+                           "hscroll-policy", Gtk.ScrollablePolicy.MINIMUM,
+                           GObject.PARAM_READWRITE),
+        "vadjustment": (Gtk.Adjustment, "hadjustment", "hadjustment",
+                        GObject.PARAM_READWRITE),
+    }
     def __init__(self):
         Gtk.DrawingArea.__init__(self)
 
@@ -74,11 +88,79 @@ class ImageViewer(Gtk.DrawingArea):
         self._in_zoomtouch = False
         self._zoomtouch_scale = 1
 
+        self._hadj = None
+        self._vadj = None
+
         self.connect('draw', self.__draw_cb)
 
     def set_file_location(self, file_location):
         self._file_location = file_location
         self.queue_draw()
+
+    def do_get_property(self, prop):
+        pass
+
+    def do_set_property(self, prop, value):
+        if prop.name == 'hadjustment':
+            if value is not None:
+                hadj = value
+                hadj.connect('value-changed', self.__hadj_value_changed_cb)
+                self._hadj = hadj
+
+        elif prop.name == 'vadjustment':
+            if value is not None:
+                vadj = value
+                vadj.connect('value-changed', self.__vadj_value_changed_cb)
+                self._vadj = vadj
+
+    def _update_adjustments(self):
+        alloc = self.get_allocation()
+        scaled_width = self._surface.get_width() * self._zoom
+        scaled_height = self._surface.get_height() * self._zoom
+
+        page_size_x = alloc.width * 1.0 / scaled_width
+        self._hadj.set_lower(0)
+        self._hadj.set_page_size(page_size_x)
+        self._hadj.set_upper(1.0)
+        self._hadj.set_step_increment(0.1)
+        self._hadj.set_page_increment(0.5)
+
+        page_size_y = alloc.height * 1.0 / scaled_height
+        self._vadj.set_lower(0)
+        self._vadj.set_page_size(page_size_y)
+        self._vadj.set_upper(1.0)
+        self._vadj.set_step_increment(0.1)
+        self._vadj.set_page_increment(0.5)
+
+        anchor_scaled = (self._anchor_point[0] * self._zoom,
+                         self._anchor_point[1] * self._zoom)
+
+        # This vector is the top left coordinate of the scaled image.
+        scaled_image_topleft = (self._target_point[0] - anchor_scaled[0],
+                                self._target_point[1] - anchor_scaled[1])
+
+        max_topleft = (scaled_width - alloc.width,
+                       scaled_height - alloc.height)
+
+        max_value = (1.0 - page_size_x,
+                     1.0 - page_size_y)
+
+        # This two linear functions map the topleft corner of the
+        # image to the value each adjustment.
+
+        if max_topleft[0] != 0:
+            self._hadj.set_value(-1 * max_value[0] *
+                                  scaled_image_topleft[0] / max_topleft[0])
+
+        if max_topleft[1] != 0:
+            self._vadj.set_value(-1 * max_value[1] *
+                                  scaled_image_topleft[1] / max_topleft[1])
+
+    def __hadj_value_changed_cb(self, adj):
+        logging.debug("hadj_value_changed_cb")
+
+    def __vadj_value_changed_cb(self, adj):
+        logging.debug("vadj_value_changed_cb")
 
     def _center_target_point(self):
         alloc = self.get_allocation()
@@ -113,14 +195,17 @@ class ImageViewer(Gtk.DrawingArea):
 
     def can_zoom_in(self):
         return self._zoom + ZOOM_STEP < ZOOM_MAX
+        self._update_adjustments()
 
     def can_zoom_out(self):
         return self._zoom - ZOOM_STEP > ZOOM_MIN
+        self._update_adjustments()
 
     def zoom_in(self):
         if not self.can_zoom_in():
             return
         self._zoom += ZOOM_STEP
+        self._update_adjustments()
         self.queue_draw()
 
     def zoom_out(self):
@@ -129,6 +214,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._zoom -= ZOOM_MIN
 
         self._center_if_small()
+        self._update_adjustments()
         self.queue_draw()
 
     def zoom_to_fit(self):
@@ -150,11 +236,13 @@ class ImageViewer(Gtk.DrawingArea):
 
         self._center_target_point()
         self._center_anchor_point()
+        self._update_adjustments()
         self.queue_draw()
 
     def zoom_original(self):
         self._zoom = 1
         self._center_if_small()
+        self._update_adjustments()
         self.queue_draw()
 
     def start_dragtouch(self, coords):
@@ -199,6 +287,7 @@ class ImageViewer(Gtk.DrawingArea):
     def finish_dragtouch(self, coords):
         self._in_dragtouch = False
         self._center_if_small()
+        self._update_adjustments()
 
     def start_zoomtouch(self, center):
         self._in_zoomtouch = True
@@ -253,6 +342,7 @@ class ImageViewer(Gtk.DrawingArea):
             self._zoom = ZOOM_MAX
 
         self._center_if_small()
+        self._update_adjustments()
         self.queue_draw()
 
     def rotate_anticlockwise(self):
@@ -264,6 +354,7 @@ class ImageViewer(Gtk.DrawingArea):
             self._anchor_point[1],
             self._surface.get_height() - self._anchor_point[0])
 
+        self._update_adjustments()
         self.queue_draw()
 
     def rotate_clockwise(self):
@@ -275,6 +366,7 @@ class ImageViewer(Gtk.DrawingArea):
             self._surface.get_width() - self._anchor_point[1],
             self._anchor_point[0])
 
+        self._update_adjustments()
         self.queue_draw()
 
     def __draw_cb(self, widget, ctx):
@@ -299,6 +391,7 @@ class ImageViewer(Gtk.DrawingArea):
         # center of the surface.
         if self._anchor_point is None:
             self._center_anchor_point()
+            self._update_adjustments()
 
         ctx.translate(*self._target_point)
         zoom_absolute = self._zoom * self._zoomtouch_scale

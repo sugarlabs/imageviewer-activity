@@ -127,7 +127,7 @@ class ImageViewerActivity(activity.Activity):
         self.view.add_events(Gdk.EventMask.TOUCH_MASK)
         self._touch_hid = self.view.connect('touch-event',
                                             self.__touch_event_cb)
-        self.scrolled_window.add_with_viewport(self.view)
+        self.scrolled_window.add(self.view)
         self.view.show()
 
         if GESTURES_AVAILABLE:
