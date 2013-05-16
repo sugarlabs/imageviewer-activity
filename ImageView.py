@@ -70,6 +70,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._target_point = None
         self._anchor_point = None
 
+        self._in_zoomtouch = False
         self._zoomtouch_scale = 1
 
         self.connect('draw', self.__draw_cb)
@@ -160,6 +161,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._center_if_small()
 
     def start_zoomtouch(self, center):
+        self._in_zoomtouch = True
         self._zoomtouch_scale = 1
 
         prev_target_point = self._target_point
@@ -195,6 +197,7 @@ class ImageViewer(Gtk.DrawingArea):
         self.queue_draw()
 
     def finish_zoomtouch(self):
+        self._in_zoomtouch = False
 
         # Apply zoom
         zoom = self._zoom * self._zoomtouch_scale
@@ -254,9 +257,6 @@ class ImageViewer(Gtk.DrawingArea):
         if self._anchor_point is None:
             self._center_anchor_point()
 
-        # FIXME investigate
-        ctx.set_antialias(cairo.ANTIALIAS_NONE)
-
         ctx.translate(*self._target_point)
 
         zoom_absolute = self._zoom * self._zoomtouch_scale
@@ -266,7 +266,7 @@ class ImageViewer(Gtk.DrawingArea):
 
         ctx.set_source_surface(self._surface, 0, 0)
 
-        # FIXME investigate
-        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+        if self._in_zoomtouch:
+            ctx.get_source().set_filter(cairo.FILTER_NEAREST)
 
         ctx.paint()
