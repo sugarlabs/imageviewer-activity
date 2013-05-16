@@ -282,6 +282,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
             return
 
         self._target_point = (coords[1], coords[2])
+        self._update_adjustments()
         self.queue_draw()
 
     def finish_dragtouch(self, coords):
