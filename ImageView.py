@@ -90,6 +90,8 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
 
         self._hadj = None
         self._vadj = None
+        self._hadj_value_changed_hid = None
+        self._vadj_value_changed_hid = None
 
         self.connect('draw', self.__draw_cb)
 
@@ -104,13 +106,15 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         if prop.name == 'hadjustment':
             if value is not None:
                 hadj = value
-                hadj.connect('value-changed', self.__hadj_value_changed_cb)
+                self._hadj_value_changed_hid = \
+                    hadj.connect('value-changed', self.__hadj_value_changed_cb)
                 self._hadj = hadj
 
         elif prop.name == 'vadjustment':
             if value is not None:
                 vadj = value
-                vadj.connect('value-changed', self.__vadj_value_changed_cb)
+                self._vadj_value_changed_hid = \
+                    vadj.connect('value-changed', self.__vadj_value_changed_cb)
                 self._vadj = vadj
 
     def _update_adjustments(self):
@@ -149,12 +153,20 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         # image to the value each adjustment.
 
         if max_topleft[0] != 0:
+            self._hadj.disconnect(self._hadj_value_changed_hid)
             self._hadj.set_value(-1 * max_value[0] *
                                   scaled_image_topleft[0] / max_topleft[0])
+            self._hadj_value_changed_hid = \
+                self._hadj.connect('value-changed',
+                                   self.__hadj_value_changed_cb)
 
         if max_topleft[1] != 0:
+            self._vadj.disconnect(self._vadj_value_changed_hid)
             self._vadj.set_value(-1 * max_value[1] *
                                   scaled_image_topleft[1] / max_topleft[1])
+            self._vadj_value_changed_hid = \
+                self._vadj.connect('value-changed',
+                                   self.__vadj_value_changed_cb)
 
     def __hadj_value_changed_cb(self, adj):
         logging.debug("hadj_value_changed_cb")
