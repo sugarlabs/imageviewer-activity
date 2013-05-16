@@ -323,7 +323,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._zoomtouch_scale = scale
 
         # Set target point to the relative coordinates of this view.
-        alloc = self.get_parent().get_allocation()
+        alloc = self.get_allocation()
         self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
         self.queue_draw()
