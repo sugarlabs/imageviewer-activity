@@ -70,6 +70,7 @@ class ImageViewer(Gtk.DrawingArea):
         self._target_point = None
         self._anchor_point = None
 
+        self._in_dragtouch = False
         self._in_zoomtouch = False
         self._zoomtouch_scale = 1
 
@@ -160,9 +161,55 @@ class ImageViewer(Gtk.DrawingArea):
         self._do_set_zoom(1)
         self._center_if_small()
 
+    def start_dragtouch(self, coords):
+        self._in_dragtouch = True
+
+        prev_target_point = self._target_point
+
+        # Set target point to the relative coordinates of this view.
+        alloc = self.get_parent().get_allocation()
+        self._target_point = (coords[1], coords[2])
+
+        # Calculate the new anchor point.
+
+        prev_anchor_scaled = (self._anchor_point[0] * self._zoom,
+                              self._anchor_point[1] * self._zoom)
+
+        # This vector is the top left coordinate of the scaled image.
+        scaled_image_topleft = (prev_target_point[0] - prev_anchor_scaled[0],
+                                prev_target_point[1] - prev_anchor_scaled[1])
+
+        anchor_scaled = (self._target_point[0] - scaled_image_topleft[0],
+                         self._target_point[1] - scaled_image_topleft[1])
+
+        self._anchor_point = (int(anchor_scaled[0] * 1.0 / self._zoom),
+                              int(anchor_scaled[1] * 1.0 / self._zoom))
+
+        self.queue_draw()
+
+    def update_dragtouch(self, coords):
+        # Drag touch will be replaced by zoom touch if another finger
+        # is placed over the display.  When the user finishes zoom
+        # touch, it will probably remove one finger after the other,
+        # and this method will be called.  In that probable case, we
+        # need to start drag touch again.
+        if not self._in_dragtouch:
+            self.start_dragtouch(coords)
+            return
+
+        self._target_point = (coords[1], coords[2])
+        self.queue_draw()
+
+    def finish_dragtouch(self, coords):
+        self._in_dragtouch = False
+        self._center_if_small()
+
     def start_zoomtouch(self, center):
         self._in_zoomtouch = True
         self._zoomtouch_scale = 1
+
+        # Zoom touch replaces drag touch.
+        self._in_dragtouch = False
 
         prev_target_point = self._target_point
 
@@ -266,7 +313,7 @@ class ImageViewer(Gtk.DrawingArea):
 
         ctx.set_source_surface(self._surface, 0, 0)
 
-        if self._in_zoomtouch:
+        if self._in_zoomtouch or self._in_dragtouch:
             ctx.get_source().set_filter(cairo.FILTER_NEAREST)
 
         ctx.paint()

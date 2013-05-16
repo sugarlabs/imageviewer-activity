@@ -28,6 +28,7 @@ import time
 import os
 import math
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 
 from sugar3.graphics.alert import NotifyAlert
@@ -117,14 +118,21 @@ class ImageViewerActivity(activity.Activity):
                                         Gtk.PolicyType.ALWAYS)
 
         # Don't use the default kinetic scrolling, let the view do the
-        # pinch to zoom logic.
+        # drag-by-touch and pinch-to-zoom logic.
         self.scrolled_window.set_kinetic_scrolling(False)
 
         self.view = ImageView.ImageViewer()
+
+        # Connect to the touch signal for performing drag-by-touch.
+        self.view.add_events(Gdk.EventMask.TOUCH_MASK)
+        self._touch_hid = self.view.connect('touch-event',
+                                            self.__touch_event_cb)
         self.scrolled_window.add_with_viewport(self.view)
         self.view.show()
 
         if GESTURES_AVAILABLE:
+            # Connect to the zoom signals for performing
+            # pinch-to-zoom.
             zoom_controller = SugarGestures.ZoomController()
             zoom_controller.attach(self,
                     SugarGestures.EventControllerFlags.NONE)
@@ -203,14 +211,28 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
+    def __touch_event_cb(self, widget, event):
+        coords = event.get_coords()
+        if event.type == Gdk.EventType.TOUCH_BEGIN:
+            self.view.start_dragtouch(coords)
+        elif event.type == Gdk.EventType.TOUCH_UPDATE:
+            self.view.update_dragtouch(coords)
+        elif event.type == Gdk.EventType.TOUCH_END:
+            self.view.finish_dragtouch(coords)
+
     def __zoomtouch_began_cb(self, controller):
         self.view.start_zoomtouch(controller.get_center())
+
+        # Don't listen to touch signals until pinch-to-zoom ends.
+        self.view.disconnect(self._touch_hid)
 
     def __zoomtouch_changed_cb(self, controller, scale):
         self.view.update_zoomtouch(controller.get_center(), scale)
 
     def __zoomtouch_ended_cb(self, controller):
         self.view.finish_zoomtouch()
+        self._touch_hid = self.view.connect('touch-event',
+                                            self.__touch_event_cb)
 
     def _add_toolbar_buttons(self, toolbar_box):
         activity_button = ActivityToolbarButton(self)
