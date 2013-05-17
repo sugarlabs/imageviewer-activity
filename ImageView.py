@@ -60,6 +60,7 @@ def _rotate_surface(surface, direction):
 
     return new_surface
 
+
 class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
     __gtype_name__ = 'ImageViewer'
 
@@ -102,9 +103,14 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self.queue_draw()
 
     def do_get_property(self, prop):
+        # We don't use the getter but GTK wants it defined as we are
+        # implementing Gtk.Scrollable interface.
         pass
 
     def do_set_property(self, prop, value):
+        # The scrolled window will give us the adjustments.  Make a
+        # reference to them and also connect to their value-changed
+        # signal.
         if prop.name == 'hadjustment':
             if value is not None:
                 hadj = value
@@ -188,21 +194,35 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
                                                   self._stop_scrolling)
 
     def __hadj_value_changed_cb(self, adj):
-        # move anchor and queue draw
         alloc = self.get_allocation()
+        scaled_width = self._surface.get_width() * self._zoom
+        anchor_scaled_x = self._anchor_point[0] * self._zoom
+        scaled_image_left = self._target_point[0] - anchor_scaled_x
 
-        dif = 10
-        self._anchor_point = (self._anchor_point[0] + dif,
+        max_left = scaled_width - alloc.width
+        max_value = 1.0 - adj.get_page_size()
+        new_left = -1 * max_left * adj.get_value() / max_value
+
+        delta_x = scaled_image_left - new_left
+        self._anchor_point = (self._anchor_point[0] + delta_x,
                               self._anchor_point[1])
 
         self._start_scrolling()
         self.queue_draw()
 
     def __vadj_value_changed_cb(self, adj):
+        alloc = self.get_allocation()
+        scaled_height = self._surface.get_height() * self._zoom
+        anchor_scaled_y = self._anchor_point[1] * self._zoom
+        scaled_image_top = self._target_point[1] - anchor_scaled_y
 
-        dif = 10
+        max_top = scaled_height - alloc.height
+        max_value = 1.0 - adj.get_page_size()
+        new_top = -1 * max_top * adj.get_value() / max_value
+
+        delta_y = scaled_image_top - new_top
         self._anchor_point = (self._anchor_point[0],
-                              self._anchor_point[1] + dif)
+                              self._anchor_point[1] + delta_y)
 
         self._start_scrolling()
         self.queue_draw()
