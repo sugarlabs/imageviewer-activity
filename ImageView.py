@@ -25,7 +25,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 
 ZOOM_STEP = 0.05
-ZOOM_MAX = 4
+ZOOM_MAX = 10
 ZOOM_MIN = 0.05
 
 
@@ -88,6 +88,8 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._in_zoomtouch = False
         self._zoomtouch_scale = 1
 
+        self._in_scrolling = False
+        self._scrolling_hid = None
         self._hadj = None
         self._vadj = None
         self._hadj_value_changed_hid = None
@@ -168,11 +170,42 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
                 self._vadj.connect('value-changed',
                                    self.__vadj_value_changed_cb)
 
+    def _stop_scrolling(self):
+        self._in_scrolling = False
+        self.queue_draw()
+        return False
+
+    def _start_scrolling(self):
+        if not self._in_scrolling:
+            self._in_scrolling = True
+
+        # Add or update a timer after which the in_scrolling flag will
+        # be set to False.  This is to perform a faster drawing while
+        # scrolling.
+        if self._scrolling_hid is not None:
+            GObject.source_remove(self._scrolling_hid)
+        self._scrolling_hid = GObject.timeout_add(200,
+                                                  self._stop_scrolling)
+
     def __hadj_value_changed_cb(self, adj):
-        logging.debug("hadj_value_changed_cb")
+        # move anchor and queue draw
+        alloc = self.get_allocation()
+
+        dif = 10
+        self._anchor_point = (self._anchor_point[0] + dif,
+                              self._anchor_point[1])
+
+        self._start_scrolling()
+        self.queue_draw()
 
     def __vadj_value_changed_cb(self, adj):
-        logging.debug("vadj_value_changed_cb")
+
+        dif = 10
+        self._anchor_point = (self._anchor_point[0],
+                              self._anchor_point[1] + dif)
+
+        self._start_scrolling()
+        self.queue_draw()
 
     def _center_target_point(self):
         alloc = self.get_allocation()
@@ -257,16 +290,9 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._update_adjustments()
         self.queue_draw()
 
-    def start_dragtouch(self, coords):
-        self._in_dragtouch = True
-
-        prev_target_point = self._target_point
-
-        # Set target point to the relative coordinates of this view.
-        alloc = self.get_allocation()
-        self._target_point = (coords[1], coords[2])
-
-        # Calculate the new anchor point.
+    def _move_anchor_to_target(self, prev_target_point):
+        # Calculate the new anchor point, move it from the previous
+        # target to the new one.
 
         prev_anchor_scaled = (self._anchor_point[0] * self._zoom,
                               self._anchor_point[1] * self._zoom)
@@ -281,6 +307,16 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._anchor_point = (int(anchor_scaled[0] * 1.0 / self._zoom),
                               int(anchor_scaled[1] * 1.0 / self._zoom))
 
+    def start_dragtouch(self, coords):
+        self._in_dragtouch = True
+
+        prev_target_point = self._target_point
+
+        # Set target point to the relative coordinates of this view.
+        alloc = self.get_allocation()
+        self._target_point = (coords[1], coords[2])
+
+        self._move_anchor_to_target(prev_target_point)
         self.queue_draw()
 
     def update_dragtouch(self, coords):
@@ -315,21 +351,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         alloc = self.get_allocation()
         self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
-        # Calculate the new anchor point.
-
-        prev_anchor_scaled = (self._anchor_point[0] * self._zoom,
-                              self._anchor_point[1] * self._zoom)
-
-        # This vector is the top left coordinate of the scaled image.
-        scaled_image_topleft = (prev_target_point[0] - prev_anchor_scaled[0],
-                                prev_target_point[1] - prev_anchor_scaled[1])
-
-        anchor_scaled = (self._target_point[0] - scaled_image_topleft[0],
-                         self._target_point[1] - scaled_image_topleft[1])
-
-        self._anchor_point = (int(anchor_scaled[0] * 1.0 / self._zoom),
-                              int(anchor_scaled[1] * 1.0 / self._zoom))
-
+        self._move_anchor_to_target(prev_target_point)
         self.queue_draw()
 
     def update_zoomtouch(self, center, scale):
@@ -414,7 +436,9 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
 
         ctx.set_source_surface(self._surface, 0, 0)
 
-        if self._in_zoomtouch or self._in_dragtouch:
+        # Perform faster draw if the view is zooming or scrolling via
+        # mouse or touch.
+        if self._in_zoomtouch or self._in_dragtouch or self._in_scrolling:
             ctx.get_source().set_filter(cairo.FILTER_NEAREST)
 
         ctx.paint()
