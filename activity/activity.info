@@ -15,7 +15,7 @@ version   = 56
 stability = stable
 
 # support original activity.info fields
-activity_version = 54
+activity_version = 56
 bundle_id = org.laptop.ImageViewerActivity
 
 [Package]
