@@ -202,7 +202,7 @@ class ImageViewerActivity(activity.Activity):
 
         self.is_received_document = False
 
-        if self.shared_activity and handle.object_id is None:
+        if self.shared_activity:
             # We're joining, and we don't already have the document.
             if self.get_shared():
                 # Already joined for some reason, just get the document
@@ -349,6 +349,11 @@ class ImageViewerActivity(activity.Activity):
             del chooser
 
     def read_file(self, file_path):
+        if self._object_id is None or self.shared_activity:
+            # read_file is call because the canvas is visible
+            # but we need check if is not the case of empty file
+            return
+
         self._want_document = False
 
         tempfile = os.path.join(self.get_activity_root(), 'instance',
@@ -399,8 +404,22 @@ class ImageViewerActivity(activity.Activity):
 
         self.progressdialog.destroy()
 
-        GObject.idle_add(self.__set_file_idle_cb, tempfile)
-        self.save()
+        GObject.idle_add(self.__set_file_idle_cb, self._jobject.object_id)
+
+    def __set_file_idle_cb(self, object_id):
+        dsobj = datastore.get(object_id)
+        self._tempfile = dsobj.file_path
+        """ This method is used when join a collaboration session """
+        self.view.set_file_location(self._tempfile)
+        try:
+            zoom = int(self.metadata.get('zoom', '0'))
+            if zoom > 0:
+                self.view.set_zoom(zoom)
+        except Exception:
+            pass
+        self.set_canvas(self.scrolled_window)
+        self.scrolled_window.show_all()
+        return False
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
         if self._download_content_length > 0:
@@ -489,8 +508,6 @@ class ImageViewerActivity(activity.Activity):
 
         self.progressdialog = ProgressDialog.ProgressDialog(self)
         self.progressdialog.show_all()
-
-        GObject.idle_add(self._get_document)
 
     def _share_document(self):
         """Share the document."""
