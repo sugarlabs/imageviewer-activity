@@ -211,6 +211,8 @@ class ImageViewerActivity(activity.Activity):
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
+        Gdk.Screen.get_default().connect('size-changed', self._configure_cb)
+
     def __touch_event_cb(self, widget, event):
         coords = event.get_coords()
         if event.type == Gdk.EventType.TOUCH_BEGIN:
@@ -235,6 +237,8 @@ class ImageViewerActivity(activity.Activity):
                                             self.__touch_event_cb)
 
     def _add_toolbar_buttons(self, toolbar_box):
+        self._seps = []
+
         activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, 0)
         activity_button.show()
@@ -263,9 +267,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
-        separator = Gtk.SeparatorToolItem()
-        toolbar_box.toolbar.insert(separator, -1)
-        separator.show()
+        self._seps.append(Gtk.SeparatorToolItem())
+        toolbar_box.toolbar.insert(self._seps[-1], -1)
+        self._seps[-1].show()
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
@@ -280,9 +284,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        separator = Gtk.SeparatorToolItem()
-        toolbar_box.toolbar.insert(separator, -1)
-        separator.show()
+        self._seps.append(Gtk.SeparatorToolItem())
+        toolbar_box.toolbar.insert(self._seps[-1], -1)
+        self._seps[-1].show()
 
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
@@ -299,6 +303,14 @@ class ImageViewerActivity(activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
+
+    def _configure_cb(self, event=None):
+        if Gdk.Screen.width() <= style.GRID_CELL_SIZE * 12:
+            for sep in self._seps:
+                sep.hide()
+        else:
+            for sep in self._seps:
+                sep.show()
 
     def _update_zoom_buttons(self):
         self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
