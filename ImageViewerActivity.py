@@ -353,6 +353,7 @@ class ImageViewerActivity(activity.Activity):
             if result == Gtk.ResponseType.ACCEPT:
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
+                    self._object_id = jobject.object_id
                     self.read_file(jobject.file_path)
                     self.set_canvas(self.scrolled_window)
                     self.scrolled_window.show()
