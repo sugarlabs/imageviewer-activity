@@ -116,6 +116,8 @@ class ImageViewerActivity(activity.Activity):
         self.scrolled_window = Gtk.ScrolledWindow()
         self.scrolled_window.set_policy(Gtk.PolicyType.ALWAYS,
                                         Gtk.PolicyType.ALWAYS)
+        # disable sharing until a file is opened
+        self.max_participants = 1
 
         # Don't use the default kinetic scrolling, let the view do the
         # drag-by-touch and pinch-to-zoom logic.
@@ -239,9 +241,9 @@ class ImageViewerActivity(activity.Activity):
     def _add_toolbar_buttons(self, toolbar_box):
         self._seps = []
 
-        activity_button = ActivityToolbarButton(self)
-        toolbar_box.toolbar.insert(activity_button, 0)
-        activity_button.show()
+        self.activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(self.activity_button, 0)
+        self.activity_button.show()
 
         self._zoom_out_button = ToolButton('zoom-out')
         self._zoom_out_button.set_tooltip(_('Zoom out'))
@@ -368,6 +370,8 @@ class ImageViewerActivity(activity.Activity):
             return
 
         self._want_document = False
+        # enable collaboration
+        self.activity_button.page.share.props.sensitive = True
 
         tempfile = os.path.join(self.get_activity_root(), 'instance',
             'tmp%i' % time.time())
