@@ -160,7 +160,7 @@ class ImageViewerActivity(activity.Activity):
             # pinch-to-zoom.
             zoom_controller = SugarGestures.ZoomController()
             zoom_controller.attach(self,
-                    SugarGestures.EventControllerFlags.NONE)
+                                   SugarGestures.EventControllerFlags.NONE)
 
             zoom_controller.connect('began', self.__zoomtouch_began_cb)
             zoom_controller.connect('scale-changed',
@@ -303,7 +303,7 @@ class ImageViewerActivity(activity.Activity):
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
         rotate_anticlockwise_button.connect('clicked',
-                self.__rotate_anticlockwise_cb)
+                                            self.__rotate_anticlockwise_cb)
         toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
         rotate_anticlockwise_button.show()
 
@@ -401,7 +401,7 @@ class ImageViewerActivity(activity.Activity):
         self.activity_button.page.share.props.sensitive = True
 
         tempfile = os.path.join(self.get_activity_root(), 'instance',
-            'tmp%i' % time.time())
+                                'tmp%i' % time.time())
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
@@ -437,7 +437,7 @@ class ImageViewerActivity(activity.Activity):
 
         self._tempfile = tempfile
         file_path = os.path.join(self.get_activity_root(), 'instance',
-                                    '%i' % time.time())
+                                 '%i' % time.time())
         logging.debug("Saving file %s to datastore...", file_path)
         os.link(tempfile, file_path)
         self._jobject.file_path = file_path
@@ -494,10 +494,11 @@ class ImageViewerActivity(activity.Activity):
         # instead of IPv4 (might be more compatible with Rainbow)
         chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
-        addr = iface.AcceptStreamTube(tube_id,
-                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-                utf8_strings=True)
+        addr = iface.AcceptStreamTube(
+            tube_id,
+            telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+            telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+            utf8_strings=True)
         logging.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
         assert isinstance(addr, dbus.Struct)
@@ -508,7 +509,7 @@ class ImageViewerActivity(activity.Activity):
         port = int(addr[1])
 
         getter = ImageViewerURLDownloader("http://%s:%d/document"
-                                           % (addr[0], port))
+                                          % (addr[0], port))
         getter.connect("finished", self._download_result_cb, tube_id)
         getter.connect("progress", self._download_progress_cb, tube_id)
         getter.connect("error", self._download_error_cb, tube_id)
@@ -560,13 +561,14 @@ class ImageViewerActivity(activity.Activity):
 
         logging.debug('Starting HTTP server on port %d', self.port)
         self._fileserver = ImageViewerHTTPServer(("", self.port),
-            self._tempfile)
+                                                 self._tempfile)
 
         # Make a tube for it
         chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = \
-                iface.OfferStreamTube(IMAGEVIEWER_STREAM_SERVICE,
+            iface.OfferStreamTube(
+                IMAGEVIEWER_STREAM_SERVICE,
                 {},
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 ('127.0.0.1', dbus.UInt16(self.port)),
@@ -576,8 +578,8 @@ class ImageViewerActivity(activity.Activity):
         """Watch for new tubes."""
         tubes_chan = self.shared_activity.telepathy_tubes_chan
 
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube',
-            self._new_tube_cb)
+        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal(
+            'NewTube', self._new_tube_cb)
         tubes_chan[telepathy.CHANNEL_TYPE_TUBES].ListTubes(
             reply_handler=self._list_tubes_reply_cb,
             error_handler=self._list_tubes_error_cb)
