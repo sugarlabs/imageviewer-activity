@@ -40,7 +40,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.activity.widgets import ActivityToolbarButton
 from sugar3.activity.widgets import StopButton
 from sugar3.graphics import style
-
+from sugar3.graphics.alert import Alert
 from sugar3 import network
 from sugar3.datastore import datastore
 
@@ -55,7 +55,30 @@ import telepathy
 import dbus
 
 import ImageView
-import ProgressDialog
+
+
+class ProgressAlert(Alert):
+    """
+    Progress alert with a progressbar - to show the advance of a task
+    """
+
+    def __init__(self, timeout=5, **kwargs):
+        Alert.__init__(self, **kwargs)
+
+        self._pb = Gtk.ProgressBar()
+        self._msg_box.pack_start(self._pb, False, False, 0)
+        self._pb.set_size_request(int(Gdk.Screen.width() * 9. / 10.), -1)
+        self._pb.set_fraction(0.0)
+        self._pb.show()
+
+    def set_fraction(self, fraction):
+        # update only by 10% fractions
+        if int(fraction * 100) % 10 == 0:
+            self._pb.set_fraction(fraction)
+            self._pb.queue_draw()
+            # force updating the progressbar
+            while Gtk.events_pending():
+                Gtk.main_iteration_do(True)
 
 
 class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
@@ -144,7 +167,7 @@ class ImageViewerActivity(activity.Activity):
                                     self.__zoomtouch_changed_cb)
             zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
 
-        self.progressdialog = None
+        self._progress_alert = None
 
         toolbar_box = ToolbarBox()
         self._add_toolbar_buttons(toolbar_box)
@@ -210,6 +233,10 @@ class ImageViewerActivity(activity.Activity):
                 # Already joined for some reason, just get the document
                 self._joined_cb(self)
             else:
+                self._progress_alert = ProgressAlert()
+                self._progress_alert.props.title = _('Please wait')
+                self._progress_alert.props.msg = _('Starting connection...')
+                self.add_alert(self._progress_alert)
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
 
@@ -419,7 +446,9 @@ class ImageViewerActivity(activity.Activity):
         logging.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
 
-        self.progressdialog.destroy()
+        if self._progress_alert is not None:
+            self.remove_alert(self._progress_alert)
+            self._progress_alert = None
 
         GObject.idle_add(self.__set_file_idle_cb, self._jobject.object_id)
 
@@ -449,9 +478,7 @@ class ImageViewerActivity(activity.Activity):
         total = self._download_content_length
 
         fraction = bytes_downloaded / total
-        self.progressdialog.set_fraction(fraction)
-
-        #Gtk.main_iteration()
+        self._progress_alert.set_fraction(fraction)
 
     def _download_error_cb(self, getter, err, tube_id):
         logging.debug("Error getting document from tube %u: %s",
@@ -523,8 +550,8 @@ class ImageViewerActivity(activity.Activity):
         """
         self.watch_for_tubes()
 
-        self.progressdialog = ProgressDialog.ProgressDialog(self)
-        self.progressdialog.show_all()
+        if self._progress_alert is not None:
+            self._progress_alert.props.msg = _('Receiving image...')
 
     def _share_document(self):
         """Share the document."""
