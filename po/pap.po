@@ -1,55 +1,58 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# MARISELLE <maber56>, 2013.
+# User <juneleonora@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2010-02-28 19:43+0200\n"
-"Last-Translator: <empetronia@yahoo.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-09-06 17:45-0400\n"
+"Last-Translator: User <juneleonora@yahoo.com>\n"
+"Language-Team: JuneLeonora\n"
+"Language: pap\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Image Viewer"
-msgstr "Miradó di Imagen"
+msgstr "Visualisadó di imágen"
 
 #. TRANS: "summary" option from activity.info file
 msgid "The Image Viewer activity is a simple and fast image viewer tool"
 msgstr ""
+"E aktividat di visualisadó di imágen ta un hèrmènt pa visualisá di imágen "
+"simpel i lihé"
 
 #. TRANS: "description" option from activity.info file
 msgid ""
 "It has features one would expect of a standard image viewer, like zoom, "
 "rotate, etc."
 msgstr ""
+"E tin karakterístika ku un hende por spera di un visualisadó di imágen "
+"stándart, manera zum, gira, etc."
 
 #: ImageViewerActivity.py:170
 msgid "Zoom out"
-msgstr "Zoom out"
+msgstr "Zum hasi chikí"
 
 #: ImageViewerActivity.py:176
 msgid "Zoom in"
-msgstr "Zoom in"
+msgstr "Zum hasi grandi"
 
 #: ImageViewerActivity.py:182
 msgid "Fit to window"
-msgstr "Fit den window"
+msgstr "Ahustá den bentana"
 
 #: ImageViewerActivity.py:188
 msgid "Original size"
@@ -57,15 +60,15 @@ msgstr "Sais original"
 
 #: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
-msgstr "Bira contra oloshi"
+msgstr "Gira kontra oloshi"
 
 #: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
-msgstr "Bira ku oloshi"
+msgstr "Gira ku oloshi"
 
 #: ImageViewerActivity.py:217
 msgid "Fullscreen"
-msgstr "Pantaya kompleto"
+msgstr "Pantaya kompletu"
 
 #: ImageViewerActivity.py:264
 msgid "Choose document"
@@ -73,8 +76,8 @@ msgstr "Skohe dokumento"
 
 #: ProgressDialog.py:8
 msgid "Downloading..."
-msgstr "Downloading..."
+msgstr "Bahando..."
 
 #: ProgressDialog.py:17
 msgid "Retrieving shared image, please wait..."
-msgstr "Tresendo imagen kompartí, un momento por fabor..."
+msgstr "Rekuperando imágen kompartí, un momento por fabor..."
