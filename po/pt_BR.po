@@ -15,15 +15,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2010-02-12 04:54+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-10-30 03:39+0200\n"
+"Last-Translator: Alex <tarrask@tarrask.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Image Viewer"
@@ -32,12 +32,15 @@ msgstr "Visualizador de Imagens"
 #. TRANS: "summary" option from activity.info file
 msgid "The Image Viewer activity is a simple and fast image viewer tool"
 msgstr ""
+"O Visualizador de Imagens é uma ferramenta simples e rápida para ver imagens"
 
 #. TRANS: "description" option from activity.info file
 msgid ""
 "It has features one would expect of a standard image viewer, like zoom, "
 "rotate, etc."
 msgstr ""
+"Ele possui as ferramentas esperadas de um visualizador de imagens "
+"tradicional, como aproximar, girar, etc."
 
 #: ImageViewerActivity.py:170
 msgid "Zoom out"
@@ -49,7 +52,7 @@ msgstr "Aumentar Zoom"
 
 #: ImageViewerActivity.py:182
 msgid "Fit to window"
-msgstr "Melhor Ajuste"
+msgstr "Preencher a janela"
 
 #: ImageViewerActivity.py:188
 msgid "Original size"
@@ -57,7 +60,7 @@ msgstr "Tamanho original"
 
 #: ImageViewerActivity.py:199
 msgid "Rotate anticlockwise"
-msgstr "Girar Sentido Anti-horário"
+msgstr "Girar no sentido anti-horário"
 
 #: ImageViewerActivity.py:206
 msgid "Rotate clockwise"
