@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2013-05-07 17:32+0200\n"
-"Last-Translator: usuariopame05 <proyecto.olpc@gmail.com>\n"
+"PO-Revision-Date: 2013-10-30 20:45+0200\n"
+"Last-Translator: xavier <proyecto.olpc@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pbs\n"
 "MIME-Version: 1.0\n"
@@ -24,12 +24,16 @@ msgstr "Ndanu xikji'ik"
 #. TRANS: "summary" option from activity.info file
 msgid "The Image Viewer activity is a simple and fast image viewer tool"
 msgstr ""
+"Ne ngul’ajau ndapajau’ re kuataut sau’ nda      d-ajap matau ndapajau’ re "
+"kutaut"
 
 #. TRANS: "description" option from activity.info file
 msgid ""
 "It has features one would expect of a standard image viewer, like zoom, "
 "rotate, etc."
 msgstr ""
+"Lumei peuk stiñkjia’ k’ua vupe ne ndanpajau’ kutaut nkjai’ ne ngutuep "
+"nixi’i, mata’t, vakja"
 
 #: ImageViewerActivity.py:170
 msgid "Zoom out"
