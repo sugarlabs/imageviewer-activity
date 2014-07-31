@@ -15,262 +15,450 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from __future__ import division
-
-import gtk
-from gtk import gdk
-import gobject
-
-import sys
 import logging
+import cairo
+import math
 
-import random
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
+
+ZOOM_STEP = 0.05
+ZOOM_MAX = 10
+ZOOM_MIN = 0.05
 
 
-class ImageViewer(gtk.DrawingArea):
-    __gsignals__ = {
-        'expose-event': (
-            'override'),
-        'zoom-changed': (
-            gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
-        'angle-changed': (
-            gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
-        }
+def _surface_from_file(file_location, ctx):
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
+    surface = ctx.get_target().create_similar(
+        cairo.CONTENT_COLOR_ALPHA, pixbuf.get_width(),
+        pixbuf.get_height())
+
+    ctx_surface = cairo.Context(surface)
+    Gdk.cairo_set_source_pixbuf(ctx_surface, pixbuf, 0, 0)
+    ctx_surface.paint()
+    return surface
+
+def _rotate_surface(surface, direction):
+    ctx = cairo.Context(surface)
+    new_surface = ctx.get_target().create_similar(
+        cairo.CONTENT_COLOR_ALPHA, surface.get_height(),
+        surface.get_width())
+
+    ctx_surface = cairo.Context(new_surface)
+
+    if direction == 1:
+        ctx_surface.translate(surface.get_height(), 0)
+    else:
+        ctx_surface.translate(0, surface.get_width())
+
+    ctx_surface.rotate(math.pi / 2 * direction)
+
+    ctx_surface.set_source_surface(surface, 0, 0)
+    ctx_surface.paint()
+
+    return new_surface
+
+
+class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
+    __gtype_name__ = 'ImageViewer'
 
     __gproperties__ = {
-        'zoom': (
-            gobject.TYPE_FLOAT, 'Zoom Factor', 'Factor of zoom',
-            0, 4, 1, gobject.PARAM_READWRITE),
-        'angle': (
-            gobject.TYPE_INT, 'Angle', 'Angle of rotation',
-            0, 360, 0, gobject.PARAM_READWRITE),
-        'file_location': (
-            gobject.TYPE_STRING, 'File Location', 'Location of the image file',
-            '', gobject.PARAM_READWRITE),
-        }
-
+        "hscroll-policy": (Gtk.ScrollablePolicy, "hscroll-policy",
+                           "hscroll-policy", Gtk.ScrollablePolicy.MINIMUM,
+                           GObject.PARAM_READWRITE),
+        "hadjustment": (Gtk.Adjustment, "hadjustment", "hadjustment",
+                        GObject.PARAM_READWRITE),
+        "vscroll-policy": (Gtk.ScrollablePolicy, "hscroll-policy",
+                           "hscroll-policy", Gtk.ScrollablePolicy.MINIMUM,
+                           GObject.PARAM_READWRITE),
+        "vadjustment": (Gtk.Adjustment, "hadjustment", "hadjustment",
+                        GObject.PARAM_READWRITE),
+    }
     def __init__(self):
-        gtk.DrawingArea.__init__(self)
-        self.set_app_paintable(True)
+        Gtk.DrawingArea.__init__(self)
 
-        self.pixbuf = None
-        self.zoom = None
-        self.file_location = None
-        self._temp_pixbuf = None
-        self._image_changed_flag = True
-        self._optimal_zoom_flag = True
+        self._file_location = None
+        self._surface = None
+        self._zoom = None
+        self._target_point = None
+        self._anchor_point = None
 
-        self.angle = 0
+        self._in_dragtouch = False
+        self._in_zoomtouch = False
+        self._zoomtouch_scale = 1
 
-    def do_get_property(self, pspec):
-        if pspec.name == 'zoom':
-            return self.zoom
-        elif pspec.name == 'angle':
-            return self.angle
-        elif pspec.name == 'file_location':
-            return self.file_location
-        else:
-            raise AttributeError('unknown property %s' % pspec.name)
+        self._in_scrolling = False
+        self._scrolling_hid = None
+        self._hadj = None
+        self._vadj = None
+        self._hadj_value_changed_hid = None
+        self._vadj_value_changed_hid = None
 
-    def do_set_property(self, pspec, value):
-        if pspec.name == 'zoom':
-            self.set_zoom(value)
-        elif pspec.name == 'angle':
-            self.set_angle(value)
-        elif pspec.name == 'file_location':
-            self.set_file_location(value)
-        else:
-            raise AttributeError('unknown property %s' % pspec.name)
-
-    def set_optimal_zoom(self):
-        self._optimal_zoom_flag = True
-        self._set_zoom(self._calc_optimal_zoom())
-
-    def update_optimal_zoom(self):
-        if self._optimal_zoom_flag:
-            self._set_zoom(self._calc_optimal_zoom())
-
-    #def do_size_request(self, requisition):
-    #    requisition.width = self.pixbuf.get_width()
-    #    requisition.height = self.pixbuf.get_height()
-
-    def do_expose_event(self, event):
-        ctx = self.window.cairo_create()
-
-        ctx.rectangle(event.area.x, event.area.y,
-            event.area.width, event.area.height)
-        ctx.clip()
-        self.draw(ctx)
-
-    def draw(self, ctx):
-        if not self.pixbuf:
-            return
-        if self.zoom is None:
-            self.zoom = self._calc_optimal_zoom()
-
-        if self._temp_pixbuf is None or self._image_changed_flag:
-            self._temp_pixbuf = self._convert_pixbuf(self.pixbuf)
-            self._image_changed_flag = False
-
-        rect = self.get_allocation()
-        x = rect.x
-        y = rect.y
-
-        width = self._temp_pixbuf.get_width()
-        height = self._temp_pixbuf.get_height()
-
-        if self.parent:
-            rect = self.parent.get_allocation()
-            if rect.width > width:
-                x = int(((rect.width - x) - width) / 2)
-
-            if rect.height > height:
-                y = int(((rect.height - y) - height) / 2)
-
-        self.set_size_request(self._temp_pixbuf.get_width(),
-                self._temp_pixbuf.get_height())
-
-        ctx.set_source_pixbuf(self._temp_pixbuf, x, y)
-
-        ctx.paint()
-
-    def set_zoom(self, zoom):
-        self._optimal_zoom_flag = False
-        self._set_zoom(zoom)
-
-    def set_angle(self, angle):
-        self._image_changed_flag = True
-        self._optimal_zoom_flag = True
-
-        self.angle = angle
-
-        if self.window:
-            alloc = self.get_allocation()
-            rect = gdk.Rectangle(alloc.x, alloc.y,
-                alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
-
-        self.emit('angle-changed')
-
-    def zoom_in(self):
-        self.set_zoom(self.zoom + 0.2)
-        if self.zoom > (4):
-            return False
-        else:
-            return True
-
-    def zoom_out(self):
-        self.set_zoom(self.zoom - 0.2)
-        if self.zoom <= 0.2:
-            return False
-        else:
-            return True
+        self.connect('draw', self.__draw_cb)
 
     def set_file_location(self, file_location):
-        self.pixbuf = gtk.gdk.pixbuf_new_from_file(file_location)
-        self.file_location = file_location
-        self.zoom = None
-        self._image_changed_flag = True
+        self._file_location = file_location
+        self.queue_draw()
 
-        if self.window:
-            alloc = self.get_allocation()
-            rect = gdk.Rectangle(alloc.x, alloc.y,
-                alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
+    def do_get_property(self, prop):
+        # We don't use the getter but GTK wants it defined as we are
+        # implementing Gtk.Scrollable interface.
+        pass
 
-    def _calc_optimal_zoom(self):
+    def do_set_property(self, prop, value):
+        # The scrolled window will give us the adjustments.  Make a
+        # reference to them and also connect to their value-changed
+        # signal.
+        if prop.name == 'hadjustment':
+            if value is not None:
+                hadj = value
+                self._hadj_value_changed_hid = \
+                    hadj.connect('value-changed', self.__hadj_value_changed_cb)
+                self._hadj = hadj
+
+        elif prop.name == 'vadjustment':
+            if value is not None:
+                vadj = value
+                self._vadj_value_changed_hid = \
+                    vadj.connect('value-changed', self.__vadj_value_changed_cb)
+                self._vadj = vadj
+
+    def _update_adjustments(self):
+        alloc = self.get_allocation()
+        scaled_width = self._surface.get_width() * self._zoom
+        scaled_height = self._surface.get_height() * self._zoom
+
+        page_size_x = alloc.width * 1.0 / scaled_width
+        self._hadj.set_lower(0)
+        self._hadj.set_page_size(page_size_x)
+        self._hadj.set_upper(1.0)
+        self._hadj.set_step_increment(0.1)
+        self._hadj.set_page_increment(0.5)
+
+        page_size_y = alloc.height * 1.0 / scaled_height
+        self._vadj.set_lower(0)
+        self._vadj.set_page_size(page_size_y)
+        self._vadj.set_upper(1.0)
+        self._vadj.set_step_increment(0.1)
+        self._vadj.set_page_increment(0.5)
+
+        anchor_scaled = (self._anchor_point[0] * self._zoom,
+                         self._anchor_point[1] * self._zoom)
+
+        # This vector is the top left coordinate of the scaled image.
+        scaled_image_topleft = (self._target_point[0] - anchor_scaled[0],
+                                self._target_point[1] - anchor_scaled[1])
+
+        max_topleft = (scaled_width - alloc.width,
+                       scaled_height - alloc.height)
+
+        max_value = (1.0 - page_size_x,
+                     1.0 - page_size_y)
+
+        # This two linear functions map the topleft corner of the
+        # image to the value each adjustment.
+
+        if max_topleft[0] != 0:
+            self._hadj.disconnect(self._hadj_value_changed_hid)
+            self._hadj.set_value(-1 * max_value[0] *
+                                  scaled_image_topleft[0] / max_topleft[0])
+            self._hadj_value_changed_hid = \
+                self._hadj.connect('value-changed',
+                                   self.__hadj_value_changed_cb)
+
+        if max_topleft[1] != 0:
+            self._vadj.disconnect(self._vadj_value_changed_hid)
+            self._vadj.set_value(-1 * max_value[1] *
+                                  scaled_image_topleft[1] / max_topleft[1])
+            self._vadj_value_changed_hid = \
+                self._vadj.connect('value-changed',
+                                   self.__vadj_value_changed_cb)
+
+    def _stop_scrolling(self):
+        self._in_scrolling = False
+        self.queue_draw()
+        return False
+
+    def _start_scrolling(self):
+        if not self._in_scrolling:
+            self._in_scrolling = True
+
+        # Add or update a timer after which the in_scrolling flag will
+        # be set to False.  This is to perform a faster drawing while
+        # scrolling.
+        if self._scrolling_hid is not None:
+            GObject.source_remove(self._scrolling_hid)
+        self._scrolling_hid = GObject.timeout_add(200,
+                                                  self._stop_scrolling)
+
+    def __hadj_value_changed_cb(self, adj):
+        alloc = self.get_allocation()
+        scaled_width = self._surface.get_width() * self._zoom
+        anchor_scaled_x = self._anchor_point[0] * self._zoom
+        scaled_image_left = self._target_point[0] - anchor_scaled_x
+
+        max_left = scaled_width - alloc.width
+        max_value = 1.0 - adj.get_page_size()
+        new_left = -1 * max_left * adj.get_value() / max_value
+
+        delta_x = scaled_image_left - new_left
+        self._anchor_point = (self._anchor_point[0] + delta_x,
+                              self._anchor_point[1])
+
+        self._start_scrolling()
+        self.queue_draw()
+
+    def __vadj_value_changed_cb(self, adj):
+        alloc = self.get_allocation()
+        scaled_height = self._surface.get_height() * self._zoom
+        anchor_scaled_y = self._anchor_point[1] * self._zoom
+        scaled_image_top = self._target_point[1] - anchor_scaled_y
+
+        max_top = scaled_height - alloc.height
+        max_value = 1.0 - adj.get_page_size()
+        new_top = -1 * max_top * adj.get_value() / max_value
+
+        delta_y = scaled_image_top - new_top
+        self._anchor_point = (self._anchor_point[0],
+                              self._anchor_point[1] + delta_y)
+
+        self._start_scrolling()
+        self.queue_draw()
+
+    def _center_target_point(self):
+        alloc = self.get_allocation()
+        self._target_point = (alloc.width / 2, alloc.height / 2)
+
+    def _center_anchor_point(self):
+        self._anchor_point = (self._surface.get_width() / 2,
+                              self._surface.get_height() / 2)
+
+    def _center_if_small(self):
+        # If at the current size the image surface is smaller than the
+        # available space, center it on the canvas.
+
+        alloc = self.get_allocation()
+
+        scaled_width = self._surface.get_width() * self._zoom
+        scaled_height = self._surface.get_height() * self._zoom
+
+        if alloc.width >= scaled_width and alloc.height >= scaled_height:
+            self._center_target_point()
+            self._center_anchor_point()
+            self.queue_draw()
+
+    def set_zoom(self, zoom):
+        if zoom < ZOOM_MIN or zoom > ZOOM_MAX:
+            return
+        self._zoom = zoom
+        self.queue_draw()
+
+    def get_zoom(self):
+        return self._zoom
+
+    def can_zoom_in(self):
+        return self._zoom + ZOOM_STEP < ZOOM_MAX
+        self._update_adjustments()
+
+    def can_zoom_out(self):
+        return self._zoom - ZOOM_STEP > ZOOM_MIN
+        self._update_adjustments()
+
+    def zoom_in(self):
+        if not self.can_zoom_in():
+            return
+        self._zoom += ZOOM_STEP
+        self._update_adjustments()
+        self.queue_draw()
+
+    def zoom_out(self):
+        if not self.can_zoom_out():
+            return
+        self._zoom -= ZOOM_MIN
+
+        self._center_if_small()
+        self._update_adjustments()
+        self.queue_draw()
+
+    def zoom_to_fit(self):
         # This tries to figure out a best fit model
         # If the image can fit in, we show it in 1:1,
         # in any other case we show it in a fit to screen way
 
-        if isinstance(self.parent, gtk.Viewport):
-            rect = self.parent.parent.get_allocation()
-        else:
-            rect = self.parent.get_allocation()
-        width = rect.width
-        height = rect.height
+        alloc = self.get_allocation()
 
-        pixbuf = self.pixbuf
-        if width < pixbuf.get_width() or height < pixbuf.get_height():
+        surface_width = self._surface.get_width()
+        surface_height = self._surface.get_height()
+
+        if alloc.width < surface_width or alloc.height < surface_height:
             # Image is larger than allocated size
-            zoom = min(width / pixbuf.get_width(),
-                    height / pixbuf.get_height())
+            self._zoom = min(alloc.width * 1.0 / surface_width,
+                             alloc.height * 1.0 / surface_height)
         else:
-            zoom = 1
+            self._zoom = 1.0
 
-        return zoom
+        self._center_target_point()
+        self._center_anchor_point()
+        self._update_adjustments()
+        self.queue_draw()
 
-    def _set_zoom(self, zoom):
-        self._image_changed_flag = True
-        self.zoom = zoom
+    def zoom_original(self):
+        self._zoom = 1
+        self._center_if_small()
+        self._update_adjustments()
+        self.queue_draw()
 
-        if self.window:
-            alloc = self.get_allocation()
-            rect = gdk.Rectangle(alloc.x, alloc.y,
-                alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
+    def _move_anchor_to_target(self, prev_target_point):
+        # Calculate the new anchor point, move it from the previous
+        # target to the new one.
 
-        self.emit('zoom-changed')
+        prev_anchor_scaled = (self._anchor_point[0] * self._zoom,
+                              self._anchor_point[1] * self._zoom)
 
-    def _convert_pixbuf(self, pixbuf):
-        if self.angle == 0:
-            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
-        elif self.angle == 90:
-            rotate = gtk.gdk.PIXBUF_ROTATE_COUNTERCLOCKWISE
-        elif self.angle == 180:
-            rotate = gtk.gdk.PIXBUF_ROTATE_UPSIDEDOWN
-        elif self.angle == 270:
-            rotate = gtk.gdk.PIXBUF_ROTATE_CLOCKWISE
-        elif self.angle == 360:
-            self.angle = 0
-            rotate = gtk.gdk.PIXBUF_ROTATE_NONE
-        else:
-            logging.warning('Got unsupported rotate angle')
+        # This vector is the top left coordinate of the scaled image.
+        scaled_image_topleft = (prev_target_point[0] - prev_anchor_scaled[0],
+                                prev_target_point[1] - prev_anchor_scaled[1])
 
-        if rotate != gtk.gdk.PIXBUF_ROTATE_NONE:
-            pixbuf = pixbuf.rotate_simple(rotate)
+        anchor_scaled = (self._target_point[0] - scaled_image_topleft[0],
+                         self._target_point[1] - scaled_image_topleft[1])
 
-        if self.zoom != 1:
-            width = int(pixbuf.get_width() * self.zoom)
-            height = int(pixbuf.get_height() * self.zoom)
-            pixbuf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_TILES)
+        self._anchor_point = (int(anchor_scaled[0] * 1.0 / self._zoom),
+                              int(anchor_scaled[1] * 1.0 / self._zoom))
 
-        return pixbuf
+    def start_dragtouch(self, coords):
+        self._in_dragtouch = True
 
+        prev_target_point = self._target_point
 
-def update(view_object):
-    #return view_object.zoom_out()
-    angle = 90 * random.randint(0, 4)
-    view_object.set_angle(angle)
+        # Set target point to the relative coordinates of this view.
+        alloc = self.get_allocation()
+        self._target_point = (coords[1], coords[2])
 
-    return True
+        self._move_anchor_to_target(prev_target_point)
+        self.queue_draw()
 
+    def update_dragtouch(self, coords):
+        # Drag touch will be replaced by zoom touch if another finger
+        # is placed over the display.  When the user finishes zoom
+        # touch, it will probably remove one finger after the other,
+        # and this method will be called.  In that probable case, we
+        # need to start drag touch again.
+        if not self._in_dragtouch:
+            self.start_dragtouch(coords)
+            return
 
-if __name__ == '__main__':
-    window = gtk.Window()
+        self._target_point = (coords[1], coords[2])
+        self._update_adjustments()
+        self.queue_draw()
 
-    vadj = gtk.Adjustment()
-    hadj = gtk.Adjustment()
-    sw = gtk.ScrolledWindow(hadj, vadj)
+    def finish_dragtouch(self, coords):
+        self._in_dragtouch = False
+        self._center_if_small()
+        self._update_adjustments()
 
-    view = ImageViewer()
+    def start_zoomtouch(self, center):
+        self._in_zoomtouch = True
+        self._zoomtouch_scale = 1
 
-    view.set_file_location(sys.argv[1])
+        # Zoom touch replaces drag touch.
+        self._in_dragtouch = False
 
+        prev_target_point = self._target_point
 
-    sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        # Set target point to the relative coordinates of this view.
+        alloc = self.get_allocation()
+        self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
+        self._move_anchor_to_target(prev_target_point)
+        self.queue_draw()
 
-    sw.add_with_viewport(view)
-    window.add(sw)
+    def update_zoomtouch(self, center, scale):
+        self._zoomtouch_scale = scale
 
-    window.set_size_request(800, 600)
+        # Set target point to the relative coordinates of this view.
+        alloc = self.get_allocation()
+        self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
 
-    window.show_all()
+        self.queue_draw()
 
-    gobject.timeout_add(1000, update, view)
+    def finish_zoomtouch(self):
+        self._in_zoomtouch = False
 
-    gtk.main()
+        # Apply zoom
+        self._zoom = self._zoom * self._zoomtouch_scale
+        self._zoomtouch_scale = 1
+
+        # Restrict zoom values
+        if self._zoom < ZOOM_MIN:
+            self._zoom = ZOOM_MIN
+        elif self._zoom > ZOOM_MAX:
+            self._zoom = ZOOM_MAX
+
+        self._center_if_small()
+        self._update_adjustments()
+        self.queue_draw()
+
+    def rotate_anticlockwise(self):
+        self._surface = _rotate_surface(self._surface, -1)
+
+        # Recalculate the anchor point to make it relative to the new
+        # top left corner.
+        self._anchor_point = (
+            self._anchor_point[1],
+            self._surface.get_height() - self._anchor_point[0])
+
+        self._update_adjustments()
+        self.queue_draw()
+
+    def rotate_clockwise(self):
+        self._surface = _rotate_surface(self._surface, 1)
+
+        # Recalculate the anchor point to make it relative to the new
+        # top left corner.
+        self._anchor_point = (
+            self._surface.get_width() - self._anchor_point[1],
+            self._anchor_point[0])
+
+        self._update_adjustments()
+        self.queue_draw()
+
+    def __draw_cb(self, widget, ctx):
+
+        # If the image surface is not set, it reads it from the file
+        # location.  If the file location is not set yet, it just
+        # returns.
+        if self._surface is None:
+            if self._file_location is None:
+                return
+            self._surface = _surface_from_file(self._file_location, ctx)
+
+        if self._zoom is None:
+            self.zoom_to_fit()
+
+        # If no target point was set via pinch-to-zoom, default to the
+        # center of the screen.
+        if self._target_point is None:
+            self._center_target_point()
+
+        # If no anchor point was set via pinch-to-zoom, default to the
+        # center of the surface.
+        if self._anchor_point is None:
+            self._center_anchor_point()
+            self._update_adjustments()
+
+        ctx.translate(*self._target_point)
+        zoom_absolute = self._zoom * self._zoomtouch_scale
+        ctx.scale(zoom_absolute, zoom_absolute)
+
+        ctx.translate(self._anchor_point[0] * -1, self._anchor_point[1] * -1)
+
+        ctx.set_source_surface(self._surface, 0, 0)
+
+        # Perform faster draw if the view is zooming or scrolling via
+        # mouse or touch.
+        if self._in_zoomtouch or self._in_dragtouch or self._in_scrolling:
+            ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+
+        ctx.paint()

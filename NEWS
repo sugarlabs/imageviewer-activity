@@ -1,3 +1,7 @@
+52
+* Touch gestures implementation
+* port to gtk3
+
 22
 
 * Fullscreen is useless #3704

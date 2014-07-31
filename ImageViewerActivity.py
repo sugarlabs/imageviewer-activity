@@ -19,33 +19,66 @@
 
 from __future__ import division
 
-from sugar.activity import activity
+from sugar3.activity import activity
 import logging
 
 from gettext import gettext as _
 
 import time
 import os
-import gtk
-import gobject
+import math
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
 
-from sugar.graphics.alert import NotifyAlert
-from sugar.graphics.objectchooser import ObjectChooser
-from sugar import mime
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import ActivityToolbarButton
-from sugar.activity.widgets import StopButton
+from sugar3.graphics.alert import NotifyAlert
+from sugar3.graphics.objectchooser import ObjectChooser
+from sugar3 import mime
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.graphics.icon import Icon
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.activity.widgets import StopButton
+from sugar3.graphics import style
+from sugar3.graphics.alert import Alert
+from sugar3 import network
+from sugar3.datastore import datastore
 
-from sugar import network
-from sugar.datastore import datastore
+try:
+    from gi.repository import SugarGestures
+    GESTURES_AVAILABLE = True
+except:
+    GESTURES_AVAILABLE = False
+
+
 import telepathy
 import dbus
 
 import ImageView
-import ProgressDialog
 
-_logger = logging.getLogger('imageviewer-activity')
+
+class ProgressAlert(Alert):
+    """
+    Progress alert with a progressbar - to show the advance of a task
+    """
+
+    def __init__(self, timeout=5, **kwargs):
+        Alert.__init__(self, **kwargs)
+
+        self._pb = Gtk.ProgressBar()
+        self._msg_box.pack_start(self._pb, False, False, 0)
+        self._pb.set_size_request(int(Gdk.Screen.width() * 9. / 10.), -1)
+        self._pb.set_fraction(0.0)
+        self._pb.show()
+
+    def set_fraction(self, fraction):
+        # update only by 10% fractions
+        if int(fraction * 100) % 10 == 0:
+            self._pb.set_fraction(fraction)
+            self._pb.queue_draw()
+            # force updating the progressbar
+            while Gtk.events_pending():
+                Gtk.main_iteration_do(True)
 
 
 class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
@@ -96,8 +129,6 @@ class ImageViewerActivity(activity.Activity):
 
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
-
-        self.zoom = None
         self._object_id = handle.object_id
 
         self._zoom_out_button = None
@@ -105,25 +136,83 @@ class ImageViewerActivity(activity.Activity):
         self._fileserver = None
         self._fileserver_tube_id = None
 
+        self.scrolled_window = Gtk.ScrolledWindow()
+        self.scrolled_window.set_policy(Gtk.PolicyType.ALWAYS,
+                                        Gtk.PolicyType.ALWAYS)
+        # disable sharing until a file is opened
+        self.max_participants = 1
+
+        # Don't use the default kinetic scrolling, let the view do the
+        # drag-by-touch and pinch-to-zoom logic.
+        self.scrolled_window.set_kinetic_scrolling(False)
+
         self.view = ImageView.ImageViewer()
-        self.progressdialog = None
+
+        # Connect to the touch signal for performing drag-by-touch.
+        self.view.add_events(Gdk.EventMask.TOUCH_MASK)
+        self._touch_hid = self.view.connect('touch-event',
+                                            self.__touch_event_cb)
+        self.scrolled_window.add(self.view)
+        self.view.show()
+
+        if GESTURES_AVAILABLE:
+            # Connect to the zoom signals for performing
+            # pinch-to-zoom.
+            zoom_controller = SugarGestures.ZoomController()
+            zoom_controller.attach(self,
+                                   SugarGestures.EventControllerFlags.NONE)
+
+            zoom_controller.connect('began', self.__zoomtouch_began_cb)
+            zoom_controller.connect('scale-changed',
+                                    self.__zoomtouch_changed_cb)
+            zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
+
+        self._progress_alert = None
 
         toolbar_box = ToolbarBox()
         self._add_toolbar_buttons(toolbar_box)
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        vadj = gtk.Adjustment()
-        hadj = gtk.Adjustment()
-        self.sw = gtk.ScrolledWindow(hadj, vadj)
+        if self._object_id is None:
+            empty_widgets = Gtk.EventBox()
+            empty_widgets.modify_bg(Gtk.StateType.NORMAL,
+                                    style.COLOR_WHITE.get_gdk_color())
 
-        self.sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.sw.add_with_viewport(self.view)
-        # Avoid needless spacing
-        self.view.parent.props.shadow_type = gtk.SHADOW_NONE
+            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            mvbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            vbox.pack_start(mvbox, True, False, 0)
 
-        self.set_canvas(self.sw)
-        self.sw.show_all()
+            image_icon = Icon(pixel_size=style.LARGE_ICON_SIZE,
+                              icon_name='imageviewer',
+                              stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
+                              fill_color=style.COLOR_TRANSPARENT.get_svg())
+            mvbox.pack_start(image_icon, False, False, style.DEFAULT_PADDING)
+
+            label = Gtk.Label('<span foreground="%s"><b>%s</b></span>' %
+                              (style.COLOR_BUTTON_GREY.get_html(),
+                              _('No image')))
+            label.set_use_markup(True)
+            mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
+
+            hbox = Gtk.Box()
+            open_image_btn = Gtk.Button()
+            open_image_btn.connect('clicked', self._show_picker_cb)
+            add_image = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
+                                                 Gtk.IconSize.BUTTON)
+            buttonbox = Gtk.Box()
+            buttonbox.pack_start(add_image, False, True, 0)
+            buttonbox.pack_end(Gtk.Label(_('Choose an image')), True, True, 5)
+            open_image_btn.add(buttonbox)
+            hbox.pack_start(open_image_btn, True, False, 0)
+            mvbox.pack_start(hbox, False, False, style.DEFAULT_PADDING)
+
+            empty_widgets.add(vbox)
+            empty_widgets.show_all()
+            self.set_canvas(empty_widgets)
+        else:
+            self.set_canvas(self.scrolled_window)
+            self.scrolled_window.show()
 
         self.unused_download_tubes = set()
         self._want_document = True
@@ -138,33 +227,50 @@ class ImageViewerActivity(activity.Activity):
 
         self.is_received_document = False
 
-        if self._shared_activity and handle.object_id == None:
+        if self.shared_activity:
             # We're joining, and we don't already have the document.
             if self.get_shared():
                 # Already joined for some reason, just get the document
                 self._joined_cb(self)
             else:
+                self._progress_alert = ProgressAlert()
+                self._progress_alert.props.title = _('Please wait')
+                self._progress_alert.props.msg = _('Starting connection...')
+                self.add_alert(self._progress_alert)
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
-        elif self._object_id is None:
-            self._show_object_picker = gobject.timeout_add(1000, \
-                self._show_picker_cb)
 
-    def handle_view_source(self):
-        raise NotImplementedError
+        Gdk.Screen.get_default().connect('size-changed', self._configure_cb)
 
-    def fullscreen(self):
-        self.view.update_optimal_zoom()
-        activity.Activity.fullscreen(self)
+    def __touch_event_cb(self, widget, event):
+        coords = event.get_coords()
+        if event.type == Gdk.EventType.TOUCH_BEGIN:
+            self.view.start_dragtouch(coords)
+        elif event.type == Gdk.EventType.TOUCH_UPDATE:
+            self.view.update_dragtouch(coords)
+        elif event.type == Gdk.EventType.TOUCH_END:
+            self.view.finish_dragtouch(coords)
 
-    def unfullscreen(self):
-        activity.Activity.unfullscreen(self)
-        self.view.update_optimal_zoom()
+    def __zoomtouch_began_cb(self, controller):
+        self.view.start_zoomtouch(controller.get_center())
+
+        # Don't listen to touch signals until pinch-to-zoom ends.
+        self.view.disconnect(self._touch_hid)
+
+    def __zoomtouch_changed_cb(self, controller, scale):
+        self.view.update_zoomtouch(controller.get_center(), scale)
+
+    def __zoomtouch_ended_cb(self, controller):
+        self.view.finish_zoomtouch()
+        self._touch_hid = self.view.connect('touch-event',
+                                            self.__touch_event_cb)
 
     def _add_toolbar_buttons(self, toolbar_box):
-        activity_button = ActivityToolbarButton(self)
-        toolbar_box.toolbar.insert(activity_button, 0)
-        activity_button.show()
+        self._seps = []
+
+        self.activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(self.activity_button, 0)
+        self.activity_button.show()
 
         self._zoom_out_button = ToolButton('zoom-out')
         self._zoom_out_button.set_tooltip(_('Zoom out'))
@@ -190,15 +296,14 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
-        spacer = gtk.SeparatorToolItem()
-        spacer.props.draw = False
-        toolbar_box.toolbar.insert(spacer, -1)
-        spacer.show()
+        self._seps.append(Gtk.SeparatorToolItem())
+        toolbar_box.toolbar.insert(self._seps[-1], -1)
+        self._seps[-1].show()
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
         rotate_anticlockwise_button.connect('clicked',
-                self.__rotate_anticlockwise_cb)
+                                            self.__rotate_anticlockwise_cb)
         toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
         rotate_anticlockwise_button.show()
 
@@ -208,10 +313,9 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        spacer = gtk.SeparatorToolItem()
-        spacer.props.draw = False
-        toolbar_box.toolbar.insert(spacer, -1)
-        spacer.show()
+        self._seps.append(Gtk.SeparatorToolItem())
+        toolbar_box.toolbar.insert(self._seps[-1], -1)
+        self._seps[-1].show()
 
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
@@ -219,7 +323,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(fullscreen_button, -1)
         fullscreen_button.show()
 
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
         toolbar_box.toolbar.insert(separator, -1)
@@ -229,79 +333,89 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
 
+    def _configure_cb(self, event=None):
+        if Gdk.Screen.width() <= style.GRID_CELL_SIZE * 12:
+            for sep in self._seps:
+                sep.hide()
+        else:
+            for sep in self._seps:
+                sep.show()
+
+    def _update_zoom_buttons(self):
+        self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
+        self._zoom_out_button.set_sensitive(self.view.can_zoom_out())
+
     def __zoom_in_cb(self, button):
-        self._zoom_in_button.set_sensitive(self.view.zoom_in())
-        self._zoom_out_button.set_sensitive(True)
+        self.view.zoom_in()
+        self._update_zoom_buttons()
 
     def __zoom_out_cb(self, button):
-        self._zoom_out_button.set_sensitive(self.view.zoom_out())
-        self._zoom_in_button.set_sensitive(True)
+        self.view.zoom_out()
+        self._update_zoom_buttons()
 
     def __zoom_tofit_cb(self, button):
-        self.view.set_optimal_zoom()
+        self.view.zoom_to_fit()
+        self._update_zoom_buttons()
 
     def __zoom_original_cb(self, button):
-        self.view.set_zoom(1)
+        self.view.zoom_original()
+        self._update_zoom_buttons()
 
     def __rotate_anticlockwise_cb(self, button):
-        angle = self.view.get_property('angle')
-        self.view.set_angle(angle + 90)
+        self.view.rotate_anticlockwise()
 
     def __rotate_clockwise_cb(self, button):
-        angle = self.view.get_property('angle')
-        if angle == 0:
-            angle = 360
-
-        self.view.set_angle(angle - 90)
+        self.view.rotate_clockwise()
 
     def __fullscreen_cb(self, button):
         self.fullscreen()
 
-    def _show_picker_cb(self):
+    def _show_picker_cb(self, button):
         if not self._want_document:
             return
 
-        chooser = ObjectChooser(_('Choose document'), self,
-            gtk.DIALOG_MODAL |
-            gtk.DIALOG_DESTROY_WITH_PARENT, \
-            what_filter=mime.GENERIC_TYPE_IMAGE)
+        chooser = ObjectChooser(parent=self,
+                                what_filter=mime.GENERIC_TYPE_IMAGE)
 
         try:
             result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
+            if result == Gtk.ResponseType.ACCEPT:
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
+                    self._object_id = jobject.object_id
                     self.read_file(jobject.file_path)
+                    self.set_canvas(self.scrolled_window)
+                    self.scrolled_window.show()
         finally:
             chooser.destroy()
             del chooser
 
     def read_file(self, file_path):
-        self._want_document = False
+        if self._object_id is None or self.shared_activity:
+            # read_file is call because the canvas is visible
+            # but we need check if is not the case of empty file
+            return
 
-        tempfile = os.path.join(self.get_activity_root(), 'instance', \
-            'tmp%i' % time.time())
+        self._want_document = False
+        # enable collaboration
+        self.activity_button.page.share.props.sensitive = True
+
+        tempfile = os.path.join(self.get_activity_root(), 'instance',
+                                'tmp%i' % time.time())
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
-        gobject.idle_add(self.__set_file_idle_cb, tempfile)
 
-    def __set_file_idle_cb(self, file_path):
-        self.view.set_file_location(file_path)
+        self.view.set_file_location(tempfile)
 
-        try:
-            self.zoom = int(self.metadata.get('zoom', '0'))
-            if self.zoom > 0:
-                self.view.set_zoom(self.zoom)
-        except Exception:
-            pass
-
-        return False
+        zoom = self.metadata.get('zoom', None)
+        if zoom is not None:
+            self.view.set_zoom(float(zoom))
 
     def write_file(self, file_path):
         if self._tempfile:
             self.metadata['activity'] = self.get_bundle_id()
-            self.metadata['zoom'] = str(self.zoom)
+            self.metadata['zoom'] = str(self.view.get_zoom())
             if self._close_requested:
                 os.link(self._tempfile, file_path)
                 os.unlink(self._tempfile)
@@ -323,55 +437,69 @@ class ImageViewerActivity(activity.Activity):
 
         self._tempfile = tempfile
         file_path = os.path.join(self.get_activity_root(), 'instance',
-                                    '%i' % time.time())
-        _logger.debug("Saving file %s to datastore...", file_path)
+                                 '%i' % time.time())
+        logging.debug("Saving file %s to datastore...", file_path)
         os.link(tempfile, file_path)
         self._jobject.file_path = file_path
         datastore.write(self._jobject, transfer_ownership=True)
 
-
-        _logger.debug("Got document %s (%s) from tube %u",
+        logging.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
 
-        self.progressdialog.destroy()
+        if self._progress_alert is not None:
+            self.remove_alert(self._progress_alert)
+            self._progress_alert = None
 
-        gobject.idle_add(self.__set_file_idle_cb, tempfile)
-        self.save()
+        GObject.idle_add(self.__set_file_idle_cb, self._jobject.object_id)
+
+    def __set_file_idle_cb(self, object_id):
+        dsobj = datastore.get(object_id)
+        self._tempfile = dsobj.file_path
+        """ This method is used when join a collaboration session """
+        self.view.set_file_location(self._tempfile)
+        try:
+            zoom = int(self.metadata.get('zoom', '0'))
+            if zoom > 0:
+                self.view.set_zoom(zoom)
+        except Exception:
+            pass
+        self.set_canvas(self.scrolled_window)
+        self.scrolled_window.show_all()
+        return False
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
         if self._download_content_length > 0:
-            _logger.debug("Downloaded %u of %u bytes from tube %u...",
+            logging.debug("Downloaded %u of %u bytes from tube %u...",
                           bytes_downloaded, self._download_content_length,
                           tube_id)
         else:
-            _logger.debug("Downloaded %u bytes from tube %u...",
+            logging.debug("Downloaded %u bytes from tube %u...",
                           bytes_downloaded, tube_id)
         total = self._download_content_length
 
         fraction = bytes_downloaded / total
-        self.progressdialog.set_fraction(fraction)
-
-        #gtk.main_iteration()
+        self._progress_alert.set_fraction(fraction)
 
     def _download_error_cb(self, getter, err, tube_id):
-        _logger.debug("Error getting document from tube %u: %s",
+        logging.debug("Error getting document from tube %u: %s",
                       tube_id, err)
         self._alert('Failure', 'Error getting document from tube')
         self._want_document = True
         self._download_content_length = 0
         self._download_content_type = None
-        gobject.idle_add(self._get_document)
+        GObject.idle_add(self._get_document)
 
     def _download_document(self, tube_id, path):
         # FIXME: should ideally have the CM listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
-        addr = iface.AcceptStreamTube(tube_id,
-                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-                utf8_strings=True)
-        _logger.debug('Accepted stream tube: listening address is %r', addr)
+        addr = iface.AcceptStreamTube(
+            tube_id,
+            telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+            telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+            utf8_strings=True)
+        logging.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
         assert isinstance(addr, dbus.Struct)
         assert len(addr) == 2
@@ -381,11 +509,11 @@ class ImageViewerActivity(activity.Activity):
         port = int(addr[1])
 
         getter = ImageViewerURLDownloader("http://%s:%d/document"
-                                           % (addr[0], port))
+                                          % (addr[0], port))
         getter.connect("finished", self._download_result_cb, tube_id)
         getter.connect("progress", self._download_progress_cb, tube_id)
         getter.connect("error", self._download_error_cb, tube_id)
-        _logger.debug("Starting download to %s...", path)
+        logging.debug("Starting download to %s...", path)
         getter.start(path)
         self._download_content_length = getter.get_content_length()
         self._download_content_type = getter.get_content_type()
@@ -407,13 +535,13 @@ class ImageViewerActivity(activity.Activity):
         try:
             tube_id = self.unused_download_tubes.pop()
         except (ValueError, KeyError), e:
-            _logger.debug('No tubes to get the document from right now: %s',
+            logging.debug('No tubes to get the document from right now: %s',
                           e)
             return False
 
         # Avoid trying to download the document multiple times at once
         self._want_document = False
-        gobject.idle_add(self._download_document, tube_id, path)
+        GObject.idle_add(self._download_document, tube_id, path)
         return False
 
     def _joined_cb(self, also_self):
@@ -423,25 +551,24 @@ class ImageViewerActivity(activity.Activity):
         """
         self.watch_for_tubes()
 
-        self.progressdialog = ProgressDialog.ProgressDialog(self)
-        self.progressdialog.show_all()
-
-        gobject.idle_add(self._get_document)
+        if self._progress_alert is not None:
+            self._progress_alert.props.msg = _('Receiving image...')
 
     def _share_document(self):
         """Share the document."""
         # FIXME: should ideally have the fileserver listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
 
-        _logger.debug('Starting HTTP server on port %d', self.port)
+        logging.debug('Starting HTTP server on port %d', self.port)
         self._fileserver = ImageViewerHTTPServer(("", self.port),
-            self._tempfile)
+                                                 self._tempfile)
 
         # Make a tube for it
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = \
-                iface.OfferStreamTube(IMAGEVIEWER_STREAM_SERVICE,
+            iface.OfferStreamTube(
+                IMAGEVIEWER_STREAM_SERVICE,
                 {},
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 ('127.0.0.1', dbus.UInt16(self.port)),
@@ -449,10 +576,10 @@ class ImageViewerActivity(activity.Activity):
 
     def watch_for_tubes(self):
         """Watch for new tubes."""
-        tubes_chan = self._shared_activity.telepathy_tubes_chan
+        tubes_chan = self.shared_activity.telepathy_tubes_chan
 
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube',
-            self._new_tube_cb)
+        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal(
+            'NewTube', self._new_tube_cb)
         tubes_chan[telepathy.CHANNEL_TYPE_TUBES].ListTubes(
             reply_handler=self._list_tubes_reply_cb,
             error_handler=self._list_tubes_error_cb)
@@ -460,15 +587,15 @@ class ImageViewerActivity(activity.Activity):
     def _new_tube_cb(self, tube_id, initiator, tube_type, service, params,
                      state):
         """Callback when a new tube becomes available."""
-        _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
+        logging.debug('New tube: ID=%d initator=%d type=%d service=%s '
                       'params=%r state=%d', tube_id, initiator, tube_type,
                       service, params, state)
         if service == IMAGEVIEWER_STREAM_SERVICE:
-            _logger.debug('I could download from that tube')
+            logging.debug('I could download from that tube')
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
             if self._want_document:
-                gobject.idle_add(self._get_document)
+                GObject.idle_add(self._get_document)
 
     def _list_tubes_reply_cb(self, tubes):
         """Callback when new tubes are available."""
@@ -477,7 +604,7 @@ class ImageViewerActivity(activity.Activity):
 
     def _list_tubes_error_cb(self, e):
         """Handle ListTubes error by logging."""
-        _logger.error('ListTubes() failed: %s', e)
+        logging.error('ListTubes() failed: %s', e)
 
     def _shared_cb(self, activityid):
         """Callback when activity shared.
@@ -487,7 +614,7 @@ class ImageViewerActivity(activity.Activity):
         """
         # We initiated this activity and have now shared it, so by
         # definition we have the file.
-        _logger.debug('Activity became shared')
+        logging.debug('Activity became shared')
         self.watch_for_tubes()
         self._share_document()
 

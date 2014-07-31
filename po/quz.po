@@ -37,6 +37,21 @@ msgstr ""
 "Huk wanki Rikuchiqkunamantaqa, aswantam hatunyachispa utaq muyurichispa "
 "rikuchin."
 
+#  "Visor de imagenes"
+#. TRANS: "name" option from activity.info file
+msgid "Image Viewer"
+msgstr "Wankikuna rikuchiq"
+
+#. TRANS: "summary" option from activity.info file
+msgid "The Image Viewer activity is a simple and fast image viewer tool"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"It has features one would expect of a standard image viewer, like zoom, "
+"rotate, etc."
+msgstr ""
+
 #  "Reducir"
 #: ImageViewerActivity.py:170
 msgid "Zoom out"
