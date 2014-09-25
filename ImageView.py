@@ -31,9 +31,8 @@ ZOOM_MIN = 0.05
 
 def _surface_from_file(file_location, ctx):
     pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
-    surface = ctx.get_target().create_similar(
-        cairo.CONTENT_COLOR_ALPHA, pixbuf.get_width(),
-        pixbuf.get_height())
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                 pixbuf.get_width(), pixbuf.get_height())
 
     ctx_surface = cairo.Context(surface)
     Gdk.cairo_set_source_pixbuf(ctx_surface, pixbuf, 0, 0)
