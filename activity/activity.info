@@ -16,3 +16,4 @@ mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 
 activity_version = 59
 bundle_id = org.laptop.ImageViewerActivity
+repository = git@github.com:godiard/imageviewer-activity.git
