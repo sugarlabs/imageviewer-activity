@@ -133,6 +133,8 @@ class ImageViewerActivity(activity.Activity):
 
         self._zoom_out_button = None
         self._zoom_in_button = None
+        self.previous_image_button = None
+        self.next_image_button = None
         self._fileserver = None
         self._fileserver_tube_id = None
 
@@ -147,6 +149,11 @@ class ImageViewerActivity(activity.Activity):
         self.scrolled_window.set_kinetic_scrolling(False)
 
         self.view = ImageView.ImageViewer()
+
+        value = mime.GENERIC_TYPE_IMAGE
+        mime_types = mime.get_generic_type(value).mime_types
+        (self.image_list, self.image_count) = datastore.find({'mime_type':
+                                                               mime_types})
 
         # Connect to the touch signal for performing drag-by-touch.
         self.view.add_events(Gdk.EventMask.TOUCH_MASK)
@@ -296,6 +303,26 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
+        if self._object_id is None:
+            self._seps.append(Gtk.SeparatorToolItem())
+            toolbar_box.toolbar.insert(self._seps[-1], -1)
+            self._seps[-1].show()
+
+            self.previous_image_button = ToolButton('go-previous-paired')
+            self.previous_image_button.set_tooltip(_('Previous Image'))
+            self.previous_image_button.props.sensitive = False
+            self.previous_image_button.connect('clicked',
+                                                self.__previous_image_cb)
+            toolbar_box.toolbar.insert(self.previous_image_button, -1)
+            self.previous_image_button.show()
+
+            self.next_image_button = ToolButton('go-next-paired')
+            self.next_image_button.set_tooltip(_('Next Image'))
+            self.next_image_button.props.sensitive = False
+            self.next_image_button.connect('clicked', self.__next_image_cb)
+            toolbar_box.toolbar.insert(self.next_image_button, -1)
+            self.next_image_button.show()
+
         self._seps.append(Gtk.SeparatorToolItem())
         toolbar_box.toolbar.insert(self._seps[-1], -1)
         self._seps[-1].show()
@@ -345,6 +372,20 @@ class ImageViewerActivity(activity.Activity):
         self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
         self._zoom_out_button.set_sensitive(self.view.can_zoom_out())
 
+    def __previous_image_cb(self, button):
+        self.current_image_index -= 1
+        self.make_button_sensitive()
+        jobject = self.image_list[self.current_image_index]
+        self._object_id = jobject.object_id
+        self.read_file(jobject.file_path, update=True)
+
+    def __next_image_cb(self, button):
+        self.current_image_index += 1
+        self.make_button_sensitive()
+        jobject = self.image_list[self.current_image_index]
+        self._object_id = jobject.object_id
+        self.read_file(jobject.file_path, update=True)
+
     def __zoom_in_cb(self, button):
         self.view.zoom_in()
         self._update_zoom_buttons()
@@ -370,6 +411,20 @@ class ImageViewerActivity(activity.Activity):
     def __fullscreen_cb(self, button):
         self.fullscreen()
 
+    def make_button_sensitive(self):
+        if self.image_count == 0 or self.image_count == 1:
+            return
+
+        if self.current_image_index == 0:
+            self.next_image_button.props.sensitive = True
+            self.previous_image_button.props.sensitive = False
+        elif self.current_image_index == self.image_count - 1:
+            self.previous_image_button.props.sensitive = True
+            self.next_image_button.props.sensitive = False
+        else:
+            self.next_image_button.props.sensitive = True
+            self.previous_image_button.props.sensitive = True
+
     def _show_picker_cb(self, button):
         if not self._want_document:
             return
@@ -387,10 +442,14 @@ class ImageViewerActivity(activity.Activity):
                     self.set_canvas(self.scrolled_window)
                     self.scrolled_window.show()
         finally:
+            self.current_image_index = self.image_list.index(
+                                        next(image for image in self.image_list
+                                        if image.object_id == self._object_id))
+            self.make_button_sensitive()
             chooser.destroy()
             del chooser
 
-    def read_file(self, file_path):
+    def read_file(self, file_path, update=False):
         if self._object_id is None or self.shared_activity:
             # read_file is call because the canvas is visible
             # but we need check if is not the case of empty file
@@ -405,8 +464,7 @@ class ImageViewerActivity(activity.Activity):
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
-
-        self.view.set_file_location(tempfile)
+        self.view.set_file_location(tempfile, update=update)
 
         zoom = self.metadata.get('zoom', None)
         if zoom is not None:
