@@ -193,7 +193,7 @@ class ImageViewerActivity(activity.Activity):
 
             label = Gtk.Label('<span foreground="%s"><b>%s</b></span>' %
                               (style.COLOR_BUTTON_GREY.get_html(),
-                              _('No image')))
+                               _('No image')))
             label.set_use_markup(True)
             mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
 

@@ -39,6 +39,7 @@ def _surface_from_file(file_location, ctx):
     ctx_surface.paint()
     return surface
 
+
 def _rotate_surface(surface, direction):
     ctx = cairo.Context(surface)
     new_surface = ctx.get_target().create_similar(
@@ -75,6 +76,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         "vadjustment": (Gtk.Adjustment, "hadjustment", "hadjustment",
                         GObject.PARAM_READWRITE),
     }
+
     def __init__(self):
         Gtk.DrawingArea.__init__(self)
 
@@ -164,7 +166,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         if max_topleft[0] != 0:
             self._hadj.disconnect(self._hadj_value_changed_hid)
             self._hadj.set_value(-1 * max_value[0] *
-                                  scaled_image_topleft[0] / max_topleft[0])
+                                 scaled_image_topleft[0] / max_topleft[0])
             self._hadj_value_changed_hid = \
                 self._hadj.connect('value-changed',
                                    self.__hadj_value_changed_cb)
@@ -172,7 +174,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         if max_topleft[1] != 0:
             self._vadj.disconnect(self._vadj_value_changed_hid)
             self._vadj.set_value(-1 * max_value[1] *
-                                  scaled_image_topleft[1] / max_topleft[1])
+                                 scaled_image_topleft[1] / max_topleft[1])
             self._vadj_value_changed_hid = \
                 self._vadj.connect('value-changed',
                                    self.__vadj_value_changed_cb)
