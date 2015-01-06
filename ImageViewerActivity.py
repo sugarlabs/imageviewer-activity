@@ -193,7 +193,7 @@ class ImageViewerActivity(activity.Activity):
 
             label = Gtk.Label('<span foreground="%s"><b>%s</b></span>' %
                               (style.COLOR_BUTTON_GREY.get_html(),
-                               _('No image')))
+                              _('No image')))
             label.set_use_markup(True)
             mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
 
@@ -306,6 +306,23 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
+        self._seps.append(Gtk.SeparatorToolItem())
+        toolbar_box.toolbar.insert(self._seps[-1], -1)
+        self._seps[-1].show()
+
+        rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
+        rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
+        rotate_anticlockwise_button.connect('clicked',
+                                            self.__rotate_anticlockwise_cb)
+        toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
+        rotate_anticlockwise_button.show()
+
+        rotate_clockwise_button = ToolButton('rotate_clockwise')
+        rotate_clockwise_button.set_tooltip(_('Rotate clockwise'))
+        rotate_clockwise_button.connect('clicked', self.__rotate_clockwise_cb)
+        toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
+        rotate_clockwise_button.show()
+
         if self._object_id is None:
             self._seps.append(Gtk.SeparatorToolItem())
             toolbar_box.toolbar.insert(self._seps[-1], -1)
@@ -325,23 +342,6 @@ class ImageViewerActivity(activity.Activity):
             self.next_image_button.connect('clicked', self.__next_image_cb)
             toolbar_box.toolbar.insert(self.next_image_button, -1)
             self.next_image_button.show()
-
-        self._seps.append(Gtk.SeparatorToolItem())
-        toolbar_box.toolbar.insert(self._seps[-1], -1)
-        self._seps[-1].show()
-
-        rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
-        rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
-        rotate_anticlockwise_button.connect('clicked',
-                                            self.__rotate_anticlockwise_cb)
-        toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
-        rotate_anticlockwise_button.show()
-
-        rotate_clockwise_button = ToolButton('rotate_clockwise')
-        rotate_clockwise_button.set_tooltip(_('Rotate clockwise'))
-        rotate_clockwise_button.connect('clicked', self.__rotate_clockwise_cb)
-        toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
-        rotate_clockwise_button.show()
 
         self._seps.append(Gtk.SeparatorToolItem())
         toolbar_box.toolbar.insert(self._seps[-1], -1)
@@ -380,14 +380,14 @@ class ImageViewerActivity(activity.Activity):
         self.make_button_sensitive()
         jobject = self.image_list[self.current_image_index]
         self._object_id = jobject.object_id
-        self.read_file(jobject.file_path, update=True)
+        self.read_file(jobject.file_path)
 
     def __next_image_cb(self, button):
         self.current_image_index += 1
         self.make_button_sensitive()
         jobject = self.image_list[self.current_image_index]
         self._object_id = jobject.object_id
-        self.read_file(jobject.file_path, update=True)
+        self.read_file(jobject.file_path)
 
     def __zoom_in_cb(self, button):
         self.view.zoom_in()
@@ -415,7 +415,7 @@ class ImageViewerActivity(activity.Activity):
         self.fullscreen()
 
     def make_button_sensitive(self):
-        if self.image_count == 0 or self.image_count == 1:
+        if self.image_count <= 1:
             return
 
         if self.current_image_index == 0:
@@ -452,7 +452,7 @@ class ImageViewerActivity(activity.Activity):
             chooser.destroy()
             del chooser
 
-    def read_file(self, file_path, update=False):
+    def read_file(self, file_path):
         if self._object_id is None or self.shared_activity:
             # read_file is call because the canvas is visible
             # but we need check if is not the case of empty file
@@ -467,7 +467,8 @@ class ImageViewerActivity(activity.Activity):
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
-        self.view.set_file_location(tempfile, update=update)
+
+        self.view.set_file_location(tempfile)
 
         zoom = self.metadata.get('zoom', None)
         if zoom is not None:
