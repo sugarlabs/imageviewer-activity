@@ -100,6 +100,8 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self.connect('draw', self.__draw_cb)
 
     def set_file_location(self, file_location):
+        self._surface = None
+        self._zoom = None
         self._file_location = file_location
         self.queue_draw()
 
