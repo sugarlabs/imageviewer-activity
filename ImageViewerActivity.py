@@ -157,6 +157,8 @@ class ImageViewerActivity(activity.Activity):
         self.scrolled_window.add(self.view)
         self.view.show()
 
+        self.connect('key-press-event', self.__key_press_cb)
+
         if GESTURES_AVAILABLE:
             # Connect to the zoom signals for performing
             # pinch-to-zoom.
@@ -267,6 +269,14 @@ class ImageViewerActivity(activity.Activity):
         self._touch_hid = self.view.connect('touch-event',
                                             self.__touch_event_cb)
 
+    def __key_press_cb(self, widget, event):
+        key_name = Gdk.keyval_name(event.keyval)
+        if key_name == "Left":
+            self._change_image(-1)
+        elif key_name == "Right":
+            self._change_image(1)
+        return True
+
     def _get_image_list(self):
         value = mime.GENERIC_TYPE_IMAGE
         mime_types = mime.get_generic_type(value).mime_types
@@ -375,19 +385,26 @@ class ImageViewerActivity(activity.Activity):
         self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
         self._zoom_out_button.set_sensitive(self.view.can_zoom_out())
 
-    def __previous_image_cb(self, button):
-        self.current_image_index -= 1
+    def _change_image(self, delta):
+        # boundary conditions
+        if self.current_image_index == 0 and delta == -1:
+            return
+        if self.current_image_index == self.image_count - 1 and delta == 1:
+            return
+
+        self.current_image_index += delta
         self.make_button_sensitive()
         jobject = self.image_list[self.current_image_index]
         self._object_id = jobject.object_id
         self.read_file(jobject.file_path)
 
+    def __previous_image_cb(self, button):
+        if self.current_image_index > 0:
+            self._change_image(-1)
+
     def __next_image_cb(self, button):
-        self.current_image_index += 1
-        self.make_button_sensitive()
-        jobject = self.image_list[self.current_image_index]
-        self._object_id = jobject.object_id
-        self.read_file(jobject.file_path)
+        if self.current_image_index < self.image_count:
+            self._change_image(1)
 
     def __zoom_in_cb(self, button):
         self.view.zoom_in()
@@ -470,6 +487,11 @@ class ImageViewerActivity(activity.Activity):
 
         tempfile = os.path.join(self.get_activity_root(), 'instance',
                                 'tmp%i' % time.time())
+
+        if os.path.exists(tempfile):
+            os.remove(tempfile)
+            tempfile = os.path.join(self.get_activity_root(), 'instance',
+                                    'tmp%i' % time.time())
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
