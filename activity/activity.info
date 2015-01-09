@@ -1,19 +1,11 @@
 [Activity]
-implement = %(bundle_id)s
 name      = Image Viewer
 summary   = An easy way and fast way to see your images! You can also change the way your image looks with zoom, rotate, size change and so on.
-description = It has features one would expect of a standard image viewer,
-            like zoom, rotate, etc.
 homepage  = http://wiki.sugarlabs.org/go/Activities/Image_Viewer
 license   = GPLv2+
-
-version   = %(activity_version)s
-stability = stable
-
 icon      = activity-imageviewer
 exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
-
 activity_version = 61
 bundle_id = org.laptop.ImageViewerActivity
 repository = git@github.com:godiard/imageviewer-activity.git
