@@ -275,6 +275,9 @@ class ImageViewerActivity(activity.Activity):
             self._change_image(-1)
         elif key_name == "Right":
             self._change_image(1)
+        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            if key_name == "q":
+                self.close()
         return True
 
     def _get_image_list(self):
