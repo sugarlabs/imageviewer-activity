@@ -314,6 +314,12 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
 
+        fullscreen_button = ToolButton('view-fullscreen')
+        fullscreen_button.set_tooltip(_('Fullscreen'))
+        fullscreen_button.connect('clicked', self.__fullscreen_cb)
+        toolbar_box.toolbar.insert(fullscreen_button, -1)
+        fullscreen_button.show()
+
         self._seps.append(Gtk.SeparatorToolItem())
         toolbar_box.toolbar.insert(self._seps[-1], -1)
         self._seps[-1].show()
@@ -352,16 +358,6 @@ class ImageViewerActivity(activity.Activity):
             self.next_image_button.show()
 
             GObject.idle_add(self._get_image_list)
-
-        self._seps.append(Gtk.SeparatorToolItem())
-        toolbar_box.toolbar.insert(self._seps[-1], -1)
-        self._seps[-1].show()
-
-        fullscreen_button = ToolButton('view-fullscreen')
-        fullscreen_button.set_tooltip(_('Fullscreen'))
-        fullscreen_button.connect('clicked', self.__fullscreen_cb)
-        toolbar_box.toolbar.insert(fullscreen_button, -1)
-        fullscreen_button.show()
 
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
