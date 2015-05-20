@@ -178,7 +178,7 @@ class ImageViewerActivity(activity.Activity):
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
 
-        if self._object_id is None:
+        if self._object_id is None or not self._jobject.file_path:
             empty_widgets = Gtk.EventBox()
             empty_widgets.modify_bg(Gtk.StateType.NORMAL,
                                     style.COLOR_WHITE.get_gdk_color())
