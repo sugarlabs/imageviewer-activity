@@ -26,7 +26,6 @@ from gettext import gettext as _
 
 import time
 import os
-import math
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject

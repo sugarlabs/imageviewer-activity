@@ -15,7 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import logging
 import cairo
 import math
 
@@ -336,7 +335,6 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         prev_target_point = self._target_point
 
         # Set target point to the relative coordinates of this view.
-        alloc = self.get_allocation()
         self._target_point = (coords[1], coords[2])
 
         self._move_anchor_to_target(prev_target_point)
