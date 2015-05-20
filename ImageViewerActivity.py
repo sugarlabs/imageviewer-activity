@@ -33,6 +33,11 @@ from gi.repository import GObject
 
 from sugar3.graphics.alert import NotifyAlert
 from sugar3.graphics.objectchooser import ObjectChooser
+try:
+    from sugar3.graphics.objectchooser import FILTER_TYPE_GENERIC_MIME
+except:
+    FILTER_TYPE_GENERIC_MIME = 'generic_mime'
+
 from sugar3 import mime
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarBox
@@ -458,8 +463,13 @@ class ImageViewerActivity(activity.Activity):
         if not self._want_document:
             return
 
-        chooser = ObjectChooser(parent=self,
-                                what_filter=mime.GENERIC_TYPE_IMAGE)
+        try:
+            chooser = ObjectChooser(self, what_filter='Image',
+                                    filter_type=FILTER_TYPE_GENERIC_MIME,
+                                    show_preview=True)
+        except:
+            # for compatibility with older versions
+            chooser = ObjectChooser(self._activity, what_filter='Image')
 
         try:
             result = chooser.run()
