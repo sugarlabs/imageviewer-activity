@@ -14,69 +14,101 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2012-09-30 03:12+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"PO-Revision-Date: 2015-02-26 01:46+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1424915163.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Image Viewer"
 msgstr "Image Viewer"
 
 #. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr "The Image Viewer activity is a simple and fast image viewer tool"
-
-#. TRANS: "description" option from activity.info file
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:198
+msgid "No image"
+msgstr "No image"
+
+#: ImageViewerActivity.py:209
+msgid "Choose an image"
+msgstr "Choose an image"
+
+#: ImageViewerActivity.py:241
+msgid "Please wait"
+msgstr "Please wait"
+
+#: ImageViewerActivity.py:242
+msgid "Starting connection..."
+msgstr "Starting connection..."
+
+#: ImageViewerActivity.py:294
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:300
 msgid "Zoom in"
 msgstr "Zoom in"
 
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:306
 msgid "Fit to window"
 msgstr "Fit to window"
 
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:312
 msgid "Original size"
 msgstr "Original size"
 
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:322
 msgid "Rotate anticlockwise"
 msgstr "Rotate anticlockwise"
 
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:329
 msgid "Rotate clockwise"
 msgstr "Rotate clockwise"
 
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:340
+msgid "Previous Image"
+msgstr "Previous Image"
+
+#: ImageViewerActivity.py:348
+msgid "Next Image"
+msgstr "Next Image"
+
+#: ImageViewerActivity.py:361
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr "Choose document"
+#: ImageViewerActivity.py:642
+msgid "Receiving image..."
+msgstr "Receiving image..."
 
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr "Downloading..."
+#~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
+#~ msgstr "The Image Viewer activity is a simple and fast image viewer tool"
 
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
-msgstr "Retrieving shared image, please wait..."
+#~ msgid ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+#~ msgstr ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+
+#~ msgid "Choose document"
+#~ msgstr "Choose document"
+
+#~ msgid "Downloading..."
+#~ msgstr "Downloading..."
+
+#~ msgid "Retrieving shared image, please wait..."
+#~ msgstr "Retrieving shared image, please wait..."

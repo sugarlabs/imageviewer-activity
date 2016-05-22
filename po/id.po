@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2012-09-29 16:58+0200\n"
+"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"PO-Revision-Date: 2016-04-16 11:03+0000\n"
 "Last-Translator: andika <andika@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: id\n"
@@ -23,62 +23,95 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1460804612.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Image Viewer"
 msgstr "Penampil Gambar"
 
 #. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr ""
-"Aktivitas Penampil Gambar adalah alat penilik gambar yang cepat dan "
-"sederhana"
-
-#. TRANS: "description" option from activity.info file
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"Ini punya fitur yang diharapkan dari suatu penilik gambar seperti zum, "
-"rotasi, dsb."
+"Suatu cara yang mudah dan cepat untuk melihat gambar Anda! Anda juga dapat "
+"mengubah penampakan gambar Anda dengan zum, putar, pengubahan ukuran, dan "
+"seterusnya."
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:198
+msgid "No image"
+msgstr "Tak ada gambar"
+
+#: ImageViewerActivity.py:209
+msgid "Choose an image"
+msgstr "Pilih sebuah gambar"
+
+#: ImageViewerActivity.py:241
+msgid "Please wait"
+msgstr "Harap tunggu"
+
+#: ImageViewerActivity.py:242
+msgid "Starting connection..."
+msgstr "Memulai sambungan..."
+
+#: ImageViewerActivity.py:294
 msgid "Zoom out"
 msgstr "Perkecil"
 
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:300
 msgid "Zoom in"
 msgstr "Perbesar"
 
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:306
 msgid "Fit to window"
 msgstr "Sebesar layar aplikasi"
 
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:312
 msgid "Original size"
 msgstr "Ukuran aslinya"
 
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:322
 msgid "Rotate anticlockwise"
 msgstr "Putar berlawanan arah jarum jam"
 
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:329
 msgid "Rotate clockwise"
 msgstr "Putar searah jarum jam"
 
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:340
+msgid "Previous Image"
+msgstr "Gambar sebelumnya"
+
+#: ImageViewerActivity.py:348
+msgid "Next Image"
+msgstr "Gambar selanjutnya"
+
+#: ImageViewerActivity.py:361
 msgid "Fullscreen"
 msgstr "Tampilan penuh"
 
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr "Pilih dokumen"
+#: ImageViewerActivity.py:642
+msgid "Receiving image..."
+msgstr "Menerima gambar..."
 
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr "Sedang mengunduh..."
+#~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
+#~ msgstr ""
+#~ "Aktivitas Penampil Gambar adalah alat penilik gambar yang cepat dan "
+#~ "sederhana"
 
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
-msgstr "Sedang menerima kiriman gambar, harap tunggu..."
+#~ msgid ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+#~ msgstr ""
+#~ "Ini punya fitur yang diharapkan dari suatu penilik gambar seperti zum, "
+#~ "rotasi, dsb."
+
+#~ msgid "Choose document"
+#~ msgstr "Pilih dokumen"
+
+#~ msgid "Downloading..."
+#~ msgstr "Sedang mengunduh..."
+
+#~ msgid "Retrieving shared image, please wait..."
+#~ msgstr "Sedang menerima kiriman gambar, harap tunggu..."
