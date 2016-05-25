@@ -8,5 +8,5 @@ exec      = sugar-activity ImageViewerActivity.ImageViewerActivity
 mime_types = image/bmp;image/gif;image/jpeg;image/png;image/tiff;image/svg+xml
 activity_version = 62
 bundle_id = org.laptop.ImageViewerActivity
-repository = git@github.com:godiard/imageviewer-activity.git
+repository = https://github.com/sugarlabs/imageviewer-activity
 max_participants = 15
