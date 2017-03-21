@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"POT-Creation-Date: 2014-07-31 16:12-0300\n"
 "PO-Revision-Date: 2012-10-10 10:01+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,61 +18,82 @@ msgstr ""
 "X-Generator: Pootle 2.0.5\n"
 
 # met'k'ontalab kan an k'otbidh
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Mét'nib t'iplab"
 
-#. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr ""
-"an t'ojlab metnib t'iplab pel jun k'e dhubat tsubixtal kal an k'otbixtalab"
-
-#. TRANS: "description" option from activity.info file
+#: activity/activity.info:3
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"in kwal in alwa axin jun in aychal ba jun i tsuuxtalab ti kòybixtalab "
-"estandar,jantin zoom,rotar jantin yan jant'oj"
+
+#: ImageViewerActivity.py:194
+msgid "No image"
+msgstr ""
+
+#: ImageViewerActivity.py:205
+msgid "Choose an image"
+msgstr ""
+
+#: ImageViewerActivity.py:237
+msgid "Please wait"
+msgstr ""
+
+#: ImageViewerActivity.py:238
+msgid "Starting connection..."
+msgstr ""
 
 # ka tsipilmedha
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:276
 msgid "Zoom out"
 msgstr "Tsipti'méjdha'"
 
 # pakbedha
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:282
 msgid "Zoom in"
 msgstr "Puwedha'"
 
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:288
 msgid "Fit to window"
 msgstr "Junkuw ti met'nib"
 
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:294
 msgid "Original size"
 msgstr "Ok'ox puwel"
 
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:304
 msgid "Rotate anticlockwise"
 msgstr "Tolk'iy abal kuxlab tin ay an léjbax k'ij"
 
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:311
 msgid "Rotate clockwise"
 msgstr "Tolk'iy tin ay an lejbaxk'ij"
 
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:321
 msgid "Fullscreen"
 msgstr "Putat walek"
 
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr "Takuy dhuchlab"
+#: ImageViewerActivity.py:555
+msgid "Receiving image..."
+msgstr ""
 
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr "Pa'bál..."
+#~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
+#~ msgstr ""
+#~ "an t'ojlab metnib t'iplab pel jun k'e dhubat tsubixtal kal an k'otbixtalab"
 
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
-msgstr "Ti ki in pakwlanchij, exom u bats'wal an buk'udh t'iplab..."
+#~ msgid ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+#~ msgstr ""
+#~ "in kwal in alwa axin jun in aychal ba jun i tsuuxtalab ti kòybixtalab "
+#~ "estandar,jantin zoom,rotar jantin yan jant'oj"
+
+#~ msgid "Choose document"
+#~ msgstr "Takuy dhuchlab"
+
+#~ msgid "Downloading..."
+#~ msgstr "Pa'bál..."
+
+#~ msgid "Retrieving shared image, please wait..."
+#~ msgstr "Ti ki in pakwlanchij, exom u bats'wal an buk'udh t'iplab..."

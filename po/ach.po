@@ -7,73 +7,73 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-31 16:12-0300\n"
-"PO-Revision-Date: 2016-06-16 21:55+0000\n"
-"Last-Translator: saravpaz <saravilarelle@gmail.com>\n"
+"PO-Revision-Date: 2017-03-19 10:52+0000\n"
+"Last-Translator: chanchumgpa <chanchumgpa@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: gl\n"
+"Language: ach\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1466114136.000000\n"
+"X-POOTLE-MTIME: 1489920775.000000\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "Visor de imaxes"
+msgstr "Jami me Neno cal"
 
 #: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"Unha maneira fácil e rápida de ver as súas imaxes! Tamén pode cambiar o "
-"aspecto da súa imaxe facendo zoom, rotándoa, cambiando o seu tamaño e demais."
+"Yore mayot kwede yoo me oyot pi neno cal mamegi! in bene itwero loko lac "
+"mamegi nen calo oride, wir, cajji ne loke ci kumeno."
 
 #: ImageViewerActivity.py:194
 msgid "No image"
-msgstr "Ningunha imaxe"
+msgstr "Cal pe"
 
 #: ImageViewerActivity.py:205
 msgid "Choose an image"
-msgstr "Escolla unha imaxe"
+msgstr "Yer cal acel"
 
 #: ImageViewerActivity.py:237
 msgid "Please wait"
-msgstr "Agarde un intre, por favor"
+msgstr "Tim ber i kur manok"
 
 #: ImageViewerActivity.py:238
 msgid "Starting connection..."
-msgstr "Iniciando a conexión..."
+msgstr "Tye kacako kube..."
 
 #: ImageViewerActivity.py:276
 msgid "Zoom out"
-msgstr "Diminuír"
+msgstr "Dwok madit"
 
 #: ImageViewerActivity.py:282
 msgid "Zoom in"
-msgstr "Aumentar"
+msgstr "Dwok matidi"
 
 #: ImageViewerActivity.py:288
 msgid "Fit to window"
-msgstr "Axustar á xanela"
+msgstr "Mii rom dirija"
 
 #: ImageViewerActivity.py:294
 msgid "Original size"
-msgstr "Tamaño orixinal"
+msgstr "Cajji kikome"
 
 #: ImageViewerActivity.py:304
 msgid "Rotate anticlockwise"
-msgstr "Tamaño orixinal"
+msgstr "Wircalo caa"
 
 #: ImageViewerActivity.py:311
 msgid "Rotate clockwise"
-msgstr "Rotar no sentido das agullas do reloxo"
+msgstr "Wir calo caa"
 
 #: ImageViewerActivity.py:321
 msgid "Fullscreen"
-msgstr "Pantalla completa"
+msgstr "Wang kio weng"
 
 #: ImageViewerActivity.py:555
 msgid "Receiving image..."
-msgstr "Recibindo a imaxe..."
+msgstr "Tye kagamo cal..."

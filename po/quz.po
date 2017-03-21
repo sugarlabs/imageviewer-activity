@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"POT-Creation-Date: 2015-01-09 20:51+0000\n"
 "PO-Revision-Date: 2012-11-15 05:55+0200\n"
 "Last-Translator: Irma  <sankaypillo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,67 +22,96 @@ msgstr ""
 msgid "Image Viewer"
 msgstr "Wankikuna rikuchiq"
 
-#  [ES] ""
-#  [ES] "La actividad Visor de imágenes es un simple y rápido visualizador de "
-#  [ES] "imágenes"
 #. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr "Wanki Rikuchiqqa utqhayllam wankikunataqa rikuchin"
-
-#. TRANS: "description" option from activity.info file
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"Huk wanki Rikuchiqkunamantaqa, aswantam hatunyachispa utaq muyurichispa "
-"rikuchin."
+
+#: ImageViewerActivity.py:198
+msgid "No image"
+msgstr ""
+
+#: ImageViewerActivity.py:209
+msgid "Choose an image"
+msgstr ""
+
+#: ImageViewerActivity.py:241
+msgid "Please wait"
+msgstr ""
+
+#: ImageViewerActivity.py:242
+msgid "Starting connection..."
+msgstr ""
 
 #  "Reducir"
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:294
 msgid "Zoom out"
 msgstr "Kharuykachaspa huch'uyachiq"
 
 #  "Ampliar"
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:300
 msgid "Zoom in"
 msgstr "Achuykachaspa hatunyachiq"
 
 #  "Ajustar a la ventana"
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:306
 msgid "Fit to window"
 msgstr "Qhawanaman t'akyachiy"
 
 #  "Tamaño original"
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:312
 msgid "Original size"
 msgstr "Kikin sayaynin"
 
 #  "Rotar en el sentido opuesto a las agujas del reloj"
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:322
 msgid "Rotate anticlockwise"
 msgstr "Lluq'iman muyuchiy"
 
 #  "Rotar en el sentido del reloj"
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:329
 msgid "Rotate clockwise"
 msgstr "Pañaman muyuchiy"
 
+#: ImageViewerActivity.py:340
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:348
+msgid "Next Image"
+msgstr ""
+
 #  "Pantalla completa"
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:361
 msgid "Fullscreen"
 msgstr "Hunt'asqa pantalla"
 
+#: ImageViewerActivity.py:642
+msgid "Receiving image..."
+msgstr ""
+
+#  [ES] ""
+#  [ES] "La actividad Visor de imágenes es un simple y rápido visualizador de "
+#  [ES] "imágenes"
+#~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
+#~ msgstr "Wanki Rikuchiqqa utqhayllam wankikunataqa rikuchin"
+
+#~ msgid ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+#~ msgstr ""
+#~ "Huk wanki Rikuchiqkunamantaqa, aswantam hatunyachispa utaq muyurichispa "
+#~ "rikuchin."
+
 #  "Elegir documento"
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr "Qillqa-khiputa akllay"
+#~ msgid "Choose document"
+#~ msgstr "Qillqa-khiputa akllay"
 
 #  "Descargando..."
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr "Uraykachichkan..."
+#~ msgid "Downloading..."
+#~ msgstr "Uraykachichkan..."
 
 #  "Obteniendo la imagen compartida, espera por favor..."
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
-msgstr "Suyarikuyraq, wanki qunakusqaqa rikhurimunqañam..."
+#~ msgid "Retrieving shared image, please wait..."
+#~ msgstr "Suyarikuyraq, wanki qunakusqaqa rikhurimunqañam..."
