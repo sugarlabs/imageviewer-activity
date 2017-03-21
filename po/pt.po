@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"POT-Creation-Date: 2015-01-09 20:51+0000\n"
 "PO-Revision-Date: 2013-09-24 15:59+0200\n"
 "Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,58 +30,87 @@ msgid "Image Viewer"
 msgstr "Ver Imagem"
 
 #. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr ""
-"A atividade Ver Imagem é uma ferramenta simples e rápida para visualizar "
-"imagens"
-
-#. TRANS: "description" option from activity.info file
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
-"Tem as características que se esperam de um visualizador de imagens "
-"habitual, como zoom, rodar, etc."
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:198
+msgid "No image"
+msgstr ""
+
+#: ImageViewerActivity.py:209
+msgid "Choose an image"
+msgstr ""
+
+#: ImageViewerActivity.py:241
+msgid "Please wait"
+msgstr ""
+
+#: ImageViewerActivity.py:242
+msgid "Starting connection..."
+msgstr ""
+
+#: ImageViewerActivity.py:294
 msgid "Zoom out"
 msgstr "Afastar zoom"
 
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:300
 msgid "Zoom in"
 msgstr "Aproximar zoom"
 
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:306
 msgid "Fit to window"
 msgstr "Caber na janela"
 
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:312
 msgid "Original size"
 msgstr "Tamanho original"
 
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:322
 msgid "Rotate anticlockwise"
 msgstr "Rodar para a esquerda"
 
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:329
 msgid "Rotate clockwise"
 msgstr "Rodar para a direita"
 
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:340
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:348
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
 msgid "Fullscreen"
 msgstr "Ecrã Inteiro"
 
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr "Escolhe um documento"
+#: ImageViewerActivity.py:642
+msgid "Receiving image..."
+msgstr ""
 
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr "A transferir..."
+#~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
+#~ msgstr ""
+#~ "A atividade Ver Imagem é uma ferramenta simples e rápida para visualizar "
+#~ "imagens"
 
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
-msgstr "A receber imagem partilhada, por favor aguarda..."
+#~ msgid ""
+#~ "It has features one would expect of a standard image viewer, like zoom, "
+#~ "rotate, etc."
+#~ msgstr ""
+#~ "Tem as características que se esperam de um visualizador de imagens "
+#~ "habitual, como zoom, rodar, etc."
+
+#~ msgid "Choose document"
+#~ msgstr "Escolhe um documento"
+
+#~ msgid "Downloading..."
+#~ msgstr "A transferir..."
+
+#~ msgid "Retrieving shared image, please wait..."
+#~ msgstr "A receber imagem partilhada, por favor aguarda..."
 
 #~ msgid "View"
 #~ msgstr "Ver"

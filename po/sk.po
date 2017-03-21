@@ -10,16 +10,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"POT-Creation-Date: 2015-01-09 20:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,51 +29,63 @@ msgid "Image Viewer"
 msgstr ""
 
 #. TRANS: "summary" option from activity.info file
-msgid "The Image Viewer activity is a simple and fast image viewer tool"
-msgstr ""
-
-#. TRANS: "description" option from activity.info file
 msgid ""
-"It has features one would expect of a standard image viewer, like zoom, "
-"rotate, etc."
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:170
+#: ImageViewerActivity.py:198
+msgid "No image"
+msgstr ""
+
+#: ImageViewerActivity.py:209
+msgid "Choose an image"
+msgstr ""
+
+#: ImageViewerActivity.py:241
+msgid "Please wait"
+msgstr ""
+
+#: ImageViewerActivity.py:242
+msgid "Starting connection..."
+msgstr ""
+
+#: ImageViewerActivity.py:294
 msgid "Zoom out"
 msgstr ""
 
-#: ImageViewerActivity.py:176
+#: ImageViewerActivity.py:300
 msgid "Zoom in"
 msgstr ""
 
-#: ImageViewerActivity.py:182
+#: ImageViewerActivity.py:306
 msgid "Fit to window"
 msgstr ""
 
-#: ImageViewerActivity.py:188
+#: ImageViewerActivity.py:312
 msgid "Original size"
 msgstr ""
 
-#: ImageViewerActivity.py:199
+#: ImageViewerActivity.py:322
 msgid "Rotate anticlockwise"
 msgstr ""
 
-#: ImageViewerActivity.py:206
+#: ImageViewerActivity.py:329
 msgid "Rotate clockwise"
 msgstr ""
 
-#: ImageViewerActivity.py:217
+#: ImageViewerActivity.py:340
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:348
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
 msgid "Fullscreen"
 msgstr ""
 
-#: ImageViewerActivity.py:264
-msgid "Choose document"
-msgstr ""
-
-#: ProgressDialog.py:8
-msgid "Downloading..."
-msgstr ""
-
-#: ProgressDialog.py:17
-msgid "Retrieving shared image, please wait..."
+#: ImageViewerActivity.py:642
+msgid "Receiving image..."
 msgstr ""

@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2014-07-31 16:12-0300\n"
 "PO-Revision-Date: 2015-09-21 01:36+0000\n"
 "Last-Translator: َAhmad <dramir2wiki@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,15 +14,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1442799412.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "نمایشگر تصویر"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -38,58 +30,56 @@ msgstr ""
 "یک راه آسان و سریع برای دیدن تصاویر شما! شما همچنین می توانید استفاده کنید "
 "در تصاویر از تغییر زوم، چرخش، تغییر اندازه و غیره."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:194
 msgid "No image"
 msgstr "تصویری نیست"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:205
 msgid "Choose an image"
 msgstr "یک عکس انتخاب کنید"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:237
 msgid "Please wait"
 msgstr "لطفاً صبر کنید"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:238
 msgid "Starting connection..."
 msgstr "شروع اتصال ..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:276
 msgid "Zoom out"
 msgstr "کوچکنمایی"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:282
 msgid "Zoom in"
 msgstr "بزرگنمایی"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:288
 msgid "Fit to window"
 msgstr "جا دادن در پنجره"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:294
 msgid "Original size"
 msgstr "اندازه اصلی"
 
-#: ImageViewerActivity.py:322
+#: ImageViewerActivity.py:304
 msgid "Rotate anticlockwise"
 msgstr "چرخش در جهت خلاف عقربه‌های ساعت"
 
-#: ImageViewerActivity.py:329
+#: ImageViewerActivity.py:311
 msgid "Rotate clockwise"
 msgstr "چرخش در جهت عقربه‌های ساعت"
 
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "عکس قبلی"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "تصویر بعدی"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:321
 msgid "Fullscreen"
 msgstr "تمام صفحه"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:555
 msgid "Receiving image..."
 msgstr "دریافت تصویر ..."
+
+#~ msgid "Previous Image"
+#~ msgstr "عکس قبلی"
+
+#~ msgid "Next Image"
+#~ msgstr "تصویر بعدی"
