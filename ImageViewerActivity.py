@@ -55,8 +55,11 @@ except:
     GESTURES_AVAILABLE = False
 
 
-import telepathy
-import dbus
+try:
+    from sugar3.presence.wrapper import CollabWrapper
+    from sugar3.presence.filetransfer import FT_STATE_COMPLETED
+except ImportError:
+    from collabwrapper import CollabWrapper
 
 import ImageView
 
@@ -85,62 +88,25 @@ class ProgressAlert(Alert):
                 Gtk.main_iteration_do(True)
 
 
-class ImageViewerHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
-    """HTTP Request Handler for transferring document while collaborating.
-
-    RequestHandler class that integrates with Glib mainloop. It writes
-    the specified file to the client in chunks, returning control to the
-    mainloop between chunks.
-
-    """
-
-    def translate_path(self, path):
-        """Return the filepath to the shared document."""
-        return self.server.filepath
-
-
-class ImageViewerHTTPServer(network.GlibTCPServer):
-    """HTTP Server for transferring document while collaborating."""
-
-    def __init__(self, server_address, filepath):
-        """Set up the GlibTCPServer with the ImageViewerHTTPRequestHandler.
-
-        filepath -- path to shared document to be served.
-        """
-        self.filepath = filepath
-        network.GlibTCPServer.__init__(self, server_address,
-                                       ImageViewerHTTPRequestHandler)
-
-
-class ImageViewerURLDownloader(network.GlibURLDownloader):
-    """URLDownloader that provides content-length and content-type."""
-
-    def get_content_length(self):
-        """Return the content-length of the download."""
-        if self._info is not None:
-            return int(self._info.headers.get('Content-Length'))
-
-    def get_content_type(self):
-        """Return the content-type of the download."""
-        if self._info is not None:
-            return self._info.headers.get('Content-type')
-        return None
-
-IMAGEVIEWER_STREAM_SERVICE = 'imageviewer-activity-http'
-
-
 class ImageViewerActivity(activity.Activity):
 
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
         self._object_id = handle.object_id
+        self._collab = CollabWrapper(self)
+        self._collab.incoming_file.connect(self.__incoming_file_cb)
+        self._collab.buddy_joined.connect(self.__buddy_joined_cb)
+        self._collab.joined.connect(self.__joined_cb)
+        self._needs_file = False  # Set to true when we join
+
+        # Status of temp file used for write_file:
+        self._tempfile = None
+        self._close_requested = False
 
         self._zoom_out_button = None
         self._zoom_in_button = None
         self.previous_image_button = None
         self.next_image_button = None
-        self._fileserver = None
-        self._fileserver_tube_id = None
 
         self.scrolled_window = Gtk.ScrolledWindow()
         self.scrolled_window.set_policy(Gtk.PolicyType.ALWAYS,
@@ -222,33 +188,8 @@ class ImageViewerActivity(activity.Activity):
             self.set_canvas(self.scrolled_window)
             self.scrolled_window.show()
 
-        self.unused_download_tubes = set()
-        self._want_document = True
-        self._download_content_length = 0
-        self._download_content_type = None
-        # Status of temp file used for write_file:
-        self._tempfile = None
-        self._close_requested = False
-        self.connect("shared", self._shared_cb)
-        h = hash(self._activity_id)
-        self.port = 1024 + (h % 64511)
-
-        self.is_received_document = False
-
-        if self.shared_activity:
-            # We're joining, and we don't already have the document.
-            if self.get_shared():
-                # Already joined for some reason, just get the document
-                self._joined_cb(self)
-            else:
-                self._progress_alert = ProgressAlert()
-                self._progress_alert.props.title = _('Please wait')
-                self._progress_alert.props.msg = _('Starting connection...')
-                self.add_alert(self._progress_alert)
-                # Wait for a successful join before trying to get the document
-                self.connect("joined", self._joined_cb)
-
         Gdk.Screen.get_default().connect('size-changed', self._configure_cb)
+        self._collab.setup()
 
     def __touch_event_cb(self, widget, event):
         coords = event.get_coords()
@@ -522,24 +463,32 @@ class ImageViewerActivity(activity.Activity):
         self._close_requested = True
         return True
 
-    def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
-        if self._download_content_type == 'text/html':
-            # got an error page instead
-            self._download_error_cb(getter, 'HTTP Error', tube_id)
+    def __incoming_file_cb(self, collab, file, desc):
+        logging.debug('__incoming_file_cb with need %r', self._needs_file)
+        if not self._needs_file:
             return
 
-        del self.unused_download_tubes
+        self._progress_alert = ProgressAlert()
+        self._progress_alert.props.title = _('Receiving image...')
+        self.add_alert(self._progress_alert)
 
-        self._tempfile = tempfile
+        self._needs_file = False
         file_path = os.path.join(self.get_activity_root(), 'instance',
                                  '%i' % time.time())
+        file.connect('notify::state', self.__file_notify_state_cb)
+        file.connect('notify::transfered_bytes',
+                     self.__file_transfered_bytes_cb)
+        file.accept_to_file(file_path)
+
+    def __file_notify_state_cb(self, file, pspec):
+        logging.debug('__file_notify_state %r', file.props.state)
+        if file.props.state != FT_STATE_COMPLETED:
+            return
+
+        file_path = file.props.output
         logging.debug("Saving file %s to datastore...", file_path)
-        os.link(tempfile, file_path)
         self._jobject.file_path = file_path
         datastore.write(self._jobject, transfer_ownership=True)
-
-        logging.debug("Got document %s (%s) from tube %u",
-                      tempfile, suggested_name, tube_id)
 
         if self._progress_alert is not None:
             self.remove_alert(self._progress_alert)
@@ -562,158 +511,20 @@ class ImageViewerActivity(activity.Activity):
         self.scrolled_window.show_all()
         return False
 
-    def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
-        if self._download_content_length > 0:
-            logging.debug("Downloaded %u of %u bytes from tube %u...",
-                          bytes_downloaded, self._download_content_length,
-                          tube_id)
-        else:
-            logging.debug("Downloaded %u bytes from tube %u...",
-                          bytes_downloaded, tube_id)
-        total = self._download_content_length
-
+    def __file_transfered_bytes_cb(self, file, pspec):
+        total = file.file_size
+        bytes_downloaded = file.props.transfered_bytes
         fraction = bytes_downloaded / total
         self._progress_alert.set_fraction(fraction)
 
-    def _download_error_cb(self, getter, err, tube_id):
-        logging.debug("Error getting document from tube %u: %s",
-                      tube_id, err)
-        self._alert('Failure', 'Error getting document from tube')
-        self._want_document = True
-        self._download_content_length = 0
-        self._download_content_type = None
-        GObject.idle_add(self._get_document)
+    def __buddy_joined_cb(self, collab, buddy):
+        logging.debug('__buddy_joined_cb %r', buddy)
+        self._collab.send_file_file(buddy, self._tempfile, None)
 
-    def _download_document(self, tube_id, path):
-        # FIXME: should ideally have the CM listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self.shared_activity.telepathy_tubes_chan
-        iface = chan[telepathy.CHANNEL_TYPE_TUBES]
-        addr = iface.AcceptStreamTube(
-            tube_id,
-            telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-            telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-            utf8_strings=True)
-        logging.debug('Accepted stream tube: listening address is %r', addr)
-        # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
-        assert isinstance(addr, dbus.Struct)
-        assert len(addr) == 2
-        assert isinstance(addr[0], str)
-        assert isinstance(addr[1], (int, long))
-        assert addr[1] > 0 and addr[1] < 65536
-        port = int(addr[1])
-
-        getter = ImageViewerURLDownloader("http://%s:%d/document"
-                                          % (addr[0], port))
-        getter.connect("finished", self._download_result_cb, tube_id)
-        getter.connect("progress", self._download_progress_cb, tube_id)
-        getter.connect("error", self._download_error_cb, tube_id)
-        logging.debug("Starting download to %s...", path)
-        getter.start(path)
-        self._download_content_length = getter.get_content_length()
-        self._download_content_type = getter.get_content_type()
-
-        return False
-
-    def _get_document(self):
-        if not self._want_document:
-            return False
-
-        # Assign a file path to download if one doesn't exist yet
-        if not self._jobject.file_path:
-            path = os.path.join(self.get_activity_root(), 'instance',
-                                'tmp%i' % time.time())
-        else:
-            path = self._jobject.file_path
-
-        # Pick an arbitrary tube we can try to download the document from
-        try:
-            tube_id = self.unused_download_tubes.pop()
-        except (ValueError, KeyError), e:
-            logging.debug('No tubes to get the document from right now: %s',
-                          e)
-            return False
-
-        # Avoid trying to download the document multiple times at once
-        self._want_document = False
-        GObject.idle_add(self._download_document, tube_id, path)
-        return False
-
-    def _joined_cb(self, also_self):
-        """Callback for when a shared activity is joined.
-
-        Get the shared document from another participant.
-        """
-        self.watch_for_tubes()
-
-        if self._progress_alert is not None:
-            self._progress_alert.props.msg = _('Receiving image...')
-
-    def _share_document(self):
-        """Share the document."""
-        # FIXME: should ideally have the fileserver listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
-
-        logging.debug('Starting HTTP server on port %d', self.port)
-        self._fileserver = ImageViewerHTTPServer(("", self.port),
-                                                 self._tempfile)
-
-        # Make a tube for it
-        chan = self.shared_activity.telepathy_tubes_chan
-        iface = chan[telepathy.CHANNEL_TYPE_TUBES]
-        self._fileserver_tube_id = \
-            iface.OfferStreamTube(
-                IMAGEVIEWER_STREAM_SERVICE,
-                {},
-                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                ('127.0.0.1', dbus.UInt16(self.port)),
-                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
-
-    def watch_for_tubes(self):
-        """Watch for new tubes."""
-        tubes_chan = self.shared_activity.telepathy_tubes_chan
-
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal(
-            'NewTube', self._new_tube_cb)
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].ListTubes(
-            reply_handler=self._list_tubes_reply_cb,
-            error_handler=self._list_tubes_error_cb)
-
-    def _new_tube_cb(self, tube_id, initiator, tube_type, service, params,
-                     state):
-        """Callback when a new tube becomes available."""
-        logging.debug('New tube: ID=%d initator=%d type=%d service=%s '
-                      'params=%r state=%d', tube_id, initiator, tube_type,
-                      service, params, state)
-        if service == IMAGEVIEWER_STREAM_SERVICE:
-            logging.debug('I could download from that tube')
-            self.unused_download_tubes.add(tube_id)
-            # if no download is in progress, let's fetch the document
-            if self._want_document:
-                GObject.idle_add(self._get_document)
-
-    def _list_tubes_reply_cb(self, tubes):
-        """Callback when new tubes are available."""
-        for tube_info in tubes:
-            self._new_tube_cb(*tube_info)
-
-    def _list_tubes_error_cb(self, e):
-        """Handle ListTubes error by logging."""
-        logging.error('ListTubes() failed: %s', e)
-
-    def _shared_cb(self, activityid):
-        """Callback when activity shared.
-
-        Set up to share the document.
-
-        """
-        # We initiated this activity and have now shared it, so by
-        # definition we have the file.
-        logging.debug('Activity became shared')
-        self.next_image_button.props.sensitive = False
-        self.previous_image_button.props.sensitive = False
-        self.watch_for_tubes()
-        self._share_document()
+    def __joined_cb(self, collab):
+        logging.debug('I joined!')
+        # Somebody will send us a file, just wait
+        self._needs_file = True
 
     def _alert(self, title, text=None):
         alert = NotifyAlert(timeout=5)
