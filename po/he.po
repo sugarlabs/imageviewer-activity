@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-11-13 09:42+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1479030148.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "מציג תמונות"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -38,58 +30,58 @@ msgstr ""
 "דרך קלה ומהירה להציג את התמונות שלך! ניתן גם לשנות את האופן בו התמונות "
 "מוצגות עם תקריב, הטייה, שינוי גודל וכו׳."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "אין תמונה"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "בחירת תמונה"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "נא להמתין"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "החיבור מאותחל…"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "התרחקות"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "התקרבות"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "התאמה לחלון"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "גודל מקורי"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "סיבוב נגד כיוון השעון"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "סיבוב עם כיוון השעון"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "התמונה הקודמת"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "התמונה הבאה"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "מסך מלא"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "סיבוב נגד כיוון השעון"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "סיבוב עם כיוון השעון"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "התמונה הקודמת"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "התמונה הבאה"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "התמונה מתקבלת…"

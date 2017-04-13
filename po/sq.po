@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-10-25 20:51+0000\n"
 "Last-Translator: Besnik_b <besnik@programeshqip.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1477428711.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Parës Figurash"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -39,70 +31,58 @@ msgstr ""
 "ndryshoni mënyrën se si duket figura juaj, përmes zmadhimit ose zvogëlimit "
 "të saj, rrotullimit, ndryshimit të madhësisë, e me radhë."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "S’ka figurë"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Zgjidhni një figurë"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Ju lutemi, prisni"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Po niset lidhja…"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Zvogëloje"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Zmadhoje"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Sa dritarja"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Madhësi origjinale"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "Rrotulloje në kah antiorar"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "Rrotulloje në kah orar"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "Figura e Mëparshme"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "Figura Pasuese"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Sa krejt ekrani"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Rrotulloje në kah antiorar"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Rrotulloje në kah orar"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "Figura e Mëparshme"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "Figura Pasuese"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Po merret figura…"
-
-#~ msgid "Choose document"
-#~ msgstr "Zgjidhni dokumentin"
-
-#~ msgid "Downloading..."
-#~ msgstr "Duke shkarkuar..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Duke korrigjuar imazhin e përhapur, ju lutem prisni..."
-
-#~ msgid "View"
-#~ msgstr "Shiko"

@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-31 16:12-0300\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2011-02-16 02:41+0200\n"
 "Last-Translator: <arslanilker@windowslive.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,59 +27,58 @@ msgid ""
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:194
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:205
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:237
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:238
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
-#: ImageViewerActivity.py:276
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Uzaklaştır"
 
-#: ImageViewerActivity.py:282
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Yakınlaştır"
 
-#: ImageViewerActivity.py:288
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Pencereye sığdır"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Özgün boyut"
 
-#: ImageViewerActivity.py:304
-msgid "Rotate anticlockwise"
-msgstr "Saat yönünün tersine çevir"
-
-#: ImageViewerActivity.py:311
-msgid "Rotate clockwise"
-msgstr "Saat yönünde döndür"
-
-#: ImageViewerActivity.py:321
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Tam ekran"
 
-#: ImageViewerActivity.py:555
-msgid "Receiving image..."
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Saat yönünün tersine çevir"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Saat yönünde döndür"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
 msgstr ""
 
-#~ msgid "Choose document"
-#~ msgstr "Belge seç"
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
 
-#~ msgid "Downloading..."
-#~ msgstr "İndiriliyor..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Paylaşılan görüntü alınıyor, lütfen bekleyin..."
+#: ImageViewerActivity.py:650
+msgid "Receiving image..."
+msgstr ""

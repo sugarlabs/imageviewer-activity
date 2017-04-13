@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-01-27 10:37+0000\n"
 "Last-Translator: jb33c <jb33c@hotmail.com>\n"
 "Language-Team: French\n"
@@ -26,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1453891079.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Visualiseur d'image"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -38,59 +30,59 @@ msgstr ""
 "Un moyen facile et rapide pour voir vos images! Vous pouvez zoomer, "
 "tourner,ou changer la taille de votre image et ainsi de suite."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Aucune image"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Choisir une image"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Veuillez patienter"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Démarrage de la connexion..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Ajuster à la taille de la fenêtre"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Taille originale"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "Rotation dans le sens anti-horaire"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "Rotation dans le sens horaire"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "Image précédente"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "Image suivante"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Plein écran"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Rotation dans le sens anti-horaire"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Rotation dans le sens horaire"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "Image précédente"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "Image suivante"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Réception de l'image"
 
@@ -105,15 +97,3 @@ msgstr "Réception de l'image"
 #~ msgstr ""
 #~ "Il comporte les fonctions offertes par un visualiseur d'image classique, "
 #~ "comme le zoom, la rotation, etc."
-
-#~ msgid "Choose document"
-#~ msgstr "Choisir un document"
-
-#~ msgid "Downloading..."
-#~ msgstr "Téléchargement en cours..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Récupération de l'image partagée en cours, patientez..."
-
-#~ msgid "View"
-#~ msgstr "Vue"

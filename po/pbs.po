@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-31 16:12-0300\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2013-10-30 20:45+0200\n"
 "Last-Translator: xavier <proyecto.olpc@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,51 +27,59 @@ msgid ""
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:194
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:205
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:237
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:238
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
-#: ImageViewerActivity.py:276
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Matse'ei'"
 
-#: ImageViewerActivity.py:282
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Mandaí"
 
-#: ImageViewerActivity.py:288
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Mkjaik lagueje pu tejiap"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Majaiñ lakja lem"
 
-#: ImageViewerActivity.py:304
-msgid "Rotate anticlockwise"
-msgstr "Makaat manama ngupeix pu se nda'u'u ne ndanu kunju'"
-
-#: ImageViewerActivity.py:311
-msgid "Rotate clockwise"
-msgstr "Makaat lan'u'u pu ndanu kunju'"
-
-#: ImageViewerActivity.py:321
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Nak'ujuly' lipia mi'ia"
 
-#: ImageViewerActivity.py:555
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Makaat manama ngupeix pu se nda'u'u ne ndanu kunju'"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Makaat lan'u'u pu ndanu kunju'"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr ""
 
@@ -86,12 +94,3 @@ msgstr ""
 #~ msgstr ""
 #~ "Lumei peuk stiñkjia’ k’ua vupe ne ndanpajau’ kutaut nkjai’ ne ngutuep "
 #~ "nixi’i, mata’t, vakja"
-
-#~ msgid "Choose document"
-#~ msgstr "Makeje' ne nguk'uix"
-
-#~ msgid "Downloading..."
-#~ msgstr "Melejep mavejeep'..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Manaja tumem' ne snakeje' mi'ian tanu'un, kichjau majau kivié..."
