@@ -7,20 +7,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-24 17:39+1100\n"
-"PO-Revision-Date: 2011-12-18 22:48+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: sl\n"
+"Language: quy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3);\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Translate Toolkit 1.11.0\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "Pregledovalnik slik"
+msgstr ""
 
 #: activity/activity.info:3
 msgid ""
@@ -46,31 +44,31 @@ msgstr ""
 
 #: ImageViewerActivity.py:301
 msgid "Zoom out"
-msgstr "Oddalji"
+msgstr ""
 
 #: ImageViewerActivity.py:307
 msgid "Zoom in"
-msgstr "Približaj"
+msgstr ""
 
 #: ImageViewerActivity.py:313
 msgid "Fit to window"
-msgstr "Prilagodi velikosti okna"
+msgstr ""
 
 #: ImageViewerActivity.py:319
 msgid "Original size"
-msgstr "Izvirna velikost"
+msgstr ""
 
 #: ImageViewerActivity.py:325
 msgid "Fullscreen"
-msgstr "Celozaslonsko"
+msgstr ""
 
 #: ImageViewerActivity.py:335
 msgid "Rotate anticlockwise"
-msgstr "Zasuči v nasprotni smeri urinega kazalca"
+msgstr ""
 
 #: ImageViewerActivity.py:342
 msgid "Rotate clockwise"
-msgstr "Zasuči v smeri urinega kazalca"
+msgstr ""
 
 #: ImageViewerActivity.py:353
 msgid "Previous Image"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-31 16:12-0300\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-06-16 21:55+0000\n"
 "Last-Translator: saravpaz <saravilarelle@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,50 +30,58 @@ msgstr ""
 "Unha maneira fácil e rápida de ver as súas imaxes! Tamén pode cambiar o "
 "aspecto da súa imaxe facendo zoom, rotándoa, cambiando o seu tamaño e demais."
 
-#: ImageViewerActivity.py:194
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Ningunha imaxe"
 
-#: ImageViewerActivity.py:205
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Escolla unha imaxe"
 
-#: ImageViewerActivity.py:237
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Agarde un intre, por favor"
 
-#: ImageViewerActivity.py:238
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Iniciando a conexión..."
 
-#: ImageViewerActivity.py:276
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Diminuír"
 
-#: ImageViewerActivity.py:282
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Aumentar"
 
-#: ImageViewerActivity.py:288
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Axustar á xanela"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Tamaño orixinal"
 
-#: ImageViewerActivity.py:304
-msgid "Rotate anticlockwise"
-msgstr "Tamaño orixinal"
-
-#: ImageViewerActivity.py:311
-msgid "Rotate clockwise"
-msgstr "Rotar no sentido das agullas do reloxo"
-
-#: ImageViewerActivity.py:321
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: ImageViewerActivity.py:555
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Tamaño orixinal"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Rotar no sentido das agullas do reloxo"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Recibindo a imaxe..."

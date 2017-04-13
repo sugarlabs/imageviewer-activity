@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2015-12-15 12:46+0000\n"
 "Last-Translator: sujiniku <qqke6wd9k@apricot.ocn.ne.jp>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,80 +18,68 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1450183615.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "画像ビューワー"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "画像なし"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "画像の選択"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "おまちください"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "接続を開始しています..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "縮小"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "拡大"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "ウィンドウにあわせる"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "元のサイズ"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "反時計まわりに回転"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "時計まわりに回転"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "前の画像"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "次の画像"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "全画面"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "反時計まわりに回転"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "時計まわりに回転"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "前の画像"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "次の画像"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "画像を受け取っています..."
-
-#~ msgid "Choose document"
-#~ msgstr "文書を選ぶ"
-
-#~ msgid "Downloading..."
-#~ msgstr "ダウンロードしています..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "共有イメージを検索しています、しばらくお待ちください..."
-
-#~ msgid "View"
-#~ msgstr "ビュー"

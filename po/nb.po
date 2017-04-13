@@ -1,11 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # translation of imageviewer-activity.po to Norsk bokmål
 # Kent Dahl <kentda@pvv.org>, 2008.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -14,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: imageviewer-activity\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2008-12-09 20:29+0100\n"
 "Last-Translator: Kent Dahl <kentda@pvv.org>\n"
 "Language-Team: Norsk bokmål <i18n-no@lister.ping.uio.no>\n"
@@ -25,72 +17,69 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Translate Toolkit 1.1.1rc4\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Bildeviser"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Forminsk"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Forstørr"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 #, fuzzy
 msgid "Fit to window"
 msgstr "Tilpass vindu"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Opprinnelig størrelse"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "Roter mot klokken"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "Roter med klokken"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr ""
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr ""
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Fullskjerm"
 
-#: ImageViewerActivity.py:642
-msgid "Receiving image..."
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Roter mot klokken"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Roter med klokken"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
 msgstr ""
 
-#~ msgid "View"
-#~ msgstr "Visning"
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:650
+msgid "Receiving image..."
+msgstr ""
