@@ -45,7 +45,6 @@ from sugar3.activity.widgets import ActivityToolbarButton
 from sugar3.activity.widgets import StopButton
 from sugar3.graphics import style
 from sugar3.graphics.alert import Alert
-from sugar3 import network
 from sugar3.datastore import datastore
 
 try:
@@ -54,13 +53,7 @@ try:
 except:
     GESTURES_AVAILABLE = False
 
-
-try:
-    from sugar3.presence.wrapper import CollabWrapper
-    from sugar3.presence.filetransfer import FT_STATE_COMPLETED
-except ImportError:
-    from collabwrapper import CollabWrapper
-
+import collabwrapper
 import ImageView
 
 
@@ -93,7 +86,7 @@ class ImageViewerActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
         self._object_id = handle.object_id
-        self._collab = CollabWrapper(self)
+        self._collab = collabwrapper.CollabWrapper(self)
         self._collab.incoming_file.connect(self.__incoming_file_cb)
         self._collab.buddy_joined.connect(self.__buddy_joined_cb)
         self._collab.joined.connect(self.__joined_cb)
@@ -482,7 +475,7 @@ class ImageViewerActivity(activity.Activity):
 
     def __file_notify_state_cb(self, file, pspec):
         logging.debug('__file_notify_state %r', file.props.state)
-        if file.props.state != FT_STATE_COMPLETED:
+        if file.props.state != collabwrapper.FT_STATE_COMPLETED:
             return
 
         file_path = file.props.output
