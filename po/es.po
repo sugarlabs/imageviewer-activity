@@ -2,31 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2015-01-09 20:55+0000\n"
 "Last-Translator: Gonzalo <godiard@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1420836948.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Visor de imagenes"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -50,59 +30,59 @@ msgstr ""
 "Una forma fácil y rápida de ver tus imágenes! Tambien puedes cambiar la "
 "forma en que la iagen se ve, cambiando el tamaño o rotandola."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Sin imagen"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Elige una imagen"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Por favor, espere"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Iniciando conexión..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Reducir"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Ampliar"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Ajustar a la ventana"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Tamaño original"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "Rotar en el sentido opuesto a las agujas del reloj"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "Rotar en el sentido del reloj"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "Imagen anterior"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "Imagen siguiente"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Rotar en el sentido opuesto a las agujas del reloj"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Rotar en el sentido del reloj"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "Imagen anterior"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "Imagen siguiente"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Recibiendo imagen..."
 
@@ -117,15 +97,3 @@ msgstr "Recibiendo imagen..."
 #~ msgstr ""
 #~ "Tiene características que uno esperaría de un visor de imágenes estándar, "
 #~ "como el zoom, rotar, etc."
-
-#~ msgid "Choose document"
-#~ msgstr "Elegir documento"
-
-#~ msgid "Downloading..."
-#~ msgstr "Descargando..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Obteniendo la imagen compartida, espera por favor..."
-
-#~ msgid "View"
-#~ msgstr "Ver"

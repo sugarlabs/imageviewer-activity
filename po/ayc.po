@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
-"PO-Revision-Date: 2015-06-19 10:22+0000\n"
-"Last-Translator: EdgarQuispeChambi <equispe7@gmail.com>\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
+"PO-Revision-Date: 2017-03-24 05:35+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ayc\n"
 "MIME-Version: 1.0\n"
@@ -16,81 +16,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1434709369.000000\n"
+"X-POOTLE-MTIME: 1490333705.000000\n"
 
 #  "Visor de imagenes"
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Uñjasiwi unjayañataki"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 "Rixitanakama suma k'ata uñjaña! Rixitama uñanaqapa mayjt'ayarakismawa, "
-"tañapa mayjt'ayasa jani ukaxa muyjtayasa"
+"tañapa mayjt'ayasa jani ukaxa muyjtayasa."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Jani rixitani"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Maya rixita ajlliña"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Suyt'ama, mira suma"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Mantaña qalltasa ..."
 
 #  "Reducir"
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Jisk'aptayaña"
 
 #  "Ampliar"
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Jach'aptayaña"
 
 #  "Ajustar a la ventana"
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Wakichataru khuskhachaña"
 
 #  "Tamaño original"
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Tunu chani"
 
+#  "Pantalla completa"
+#: ImageViewerActivity.py:325
+msgid "Fullscreen"
+msgstr "Maypacha uñtawi"
+
 #  "Rotar en el sentido opuesto a las agujas del reloj"
-#: ImageViewerActivity.py:322
+#: ImageViewerActivity.py:335
 msgid "Rotate anticlockwise"
 msgstr "Kupi tuqiru muyuña"
 
 #  "Rotar en el sentido del reloj"
-#: ImageViewerActivity.py:329
+#: ImageViewerActivity.py:342
 msgid "Rotate clockwise"
 msgstr "Ch'iqa tuqiru muyuña"
 
-#: ImageViewerActivity.py:340
+#: ImageViewerActivity.py:353
 msgid "Previous Image"
 msgstr "Nayrïri rixita"
 
-#: ImageViewerActivity.py:348
+#: ImageViewerActivity.py:361
 msgid "Next Image"
 msgstr "Arkiri rixita"
 
-#  "Pantalla completa"
-#: ImageViewerActivity.py:361
-msgid "Fullscreen"
-msgstr "Maypacha uñtawi"
-
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Rixita katuqkasa ..."
 
@@ -105,15 +105,3 @@ msgstr "Rixita katuqkasa ..."
 #~ msgstr ""
 #~ "Ukaxa taqi kasta uñjasïwinaka uñjaña uñanaqani wakichatarakiwa, "
 #~ "jach'aptayañataki, muytayañataki, yaqhampitaki."
-
-#  "Elegir documento"
-#~ msgid "Choose document"
-#~ msgstr "Wakichata katuña"
-
-#  "Descargando..."
-#~ msgid "Downloading..."
-#~ msgstr "Apaqaskiwa..."
-
-#  "Obteniendo la imagen compartida, espera por favor..."
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Apaqaskiwa uñtasiwi, suyt'asma..."

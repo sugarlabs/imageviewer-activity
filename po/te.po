@@ -2,100 +2,84 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
-"PO-Revision-Date: 2011-11-27 01:12+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
+"PO-Revision-Date: 2017-04-10 03:03+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1491793419.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
-msgstr "ప్రతిరూప  దర్శిని"
+msgstr "ప్రతిరూప దర్శిని"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "జూమ్‌ వెలుపల"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "జూమ్‌ లోపల"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "గవాక్షానికి అమర్చు"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "మూల పరిమాణము"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "అపసవ్య గమనంలో తిప్పుము"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "సవ్యగనంలో తిప్పుము"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr ""
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr ""
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "తెర మొత్తం"
 
-#: ImageViewerActivity.py:642
-msgid "Receiving image..."
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "అపసవ్య గమనంలో తిప్పుము"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "సవ్యగనంలో తిప్పుము"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
 msgstr ""
 
-#~ msgid "Choose document"
-#~ msgstr "దస్తావేజును ఎంచుకొనుము"
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
 
-#~ msgid "Downloading..."
-#~ msgstr "దిగుమతి..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "పంచుకొనే ప్రతిరూపాన్ని  వెలికి తీస్తున్నది, దయచేసి వేచి చూడండి"
+#: ImageViewerActivity.py:650
+msgid "Receiving image..."
+msgstr ""

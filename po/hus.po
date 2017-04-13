@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-31 16:12-0300\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2012-10-10 10:01+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,53 +28,61 @@ msgid ""
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:194
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:205
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:237
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:238
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
 # ka tsipilmedha
-#: ImageViewerActivity.py:276
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Tsipti'méjdha'"
 
 # pakbedha
-#: ImageViewerActivity.py:282
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Puwedha'"
 
-#: ImageViewerActivity.py:288
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Junkuw ti met'nib"
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Ok'ox puwel"
 
-#: ImageViewerActivity.py:304
-msgid "Rotate anticlockwise"
-msgstr "Tolk'iy abal kuxlab tin ay an léjbax k'ij"
-
-#: ImageViewerActivity.py:311
-msgid "Rotate clockwise"
-msgstr "Tolk'iy tin ay an lejbaxk'ij"
-
-#: ImageViewerActivity.py:321
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Putat walek"
 
-#: ImageViewerActivity.py:555
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Tolk'iy abal kuxlab tin ay an léjbax k'ij"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Tolk'iy tin ay an lejbaxk'ij"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr ""
 
@@ -88,12 +96,3 @@ msgstr ""
 #~ msgstr ""
 #~ "in kwal in alwa axin jun in aychal ba jun i tsuuxtalab ti kòybixtalab "
 #~ "estandar,jantin zoom,rotar jantin yan jant'oj"
-
-#~ msgid "Choose document"
-#~ msgstr "Takuy dhuchlab"
-
-#~ msgid "Downloading..."
-#~ msgstr "Pa'bál..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Ti ki in pakwlanchij, exom u bats'wal an buk'udh t'iplab..."

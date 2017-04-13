@@ -2,15 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2014-02-06 18:36+0200\n"
 "Last-Translator: elxrashedy <abdxelrhman@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,69 +18,69 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "عارض الصور"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr ""
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr ""
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "صَغِر"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "كَبِر"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "لائم النافذه"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "الحجم الأصلى"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "دَوِر عكس عقارب الساعة (يساراً)"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "دَوِر مع عقارب الساعة (يميناً)"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr ""
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr ""
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "الشاشه الكامله"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "دَوِر عكس عقارب الساعة (يساراً)"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "دَوِر مع عقارب الساعة (يميناً)"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr ""
 
@@ -97,15 +93,3 @@ msgstr ""
 #~ msgstr ""
 #~ "لديه مميزات يتوقعها المرء بمجرد سماع كلمه \"عارض صور\" فهو يتميز بإمكانيات "
 #~ "بسيطه مثل إمكانيه التكبير/التصغير وإمكانيه تدوير الصور 360 درجه...إلخ."
-
-#~ msgid "Choose document"
-#~ msgstr "إختر مستند"
-
-#~ msgid "Downloading..."
-#~ msgstr "جارٍ التنزيل..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "جارٍ جلب الصوره المُتشارَكه..."
-
-#~ msgid "View"
-#~ msgstr "عرض"

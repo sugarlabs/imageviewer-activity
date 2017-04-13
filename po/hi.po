@@ -2,23 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-05-21 14:44+0000\n"
 "Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1463841881.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "छवि प्रदर्शक"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -42,70 +30,61 @@ msgstr ""
 "अपनी तस्वीरों को देखने का एक आसान और तेज़ तरीका! ज़ूम, घुमाने, आकार परिवर्तन "
 "और इत्यादि के साथ आप अपनी छवि की दिखावट को बदल सकते हैं"
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "कोई तस्वीर नहीं है"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "कोई छवि चुनें"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "कृपया प्रतीक्षा करें"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "कनेक्शन शुरू किया जा रहा है ..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "छोटे आकार में दिखाएँ"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "बड़े आकार में दिखाएँ"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "विन्डो में फिट करें"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "मूल आकार"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "घड़ी की विपरीत दिशा में घुमाएँ"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "घड़ी की दिशा में घुमाएँ"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "पिछली छवि"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "अगला फोटू"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "पूर्ण स्क्रीन"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "घड़ी की विपरीत दिशा में घुमाएँ"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "घड़ी की दिशा में घुमाएँ"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "पिछली छवि"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "अगला फोटू"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "छवि प्राप्त करी जा रही है ..."
 
 #~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
 #~ msgstr "\"छवि प्रदर्शक\" एक आसान और तेज़ छवि प्रदर्शन कार्यकलाप हैI "
-
-#~ msgid "Choose document"
-#~ msgstr "दस्तावेज़ चुनें"
-
-#~ msgid "Downloading..."
-#~ msgstr "डाउनलोड किया जा रहा है..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "साझा फ़ोटो प्राप्त किया जा रहा है. कृपया प्रतीक्षा करें..."

@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-09-15 23:15+0000\n"
 "Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1473981304.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Aworan wiwo"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -38,58 +30,58 @@ msgstr ""
 "Ohun rọrun ọna ati ki o yara ọna lati ri rẹ aworan! O tun le yi awọn ọna rẹ "
 "aworan wulẹ pẹlu sun, n yi, iwọn ayipada ati bẹ bẹ lori."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Ko si aworan"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Yan ohun aworan"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Jọwọ duro"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Ti o bere asopọ..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Fẹ̀ẹ́ Síta"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Fẹ̀ẹ́ Sinú"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Fit to ferese"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Original iwọn"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "N yi olowo osi aago"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "N yi ọtun-ofo aago"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "ṣaaju ki o to aworan"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "tókàn aworan"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Gbogbo sikirini"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "N yi olowo osi aago"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "N yi ọtun-ofo aago"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "ṣaaju ki o to aworan"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "tókàn aworan"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Gbigba aworan..."

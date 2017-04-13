@@ -2,19 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 20:51+0000\n"
+"POT-Creation-Date: 2017-03-24 17:39+1100\n"
 "PO-Revision-Date: 2016-10-13 09:54+0000\n"
 "Last-Translator: dark159123 <r.j.hansen@protonmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +18,11 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1476352479.000000\n"
 
-#. TRANS: "name" option from activity.info file
+#: activity/activity.info:2
 msgid "Image Viewer"
 msgstr "Billedefremviser"
 
-#. TRANS: "summary" option from activity.info file
+#: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
@@ -38,59 +30,59 @@ msgstr ""
 "En let og hurtig måde at se dine billeder på! Du kan også ændre hvordan dit "
 "billede ser ud med zoom, rotation, størrelse skift og så videre."
 
-#: ImageViewerActivity.py:198
+#: ImageViewerActivity.py:202
 msgid "No image"
 msgstr "Intet billede"
 
-#: ImageViewerActivity.py:209
+#: ImageViewerActivity.py:213
 msgid "Choose an image"
 msgstr "Vælg et billede"
 
-#: ImageViewerActivity.py:241
+#: ImageViewerActivity.py:245
 msgid "Please wait"
 msgstr "Vent venligst"
 
-#: ImageViewerActivity.py:242
+#: ImageViewerActivity.py:246
 msgid "Starting connection..."
 msgstr "Starter forbindelse..."
 
-#: ImageViewerActivity.py:294
+#: ImageViewerActivity.py:301
 msgid "Zoom out"
 msgstr "Zoom ud"
 
-#: ImageViewerActivity.py:300
+#: ImageViewerActivity.py:307
 msgid "Zoom in"
 msgstr "Zoom ind"
 
-#: ImageViewerActivity.py:306
+#: ImageViewerActivity.py:313
 msgid "Fit to window"
 msgstr "Tilpas til vindue"
 
-#: ImageViewerActivity.py:312
+#: ImageViewerActivity.py:319
 msgid "Original size"
 msgstr "Original størrelse"
 
-#: ImageViewerActivity.py:322
-msgid "Rotate anticlockwise"
-msgstr "Rotér mod uret"
-
-#: ImageViewerActivity.py:329
-msgid "Rotate clockwise"
-msgstr "Rotér med uret"
-
-#: ImageViewerActivity.py:340
-msgid "Previous Image"
-msgstr "Forrige billede"
-
-#: ImageViewerActivity.py:348
-msgid "Next Image"
-msgstr "Næste billede"
-
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:325
 msgid "Fullscreen"
 msgstr "Fuldskærm"
 
-#: ImageViewerActivity.py:642
+#: ImageViewerActivity.py:335
+msgid "Rotate anticlockwise"
+msgstr "Rotér mod uret"
+
+#: ImageViewerActivity.py:342
+msgid "Rotate clockwise"
+msgstr "Rotér med uret"
+
+#: ImageViewerActivity.py:353
+msgid "Previous Image"
+msgstr "Forrige billede"
+
+#: ImageViewerActivity.py:361
+msgid "Next Image"
+msgstr "Næste billede"
+
+#: ImageViewerActivity.py:650
 msgid "Receiving image..."
 msgstr "Modtager billede..."
 
@@ -105,12 +97,3 @@ msgstr "Modtager billede..."
 #~ msgstr ""
 #~ "De har de funktioner som man forventer fra en standard-fremviser, såsom "
 #~ "zoom, rotation, osv."
-
-#~ msgid "Choose document"
-#~ msgstr "Vælg dokument"
-
-#~ msgid "Downloading..."
-#~ msgstr "Henter..."
-
-#~ msgid "Retrieving shared image, please wait..."
-#~ msgstr "Henter delt billede, vent venligst..."
