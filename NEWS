@@ -1,3 +1,14 @@
+63
+
+* New icons for rotation (Ignacio Rodríguez),
+* Port to using CollabWrapper API (Sam Parkinson),
+* New translations (Chris Leonard et al),
+* Update repository URL (James Cameron),
+* Update POT file (James Cameron),
+* CollabWrapper fixes (Sam Parkinson, James Cameron),
+* Source formatting fixes (James Cameron),
+* FIx file transfer (James Cameron),
+
 52
 * Touch gestures implementation
 * port to gtk3
