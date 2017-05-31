@@ -1,6 +1,6 @@
-# PO for ImageViewer Activity.
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the ImageViewer package.
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 17:39+1100\n"
+"POT-Creation-Date: 2017-05-31 17:52+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,58 +27,62 @@ msgid ""
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
 
-#: ImageViewerActivity.py:202
+#: ImageViewerActivity.py:161
 msgid "No image"
 msgstr ""
 
-#: ImageViewerActivity.py:213
+#: ImageViewerActivity.py:172
 msgid "Choose an image"
 msgstr ""
 
-#: ImageViewerActivity.py:245
-msgid "Please wait"
-msgstr ""
-
-#: ImageViewerActivity.py:246
-msgid "Starting connection..."
-msgstr ""
-
-#: ImageViewerActivity.py:301
+#: ImageViewerActivity.py:235
 msgid "Zoom out"
 msgstr ""
 
-#: ImageViewerActivity.py:307
+#: ImageViewerActivity.py:241
 msgid "Zoom in"
 msgstr ""
 
-#: ImageViewerActivity.py:313
+#: ImageViewerActivity.py:247
 msgid "Fit to window"
 msgstr ""
 
-#: ImageViewerActivity.py:319
+#: ImageViewerActivity.py:253
 msgid "Original size"
 msgstr ""
 
-#: ImageViewerActivity.py:325
+#: ImageViewerActivity.py:259
 msgid "Fullscreen"
 msgstr ""
 
-#: ImageViewerActivity.py:335
+#: ImageViewerActivity.py:269
 msgid "Rotate anticlockwise"
 msgstr ""
 
-#: ImageViewerActivity.py:342
+#: ImageViewerActivity.py:276
 msgid "Rotate clockwise"
 msgstr ""
 
-#: ImageViewerActivity.py:353
+#: ImageViewerActivity.py:287
 msgid "Previous Image"
 msgstr ""
 
-#: ImageViewerActivity.py:361
+#: ImageViewerActivity.py:295
 msgid "Next Image"
 msgstr ""
 
-#: ImageViewerActivity.py:650
+#: ImageViewerActivity.py:465
 msgid "Receiving image..."
+msgstr ""
+
+#: collabwrapper.py:176
+msgid "Joining activity..."
+msgstr ""
+
+#: collabwrapper.py:177 collabwrapper.py:189
+msgid "Please wait for the connection..."
+msgstr ""
+
+#: collabwrapper.py:188
+msgid "Resuming shared activity..."
 msgstr ""
