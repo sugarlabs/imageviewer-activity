@@ -95,6 +95,7 @@ class ImageViewerActivity(activity.Activity):
         # Status of temp file used for write_file:
         self._tempfile = None
         self._close_requested = False
+        self._want_document = True
 
         self._zoom_out_button = None
         self._zoom_in_button = None
