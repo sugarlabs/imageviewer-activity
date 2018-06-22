@@ -114,6 +114,7 @@ class ImageViewerActivity(activity.Activity):
 
         self.view = ImageView.ImageViewer()
 
+        self._image_list = []
         # Connect to the touch signal for performing drag-by-touch.
         self.view.add_events(Gdk.EventMask.TOUCH_MASK)
         self._touch_hid = self.view.connect('touch-event',
@@ -227,6 +228,7 @@ class ImageViewerActivity(activity.Activity):
 
     def _add_toolbar_buttons(self, toolbar_box):
         self._seps = []
+        self._image_buttons = []
 
         self.activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(self.activity_button, 0)
@@ -234,24 +236,28 @@ class ImageViewerActivity(activity.Activity):
 
         self._zoom_out_button = ToolButton('zoom-out')
         self._zoom_out_button.set_tooltip(_('Zoom out'))
+        self._image_buttons.append(self._zoom_out_button)
         self._zoom_out_button.connect('clicked', self.__zoom_out_cb)
         toolbar_box.toolbar.insert(self._zoom_out_button, -1)
         self._zoom_out_button.show()
 
         self._zoom_in_button = ToolButton('zoom-in')
         self._zoom_in_button.set_tooltip(_('Zoom in'))
+        self._image_buttons.append(self._zoom_in_button)
         self._zoom_in_button.connect('clicked', self.__zoom_in_cb)
         toolbar_box.toolbar.insert(self._zoom_in_button, -1)
         self._zoom_in_button.show()
 
         zoom_tofit_button = ToolButton('zoom-best-fit')
         zoom_tofit_button.set_tooltip(_('Fit to window'))
+        self._image_buttons.append(zoom_tofit_button)
         zoom_tofit_button.connect('clicked', self.__zoom_tofit_cb)
         toolbar_box.toolbar.insert(zoom_tofit_button, -1)
         zoom_tofit_button.show()
 
         zoom_original_button = ToolButton('zoom-original')
         zoom_original_button.set_tooltip(_('Original size'))
+        self._image_buttons.append(zoom_original_button)
         zoom_original_button.connect('clicked', self.__zoom_original_cb)
         toolbar_box.toolbar.insert(zoom_original_button, -1)
         zoom_original_button.show()
@@ -268,6 +274,7 @@ class ImageViewerActivity(activity.Activity):
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
+        self._image_buttons.append(rotate_anticlockwise_button)
         rotate_anticlockwise_button.connect('clicked',
                                             self.__rotate_anticlockwise_cb)
         toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
@@ -275,9 +282,12 @@ class ImageViewerActivity(activity.Activity):
 
         rotate_clockwise_button = ToolButton('rotate_clockwise')
         rotate_clockwise_button.set_tooltip(_('Rotate clockwise'))
+        self._image_buttons.append(rotate_clockwise_button)
         rotate_clockwise_button.connect('clicked', self.__rotate_clockwise_cb)
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
+
+        self.update_image_button_sensitiveness(False)
 
         if self._object_id is None:
             self._seps.append(Gtk.SeparatorToolItem())
@@ -376,8 +386,14 @@ class ImageViewerActivity(activity.Activity):
             if image.object_id == self._object_id:
                 jobject = image
                 break
-
+        else:
+            return False
         self.current_image_index = self.image_list.index(jobject)
+        return True
+
+    def update_image_button_sensitiveness(self, sensitiveness):
+        for button in self._image_buttons:
+            button.set_sensitive(sensitiveness)
 
     def make_button_sensitive(self):
         if self.image_count <= 1:
@@ -408,6 +424,7 @@ class ImageViewerActivity(activity.Activity):
         try:
             result = chooser.run()
             if result == Gtk.ResponseType.ACCEPT:
+                self.update_image_button_sensitiveness(True)
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self._object_id = jobject.object_id
@@ -415,8 +432,8 @@ class ImageViewerActivity(activity.Activity):
                     self.set_canvas(self.scrolled_window)
                     self.scrolled_window.show()
         finally:
-            self.get_current_image_index()
-            self.make_button_sensitive()
+            if self.get_current_image_index():
+                self.make_button_sensitive()
             chooser.destroy()
             del chooser
 
@@ -437,6 +454,7 @@ class ImageViewerActivity(activity.Activity):
         self._tempfile = tempfile
 
         self.view.set_file_location(tempfile)
+        self.update_image_button_sensitiveness(True)
 
         zoom = self.metadata.get('zoom', None)
         if zoom is not None:
