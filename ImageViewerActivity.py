@@ -17,7 +17,6 @@
 
 # The sharing bits have been taken from ReadEtexts
 
-from __future__ import division
 
 from sugar3.activity import activity
 import logging
