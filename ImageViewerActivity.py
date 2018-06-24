@@ -264,6 +264,7 @@ class ImageViewerActivity(activity.Activity):
 
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
+        self._image_buttons.append(fullscreen_button)
         fullscreen_button.connect('clicked', self.__fullscreen_cb)
         toolbar_box.toolbar.insert(fullscreen_button, -1)
         fullscreen_button.show()
