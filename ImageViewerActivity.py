@@ -288,7 +288,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        self.update_image_button_sensitiveness(False)
+        self.image_buttons_set_sensitive(False)
 
         if self._object_id is None:
             self._seps.append(Gtk.SeparatorToolItem())
@@ -392,9 +392,9 @@ class ImageViewerActivity(activity.Activity):
         self.current_image_index = self.image_list.index(jobject)
         return True
 
-    def update_image_button_sensitiveness(self, sensitiveness):
+    def image_buttons_set_sensitive(self, sensitive):
         for button in self._image_buttons:
-            button.set_sensitive(sensitiveness)
+            button.set_sensitive(sensitive)
 
     def make_button_sensitive(self):
         if self.image_count <= 1:
@@ -425,7 +425,7 @@ class ImageViewerActivity(activity.Activity):
         try:
             result = chooser.run()
             if result == Gtk.ResponseType.ACCEPT:
-                self.update_image_button_sensitiveness(True)
+                self.image_buttons_set_sensitive(True)
                 jobject = chooser.get_selected_object()
                 if jobject and jobject.file_path:
                     self._object_id = jobject.object_id
@@ -455,7 +455,7 @@ class ImageViewerActivity(activity.Activity):
         self._tempfile = tempfile
 
         self.view.set_file_location(tempfile)
-        self.update_image_button_sensitiveness(True)
+        self.image_buttons_set_sensitive(True)
 
         zoom = self.metadata.get('zoom', None)
         if zoom is not None:
