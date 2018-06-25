@@ -342,7 +342,7 @@ class ImageViewerActivity(activity.Activity):
             return
 
         self.current_image_index += delta
-        self.make_button_sensitive()
+        self.traverse_button_update_sensitive()
         jobject = self.image_list[self.current_image_index]
         self._object_id = jobject.object_id
         if os.path.exists(self._tempfile):
@@ -382,7 +382,7 @@ class ImageViewerActivity(activity.Activity):
     def __fullscreen_cb(self, button):
         self.fullscreen()
 
-    def get_current_image_index(self):
+    def update_current_image_index(self):
         for image in self.image_list:
             if image.object_id == self._object_id:
                 jobject = image
@@ -396,7 +396,7 @@ class ImageViewerActivity(activity.Activity):
         for button in self._image_buttons:
             button.set_sensitive(sensitive)
 
-    def make_button_sensitive(self):
+    def traverse_button_update_sensitive(self):
         if self.image_count <= 1:
             return
 
@@ -433,8 +433,8 @@ class ImageViewerActivity(activity.Activity):
                     self.set_canvas(self.scrolled_window)
                     self.scrolled_window.show()
         finally:
-            if self.get_current_image_index():
-                self.make_button_sensitive()
+            if self.update_current_image_index():
+                self.traverse_button_update_sensitive()
             chooser.destroy()
             del chooser
 
