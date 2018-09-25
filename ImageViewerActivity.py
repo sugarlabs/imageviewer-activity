@@ -333,11 +333,9 @@ class ImageViewerActivity(activity.Activity):
 
     def _configure_cb(self, event=None):
         if Gdk.Screen.width() <= style.GRID_CELL_SIZE * 12:
-            for sep in self._seps:
-                sep.hide()
+            self.list_set_visible(self._seps, False)
         else:
-            for sep in self._seps:
-                sep.show()
+            self.list_set_visible(self._seps, True)
 
     def _update_zoom_buttons(self):
         self._zoom_in_button.set_sensitive(self.view.can_zoom_in())
