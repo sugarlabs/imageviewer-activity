@@ -1,3 +1,13 @@
+64
+
+* Add README (Rudra Sadhu),
+* Add screenshots and fix metadata (Vipul Gupta),
+* Disable buttons when no image is loaded (Rahul Bothra),
+* Port from GObject to GLib (James Cameron),
+* Update CollabWrapper (James Cameron),
+* New translations (Chris Leonard et al),
+* Show images in journal when started new (James Cameron),
+
 63
 
 * New icons for rotation (Ignacio Rodríguez),
