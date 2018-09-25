@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-24 17:39+1100\n"
-"PO-Revision-Date: 2013-10-30 03:39+0200\n"
-"Last-Translator: Alex <tarrask@tarrask.com>\n"
+"PO-Revision-Date: 2018-09-05 19:53+0000\n"
+"Last-Translator: Paulo Francisco <slomp@ufrgs.br>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.0.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1536177185.000000\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
@@ -26,22 +27,25 @@ msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
+"Uma maneira rápida e fácil de visualizar suas imagens! Você também pode "
+"mudar a forma na qual sua imagem é apresentada, no que se refere ao zoom, "
+"rotação, redefinição de tamanho, etc."
 
 #: ImageViewerActivity.py:202
 msgid "No image"
-msgstr ""
+msgstr "Sem imagem"
 
 #: ImageViewerActivity.py:213
 msgid "Choose an image"
-msgstr ""
+msgstr "Escolher imagem"
 
 #: ImageViewerActivity.py:245
 msgid "Please wait"
-msgstr ""
+msgstr "Por favor espere"
 
 #: ImageViewerActivity.py:246
 msgid "Starting connection..."
-msgstr ""
+msgstr "Iniciando conexão..."
 
 #: ImageViewerActivity.py:301
 msgid "Zoom out"
@@ -53,7 +57,7 @@ msgstr "Aumentar Zoom"
 
 #: ImageViewerActivity.py:313
 msgid "Fit to window"
-msgstr "Preencher a janela"
+msgstr "Ajustar à janela"
 
 #: ImageViewerActivity.py:319
 msgid "Original size"
@@ -73,15 +77,15 @@ msgstr "Girar no sentido horário"
 
 #: ImageViewerActivity.py:353
 msgid "Previous Image"
-msgstr ""
+msgstr "Imagem anterior"
 
 #: ImageViewerActivity.py:361
 msgid "Next Image"
-msgstr ""
+msgstr "Próxima imagem"
 
 #: ImageViewerActivity.py:650
 msgid "Receiving image..."
-msgstr ""
+msgstr "Recebendo Imagem..."
 
 #~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
 #~ msgstr ""

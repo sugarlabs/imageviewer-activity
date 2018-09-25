@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-24 17:39+1100\n"
-"PO-Revision-Date: 2017-04-10 02:45+0000\n"
+"PO-Revision-Date: 2017-09-05 03:30+0000\n"
 "Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: gug\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491792350.000000\n"
+"X-POOTLE-MTIME: 1504582259.000000\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
@@ -76,11 +76,11 @@ msgstr "Jere andu aravo papaha"
 
 #: ImageViewerActivity.py:353
 msgid "Previous Image"
-msgstr ""
+msgstr "Ta'anga mboyvegua"
 
 #: ImageViewerActivity.py:361
 msgid "Next Image"
-msgstr ""
+msgstr "Ta'anga uperiregua"
 
 #: ImageViewerActivity.py:650
 msgid "Receiving image..."
