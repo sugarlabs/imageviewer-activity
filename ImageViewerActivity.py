@@ -26,9 +26,9 @@ from gettext import gettext as _
 
 import time
 import os
-from gi.repository import Gtk
+from gi.repository import GLib
 from gi.repository import Gdk
-from gi.repository import GObject
+from gi.repository import Gtk
 
 from sugar3.graphics.alert import NotifyAlert
 from sugar3.graphics.objectchooser import ObjectChooser
@@ -310,7 +310,7 @@ class ImageViewerActivity(activity.Activity):
             toolbar_box.toolbar.insert(self.next_image_button, -1)
             self.next_image_button.show()
 
-            GObject.idle_add(self._get_image_list)
+            GLib.idle_add(self._get_image_list)
 
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
@@ -507,7 +507,7 @@ class ImageViewerActivity(activity.Activity):
             self.remove_alert(self._progress_alert)
             self._progress_alert = None
 
-        GObject.idle_add(self.__set_file_idle_cb, self._jobject.object_id)
+        GLib.idle_add(self.__set_file_idle_cb, self._jobject.object_id)
 
     def __set_file_idle_cb(self, object_id):
         dsobj = datastore.get(object_id)
