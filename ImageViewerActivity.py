@@ -31,11 +31,6 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from sugar3.graphics.alert import NotifyAlert
-from sugar3.graphics.objectchooser import ObjectChooser
-try:
-    from sugar3.graphics.objectchooser import FILTER_TYPE_GENERIC_MIME
-except:
-    FILTER_TYPE_GENERIC_MIME = 'generic_mime'
 
 from sugar3 import mime
 from sugar3.graphics.toolbutton import ToolButton
@@ -95,7 +90,6 @@ class ImageViewerActivity(activity.Activity):
         # Status of temp file used for write_file:
         self._tempfile = None
         self._close_requested = False
-        self._want_document = True
 
         self._zoom_out_button = None
         self._zoom_in_button = None
@@ -144,6 +138,7 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.show()
 
         if self._object_id is None or not self._jobject.file_path:
+            # start new, or resume empty
             empty_widgets = Gtk.EventBox()
             empty_widgets.modify_bg(Gtk.StateType.NORMAL,
                                     style.COLOR_WHITE.get_gdk_color())
@@ -164,22 +159,13 @@ class ImageViewerActivity(activity.Activity):
             label.set_use_markup(True)
             mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
 
-            hbox = Gtk.Box()
-            open_image_btn = Gtk.Button()
-            open_image_btn.connect('clicked', self._show_picker_cb)
-            add_image = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
-                                                 Gtk.IconSize.BUTTON)
-            buttonbox = Gtk.Box()
-            buttonbox.pack_start(add_image, False, True, 0)
-            buttonbox.pack_end(Gtk.Label(_('Choose an image')), True, True, 5)
-            open_image_btn.add(buttonbox)
-            hbox.pack_start(open_image_btn, True, False, 0)
-            mvbox.pack_start(hbox, False, False, style.DEFAULT_PADDING)
-
             empty_widgets.add(vbox)
             empty_widgets.show_all()
             self.set_canvas(empty_widgets)
+            self.busy()
+            GLib.idle_add(self._get_image_list)
         else:
+            # opening an image, or our journal object with image
             self.set_canvas(self.scrolled_window)
             self.scrolled_window.show()
 
@@ -225,6 +211,28 @@ class ImageViewerActivity(activity.Activity):
         mime_types = mime.get_generic_type(value).mime_types
         (self.image_list, self.image_count) = datastore.find({'mime_type':
                                                              mime_types})
+        self.unbusy()
+
+        if self.image_count == 0:
+            # start new, or resume empty; with no images in journal
+            # leave the "No image" message visible
+            return False
+
+        if self.image_count > 1:
+            # start new, or resume empty; with more than one image in journal
+            # add image choosing buttons to toolbar box
+            self.list_set_visible(self._traverse_widgets, True)
+
+        # start new, or resume empty; with at least one image in journal
+        # display the first image
+        self.current_image_index = 0
+        self._change_image(0)
+        self.traverse_update_sensitive()
+
+        self.set_canvas(self.scrolled_window)
+        self.scrolled_window.show()
+
+        return False
 
     def _add_toolbar_buttons(self, toolbar_box):
         self._seps = []
@@ -288,29 +296,30 @@ class ImageViewerActivity(activity.Activity):
         toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
         rotate_clockwise_button.show()
 
-        self.image_buttons_set_sensitive(False)
+        self.list_set_sensitive(self._image_buttons, False)
 
-        if self._object_id is None:
-            self._seps.append(Gtk.SeparatorToolItem())
-            toolbar_box.toolbar.insert(self._seps[-1], -1)
-            self._seps[-1].show()
+        self._traverse_widgets = []
+        separator = Gtk.SeparatorToolItem()
+        self._seps.append(separator)
+        toolbar_box.toolbar.insert(separator, -1)
+        self._traverse_widgets.append(separator)
 
-            self.previous_image_button = ToolButton('go-previous-paired')
-            self.previous_image_button.set_tooltip(_('Previous Image'))
-            self.previous_image_button.props.sensitive = False
-            self.previous_image_button.connect('clicked',
-                                               self.__previous_image_cb)
-            toolbar_box.toolbar.insert(self.previous_image_button, -1)
-            self.previous_image_button.show()
+        self.previous_image_button = ToolButton('go-previous-paired')
+        self.previous_image_button.set_tooltip(_('Previous Image'))
+        self.previous_image_button.props.sensitive = False
+        self.previous_image_button.connect('clicked',
+                                           self.__previous_image_cb)
+        toolbar_box.toolbar.insert(self.previous_image_button, -1)
+        self._traverse_widgets.append(self.previous_image_button)
 
-            self.next_image_button = ToolButton('go-next-paired')
-            self.next_image_button.set_tooltip(_('Next Image'))
-            self.next_image_button.props.sensitive = False
-            self.next_image_button.connect('clicked', self.__next_image_cb)
-            toolbar_box.toolbar.insert(self.next_image_button, -1)
-            self.next_image_button.show()
+        self.next_image_button = ToolButton('go-next-paired')
+        self.next_image_button.set_tooltip(_('Next Image'))
+        self.next_image_button.props.sensitive = False
+        self.next_image_button.connect('clicked', self.__next_image_cb)
+        toolbar_box.toolbar.insert(self.next_image_button, -1)
+        self._traverse_widgets.append(self.next_image_button)
 
-            GLib.idle_add(self._get_image_list)
+        self.list_set_visible(self._traverse_widgets, False)
 
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
@@ -342,11 +351,10 @@ class ImageViewerActivity(activity.Activity):
             return
 
         self.current_image_index += delta
-        self.traverse_button_update_sensitive()
+        self.traverse_update_sensitive()
+
         jobject = self.image_list[self.current_image_index]
         self._object_id = jobject.object_id
-        if os.path.exists(self._tempfile):
-            os.remove(self._tempfile)
         self.read_file(jobject.file_path)
 
     def __previous_image_cb(self, button):
@@ -392,11 +400,15 @@ class ImageViewerActivity(activity.Activity):
         self.current_image_index = self.image_list.index(jobject)
         return True
 
-    def image_buttons_set_sensitive(self, sensitive):
-        for button in self._image_buttons:
-            button.set_sensitive(sensitive)
+    def list_set_visible(self, widgets, visible):
+        for widget in widgets:
+            widget.set_visible(visible)
 
-    def traverse_button_update_sensitive(self):
+    def list_set_sensitive(self, widgets, sensitive):
+        for widget in widgets:
+            widget.set_sensitive(sensitive)
+
+    def traverse_update_sensitive(self):
         if self.image_count <= 1:
             return
 
@@ -410,41 +422,12 @@ class ImageViewerActivity(activity.Activity):
             self.next_image_button.props.sensitive = True
             self.previous_image_button.props.sensitive = True
 
-    def _show_picker_cb(self, button):
-        if not self._want_document:
-            return
-
-        try:
-            chooser = ObjectChooser(self, what_filter='Image',
-                                    filter_type=FILTER_TYPE_GENERIC_MIME,
-                                    show_preview=True)
-        except:
-            # for compatibility with older versions
-            chooser = ObjectChooser(self._activity, what_filter='Image')
-
-        try:
-            result = chooser.run()
-            if result == Gtk.ResponseType.ACCEPT:
-                self.image_buttons_set_sensitive(True)
-                jobject = chooser.get_selected_object()
-                if jobject and jobject.file_path:
-                    self._object_id = jobject.object_id
-                    self.read_file(jobject.file_path)
-                    self.set_canvas(self.scrolled_window)
-                    self.scrolled_window.show()
-        finally:
-            if self.update_current_image_index():
-                self.traverse_button_update_sensitive()
-            chooser.destroy()
-            del chooser
-
     def read_file(self, file_path):
         if self._object_id is None or self.shared_activity:
             # read_file is call because the canvas is visible
             # but we need check if is not the case of empty file
             return
 
-        self._want_document = False
         # enable collaboration
         self.activity_button.page.share.props.sensitive = True
 
@@ -455,7 +438,7 @@ class ImageViewerActivity(activity.Activity):
         self._tempfile = tempfile
 
         self.view.set_file_location(tempfile)
-        self.image_buttons_set_sensitive(True)
+        self.list_set_sensitive(self._image_buttons, True)
 
         zoom = self.metadata.get('zoom', None)
         if zoom is not None:
