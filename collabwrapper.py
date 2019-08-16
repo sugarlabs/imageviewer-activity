@@ -68,26 +68,29 @@ import json
 import socket
 from gettext import gettext as _
 
+import gi
+gi.require_version('TelepathyGLib', '0.12')
 from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import TelepathyGLib
 import dbus
+from dbus import PROPERTIES_IFACE
 
-from telepathy.interfaces import \
-    CHANNEL_INTERFACE, \
-    CHANNEL_INTERFACE_GROUP, \
-    CHANNEL_TYPE_TEXT, \
-    CHANNEL_TYPE_FILE_TRANSFER, \
-    CONN_INTERFACE_ALIASING, \
-    CHANNEL, \
-    CLIENT
-from telepathy.constants import \
-    CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES, \
-    CONNECTION_HANDLE_TYPE_CONTACT, \
-    CHANNEL_TEXT_MESSAGE_TYPE_NORMAL, \
-    SOCKET_ADDRESS_TYPE_UNIX, \
-    SOCKET_ACCESS_CONTROL_LOCALHOST
-from telepathy.client import Connection, Channel
+CHANNEL_INTERFACE = TelepathyGLib.IFACE_CHANNEL
+CHANNEL_INTERFACE_GROUP = TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP
+CHANNEL_TYPE_TEXT = TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT
+CHANNEL_TYPE_FILE_TRANSFER = TelepathyGLib.IFACE_CHANNEL_TYPE_FILE_TRANSFER
+CONN_INTERFACE_ALIASING = TelepathyGLib.IFACE_CONNECTION_INTERFACE_ALIASING
+CONN_INTERFACE = TelepathyGLib.IFACE_CONNECTION
+CHANNEL = TelepathyGLib.IFACE_CHANNEL
+CLIENT = TelepathyGLib.IFACE_CLIENT
+CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES = \
+    TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES
+CONNECTION_HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+CHANNEL_TEXT_MESSAGE_TYPE_NORMAL = TelepathyGLib.ChannelTextMessageType.NORMAL
+SOCKET_ADDRESS_TYPE_UNIX = TelepathyGLib.SocketAddressType.UNIX
+SOCKET_ACCESS_CONTROL_LOCALHOST = TelepathyGLib.SocketAccessControl.LOCALHOST
 
 from sugar3.presence import presenceservice
 from sugar3.activity.activity import SCOPE_PRIVATE
@@ -148,8 +151,7 @@ class CollabWrapper(GObject.GObject):
 
     The `incoming_file` signal is emitted when a file transfer is
     received.  The signal has two arguments.  The first is a
-    :class:`sugar3.presence.filetransfer.IncomingFileTransfer`.  The
-    second is the description.
+    :class:`IncomingFileTransfer`.  The second is the description.
     '''
 
     message = GObject.Signal('message', arg_types=[object, object])
@@ -276,16 +278,15 @@ class CollabWrapper(GObject.GObject):
         _logger.debug('_handle_ft_channel')
         ft = IncomingFileTransfer(conn, path, props)
         if ft.description == ACTION_INIT_RESPONSE:
-            ft.connect('notify::state', self.__notify_ft_state_cb)
+            ft.connect('ready', self.__ready_cb)
             ft.accept_to_memory()
         else:
             desc = json.loads(ft.description)
             self.incoming_file.emit(ft, desc)
 
-    def __notify_ft_state_cb(self, ft, pspec):
-        _logger.debug('__notify_ft_state_cb')
-        if ft.props.state == FT_STATE_COMPLETED and self._init_waiting:
-            stream = ft.props.output
+    def __ready_cb(self, ft, stream):
+        _logger.debug('__ready_cb')
+        if self._init_waiting:
             stream.close(None)
             # FIXME:  The data prop seems to just be the raw pointer
             gbytes = stream.steal_as_bytes()
@@ -299,17 +300,18 @@ class CollabWrapper(GObject.GObject):
         '''Process a message when it is received.'''
         _logger.debug('__received_cb')
         action = msg.get('action')
-        if action == ACTION_INIT_REQUEST and self._leader:
-            data = self.activity.get_data()
-            if data is not None:
-                data = json.dumps(data)
-                OutgoingBlobTransfer(
-                    buddy,
-                    self.shared_activity.telepathy_conn,
-                    data,
-                    self.get_client_name(),
-                    ACTION_INIT_RESPONSE,
-                    ACTIVITY_FT_MIME)
+        if action == ACTION_INIT_REQUEST:
+            if self._leader:
+                data = self.activity.get_data()
+                if data is not None:
+                    data = json.dumps(data)
+                    OutgoingBlobTransfer(
+                        buddy,
+                        self.shared_activity.telepathy_conn,
+                        data,
+                        self.get_client_name(),
+                        ACTION_INIT_RESPONSE,
+                        ACTIVITY_FT_MIME)
             return
 
         if buddy:
@@ -431,7 +433,7 @@ class _BaseFileTransfer(GObject.GObject):
 
     GObject Props:
         state (FT_STATE_*), current state of the transfer
-        transferred_bytes (int), number of bytes transfered so far
+        transferred_bytes (int), number of bytes transferred so far
     '''
 
     def __init__(self):
@@ -460,7 +462,7 @@ class _BaseFileTransfer(GObject.GObject):
         self.channel[CHANNEL_TYPE_FILE_TRANSFER].connect_to_signal(
             'InitialOffsetDefined', self.__initial_offset_defined_cb)
 
-        channel_properties = self.channel[dbus.PROPERTIES_IFACE]
+        channel_properties = self.channel[PROPERTIES_IFACE]
 
         props = channel_properties.GetAll(CHANNEL_TYPE_FILE_TRANSFER)
         self._state = props['State']
@@ -524,10 +526,17 @@ class IncomingFileTransfer(_BaseFileTransfer):
     it is a :class:`Gio.MemoryOutputStream`.
     '''
 
+    ready = GObject.Signal('ready', arg_types=[object])
+
     def __init__(self, connection, object_path, props):
         _BaseFileTransfer.__init__(self)
 
-        channel = Channel(connection.bus_name, object_path)
+        channel = {}
+        proxy = dbus.Bus().get_object(connection.bus_name, object_path)
+        channel[PROPERTIES_IFACE] = dbus.Interface(proxy, PROPERTIES_IFACE)
+        channel[CHANNEL] = dbus.Interface(proxy, CHANNEL)
+        channel[CHANNEL_TYPE_FILE_TRANSFER] = dbus.Interface(
+            proxy, CHANNEL_TYPE_FILE_TRANSFER)
         self.set_channel(channel)
 
         self.connect('notify::state', self.__notify_state_cb)
@@ -559,6 +568,7 @@ class IncomingFileTransfer(_BaseFileTransfer):
         Accept the file transfer.  Once the state is FT_STATE_OPEN, a
         :class:`Gio.MemoryOutputStream` accessible via the output prop.
         '''
+        self._destination_path = None
         self._accept()
 
     def _accept(self):
@@ -598,7 +608,11 @@ class IncomingFileTransfer(_BaseFileTransfer):
                 input_stream,
                 Gio.OutputStreamSpliceFlags.CLOSE_SOURCE |
                 Gio.OutputStreamSpliceFlags.CLOSE_TARGET,
-                GLib.PRIORITY_LOW, None, None, None)
+                GLib.PRIORITY_LOW, None, self.__splice_done_cb, None)
+
+    def __splice_done_cb(self, output_stream, res, user):
+        _logger.debug('__splice_done_cb')
+        self.ready.emit(self._destination_path or self._output_stream)
 
     @GObject.Property
     def output(self):
@@ -646,7 +660,13 @@ class _BaseOutgoingTransfer(_BaseFileTransfer):
             CHANNEL_TYPE_FILE_TRANSFER + '.Size': file_size,
             CHANNEL_TYPE_FILE_TRANSFER + '.ContentType': self._mime,
             CHANNEL_TYPE_FILE_TRANSFER + '.InitialOffset': 0}, signature='sv'))
-        self.set_channel(Channel(self._conn.bus_name, object_path))
+        channel = {}
+        proxy = dbus.Bus().get_object(self._conn.bus_name, object_path)
+        channel[PROPERTIES_IFACE] = dbus.Interface(proxy, PROPERTIES_IFACE)
+        channel[CHANNEL] = dbus.Interface(proxy, CHANNEL)
+        channel[CHANNEL_TYPE_FILE_TRANSFER] = dbus.Interface(
+            proxy, CHANNEL_TYPE_FILE_TRANSFER)
+        self.set_channel(channel)
 
         channel_file_transfer = self.channel[CHANNEL_TYPE_FILE_TRANSFER]
         self._socket_address = channel_file_transfer.ProvideFile(
@@ -836,7 +856,8 @@ class _TextChannelWrapper(object):
 
         # Get the Telepathy Connection
         tp_name, tp_path = pservice.get_preferred_connection()
-        conn = Connection(tp_name, tp_path)
+        obj = dbus.Bus().get_object(tp_name, tp_path)
+        conn = dbus.Interface(obj, CONN_INTERFACE)
         group = self._text_chan[CHANNEL_INTERFACE_GROUP]
         my_csh = group.GetSelfHandle()
         if my_csh == cs_handle:
