@@ -1,3 +1,15 @@
+65
+
+* Port to Python 3 (Rahul Bothra),
+* Update collabwrapper to favour TelepathyGLib (Aniket Mathur),
+* Remove empty locale files (James Cameron),
+* flake8 fix (James Cameron),
+* Fix missing image buttons on join (James Cameron),
+* Fix GLib.source_remove warning (James Cameron),
+* Add missing get_data and set_data methods (James Cameron),
+* Fix TypeError traceback on joining (James Cameron),
+* Fix FileExistsError on repeated browse (James Cameron),
+
 64
 
 * Add README (Rudra Sadhu),
