@@ -436,7 +436,7 @@ class ImageViewerActivity(activity.Activity):
         self.activity_button.page.share.props.sensitive = True
 
         tempfile = os.path.join(self.get_activity_root(), 'instance',
-                                'tmp%i' % time.time())
+                                'tmp%f' % time.time())
 
         os.link(file_path, tempfile)
         self._tempfile = tempfile
