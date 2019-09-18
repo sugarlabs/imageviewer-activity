@@ -419,6 +419,12 @@ class ImageViewerActivity(activity.Activity):
             self.next_image_button.props.sensitive = True
             self.previous_image_button.props.sensitive = True
 
+    def get_data(self):
+        return None
+
+    def set_data(self, data):
+        pass
+
     def read_file(self, file_path):
         if self._object_id is None or self.shared_activity:
             # read_file is call because the canvas is visible
