@@ -519,7 +519,9 @@ class ImageViewerActivity(activity.Activity):
         self._progress_alert.set_fraction(fraction)
 
     def __buddy_joined_cb(self, collab, buddy):
-        logging.debug('__buddy_joined_cb %r', buddy)
+        logging.debug('__buddy_joined_cb %r', buddy.props.nick)
+        if self._tempfile is None:
+            return  # we have nothing to share
         self._collab.send_file_file(buddy, self._tempfile, None)
 
     def __joined_cb(self, collab):
