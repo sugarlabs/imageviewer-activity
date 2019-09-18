@@ -182,6 +182,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
     def _stop_scrolling(self):
         self._in_scrolling = False
         self.queue_draw()
+        self._scrolling_hid = None
         return False
 
     def _start_scrolling(self):
