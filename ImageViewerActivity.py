@@ -502,6 +502,7 @@ class ImageViewerActivity(activity.Activity):
             pass
         self.set_canvas(self.scrolled_window)
         self.scrolled_window.show_all()
+        self.list_set_sensitive(self._image_buttons, True)
         return False
 
     def __file_transfered_bytes_cb(self, file, pspec):
