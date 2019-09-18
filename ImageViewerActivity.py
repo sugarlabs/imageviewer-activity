@@ -45,7 +45,7 @@ from sugar3.datastore import datastore
 try:
     from gi.repository import SugarGestures
     GESTURES_AVAILABLE = True
-except:
+except ImportError:
     GESTURES_AVAILABLE = False
 
 import collabwrapper
