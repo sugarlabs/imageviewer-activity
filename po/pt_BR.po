@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-24 17:39+1100\n"
-"PO-Revision-Date: 2018-09-05 19:53+0000\n"
+"PO-Revision-Date: 2019-03-09 00:27+0000\n"
 "Last-Translator: Paulo Francisco <slomp@ufrgs.br>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1536177185.000000\n"
+"X-POOTLE-MTIME: 1552091251.000000\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
@@ -49,11 +49,11 @@ msgstr "Iniciando conexão..."
 
 #: ImageViewerActivity.py:301
 msgid "Zoom out"
-msgstr "Diminuir Zoom"
+msgstr "Diminuir zoom"
 
 #: ImageViewerActivity.py:307
 msgid "Zoom in"
-msgstr "Aumentar Zoom"
+msgstr "Aumentar zoom"
 
 #: ImageViewerActivity.py:313
 msgid "Fit to window"
@@ -65,7 +65,7 @@ msgstr "Tamanho original"
 
 #: ImageViewerActivity.py:325
 msgid "Fullscreen"
-msgstr "Tela Cheia"
+msgstr "Tela cheia"
 
 #: ImageViewerActivity.py:335
 msgid "Rotate anticlockwise"
@@ -85,7 +85,7 @@ msgstr "Próxima imagem"
 
 #: ImageViewerActivity.py:650
 msgid "Receiving image..."
-msgstr "Recebendo Imagem..."
+msgstr "Recebendo imagem..."
 
 #~ msgid "The Image Viewer activity is a simple and fast image viewer tool"
 #~ msgstr ""
