@@ -41,11 +41,7 @@ from sugar3.graphics import style
 from sugar3.graphics.alert import Alert
 from sugar3.datastore import datastore
 
-try:
-    from gi.repository import SugarGestures
-    GESTURES_AVAILABLE = True
-except ImportError:
-    GESTURES_AVAILABLE = False
+from gi.repository import SugarGestures
 
 import collabwrapper
 import ImageView
@@ -117,17 +113,14 @@ class ImageViewerActivity(activity.Activity):
 
         self.connect('key-press-event', self.__key_press_cb)
 
-        if GESTURES_AVAILABLE:
-            # Connect to the zoom signals for performing
-            # pinch-to-zoom.
-            zoom_controller = SugarGestures.ZoomController()
-            zoom_controller.attach(self,
-                                   SugarGestures.EventControllerFlags.NONE)
+        # Connect to the zoom signals for performing
+        # pinch-to-zoom.
+        zoom_controller = SugarGestures.ZoomController()
+        zoom_controller.attach(self, SugarGestures.EventControllerFlags.NONE)
 
-            zoom_controller.connect('began', self.__zoomtouch_began_cb)
-            zoom_controller.connect('scale-changed',
-                                    self.__zoomtouch_changed_cb)
-            zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
+        zoom_controller.connect('began', self.__zoomtouch_began_cb)
+        zoom_controller.connect('scale-changed', self.__zoomtouch_changed_cb)
+        zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
 
         self._progress_alert = None
 
