@@ -455,7 +455,7 @@ class ImageViewerActivity(activity.Activity):
         self._close_requested = True
         return True
 
-    def __incoming_file_cb(self, collab, file, desc):
+    def __incoming_file_cb(self, collab, ft, desc):
         logging.debug('__incoming_file_cb with need %r', self._needs_file)
         if not self._needs_file:
             return
@@ -467,17 +467,17 @@ class ImageViewerActivity(activity.Activity):
         self._needs_file = False
         file_path = os.path.join(self.get_activity_root(), 'instance',
                                  '%i' % time.time())
-        file.connect('notify::state', self.__file_notify_state_cb)
-        file.connect('notify::transfered_bytes',
+        ft.connect('notify::state', self.__file_notify_state_cb)
+        ft.connect('notify::transfered_bytes',
                      self.__file_transfered_bytes_cb)
-        file.accept_to_file(file_path)
+        ft.accept_to_file(file_path)
 
-    def __file_notify_state_cb(self, file, pspec):
-        logging.debug('__file_notify_state %r', file.props.state)
-        if file.props.state != collabwrapper.FT_STATE_COMPLETED:
+    def __file_notify_state_cb(self, ft, pspec):
+        logging.debug('__file_notify_state %r', ft.props.state)
+        if ft.props.state != collabwrapper.FT_STATE_COMPLETED:
             return
 
-        file_path = file.props.output
+        file_path = ft.props.output
         logging.debug("Saving file %s to datastore...", file_path)
         self._jobject.file_path = file_path
         datastore.write(self._jobject, transfer_ownership=True)
