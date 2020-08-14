@@ -443,7 +443,6 @@ class ImageViewerActivity(activity.Activity):
 
     def write_file(self, file_path):
         if self._tempfile:
-            self.metadata['activity'] = self.get_bundle_id()
             self.metadata['zoom'] = str(self.view.get_zoom())
             if self._close_requested:
                 os.link(self._tempfile, file_path)
