@@ -419,6 +419,10 @@ class ImageViewerActivity(activity.Activity):
     def set_data(self, data):
         pass
 
+    def get_preview(self):
+        if self.metadata.get('preview', None) is None:
+            activity.Activity.get_preview(self)
+
     def read_file(self, file_path):
         if self._object_id is None or self.shared_activity:
             # read_file is call because the canvas is visible
