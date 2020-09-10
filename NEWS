@@ -1,3 +1,11 @@
+64.2
+
+* New translations (Chris Leonard et al),
+* SugarGestures is present now (James Cameron),
+* Update CollabWrapper (James Cameron),
+* Preserve activity metadata of files (James Cameron),
+* Preserve preview metadata of files (James Cameron),
+
 64.1
 
 * Update collabwrapper to favour TelepathyGLib (Aniket Mathur),
