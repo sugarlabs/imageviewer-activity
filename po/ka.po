@@ -8,71 +8,77 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-31 17:52+1000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-04-30 05:36+0000\n"
+"Last-Translator: NF <rkavt@smartprojects.ge>\n"
+"Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
+"sugar-activities/imageviewer/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: activity/activity.info:2
 msgid "Image Viewer"
-msgstr ""
+msgstr "გამოსახულებების დამთვალიერებელი"
 
 #: activity/activity.info:3
 msgid ""
 "An easy way and fast way to see your images! You can also change the way "
 "your image looks with zoom, rotate, size change and so on."
 msgstr ""
+"იოლი და სწრაფი გზა, დაათვალიეროთ თქვენი სურათები! ასევე შეგიძლიათ, შეცვალოთ "
+"გზა, როგორი იქნება გამოსახულებები გადიდების, მობრუნების, ზომის ცვლილების და "
+"ა.შ. შემდეგ."
 
 #: ImageViewerActivity.py:161
 msgid "No image"
-msgstr ""
+msgstr "გამოსახულებების გარეშე"
 
 #: ImageViewerActivity.py:172
 msgid "Choose an image"
-msgstr ""
+msgstr "აირჩიეთ გამოსახულება"
 
 #: ImageViewerActivity.py:235
 msgid "Zoom out"
-msgstr ""
+msgstr "დაპატარავება"
 
 #: ImageViewerActivity.py:241
 msgid "Zoom in"
-msgstr ""
+msgstr "გადიდება"
 
 #: ImageViewerActivity.py:247
 msgid "Fit to window"
-msgstr ""
+msgstr "ფანჯარაში ჩატევა"
 
 #: ImageViewerActivity.py:253
 msgid "Original size"
-msgstr ""
+msgstr "ორიგინალი ზომა"
 
 #: ImageViewerActivity.py:259
 msgid "Fullscreen"
-msgstr ""
+msgstr "სრულ ეკრანზე"
 
 #: ImageViewerActivity.py:269
 msgid "Rotate anticlockwise"
-msgstr ""
+msgstr "მობრუნება სისმ"
 
 #: ImageViewerActivity.py:276
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "მობრუნება სიმ"
 
 #: ImageViewerActivity.py:287
 msgid "Previous Image"
-msgstr ""
+msgstr "წინა გამოსახულება"
 
 #: ImageViewerActivity.py:295
 msgid "Next Image"
-msgstr ""
+msgstr "შემდეგი გამოსახულება"
 
 #: ImageViewerActivity.py:465
 msgid "Receiving image..."
-msgstr ""
+msgstr "გამოსახულებების მიღება..."
 
 #: collabwrapper.py:176
 msgid "Joining activity..."
@@ -85,3 +91,11 @@ msgstr ""
 #: collabwrapper.py:188
 msgid "Resuming shared activity..."
 msgstr ""
+
+#: ImageViewerActivity.py:245
+msgid "Please wait"
+msgstr "მოითმინეთ"
+
+#: ImageViewerActivity.py:246
+msgid "Starting connection..."
+msgstr "დაკავსირების დაწყება..."
