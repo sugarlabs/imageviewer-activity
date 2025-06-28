@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-31 17:52+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: niu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: activity/activity.info:2
+msgid "Image Viewer"
+msgstr ""
+
+#: activity/activity.info:3
+msgid ""
+"An easy way and fast way to see your images! You can also change the way "
+"your image looks with zoom, rotate, size change and so on."
+msgstr ""
+
+#: ImageViewerActivity.py:161
+msgid "No image"
+msgstr ""
+
+#: ImageViewerActivity.py:172
+msgid "Choose an image"
+msgstr ""
+
+#: ImageViewerActivity.py:235
+msgid "Zoom out"
+msgstr ""
+
+#: ImageViewerActivity.py:241
+msgid "Zoom in"
+msgstr ""
+
+#: ImageViewerActivity.py:247
+msgid "Fit to window"
+msgstr ""
+
+#: ImageViewerActivity.py:253
+msgid "Original size"
+msgstr ""
+
+#: ImageViewerActivity.py:259
+msgid "Fullscreen"
+msgstr ""
+
+#: ImageViewerActivity.py:269
+msgid "Rotate anticlockwise"
+msgstr ""
+
+#: ImageViewerActivity.py:276
+msgid "Rotate clockwise"
+msgstr ""
+
+#: ImageViewerActivity.py:287
+msgid "Previous Image"
+msgstr ""
+
+#: ImageViewerActivity.py:295
+msgid "Next Image"
+msgstr ""
+
+#: ImageViewerActivity.py:465
+msgid "Receiving image..."
+msgstr ""
+
+#: collabwrapper.py:176
+msgid "Joining activity..."
+msgstr ""
+
+#: collabwrapper.py:177 collabwrapper.py:189
+msgid "Please wait for the connection..."
+msgstr ""
+
+#: collabwrapper.py:188
+msgid "Resuming shared activity..."
+msgstr ""
