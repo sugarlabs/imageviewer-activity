@@ -18,7 +18,7 @@
 # The sharing bits have been taken from ReadEtexts
 
 
-from sugar3.activity import activity
+from sugar4.activity import activity
 import logging
 
 from gettext import gettext as _
@@ -29,19 +29,17 @@ from gi.repository import GLib
 from gi.repository import Gdk
 from gi.repository import Gtk
 
-from sugar3.graphics.alert import NotifyAlert
+from sugar4.graphics.alert import NotifyAlert
 
-from sugar3 import mime
-from sugar3.graphics.toolbutton import ToolButton
-from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.graphics.icon import Icon
-from sugar3.activity.widgets import ActivityToolbarButton
-from sugar3.activity.widgets import StopButton
-from sugar3.graphics import style
-from sugar3.graphics.alert import Alert
-from sugar3.datastore import datastore
-
-from gi.repository import SugarGestures
+from sugar4 import mime
+from sugar4.graphics.toolbutton import ToolButton
+from sugar4.graphics.toolbarbox import ToolbarBox
+from sugar4.graphics.icon import Icon
+from sugar4.activity.widgets import ActivityToolbarButton
+from sugar4.activity.widgets import StopButton
+from sugar4.graphics import style
+from sugar4.graphics.alert import Alert
+from sugar4.datastore import datastore
 
 import collabwrapper
 import ImageView
@@ -56,19 +54,14 @@ class ProgressAlert(Alert):
         Alert.__init__(self, **kwargs)
 
         self._pb = Gtk.ProgressBar()
-        self._msg_box.pack_start(self._pb, False, False, 0)
-        self._pb.set_size_request(int(Gdk.Screen.width() * 9. / 10.), -1)
+        self._pb.set_hexpand(True)
+        self._msg_box.append(self._pb)
         self._pb.set_fraction(0.0)
-        self._pb.show()
 
     def set_fraction(self, fraction):
         # update only by 10% fractions
         if int(fraction * 100) % 10 == 0:
             self._pb.set_fraction(fraction)
-            self._pb.queue_draw()
-            # force updating the progressbar
-            while Gtk.events_pending():
-                Gtk.main_iteration_do(True)
 
 
 class ImageViewerActivity(activity.Activity):
@@ -76,11 +69,18 @@ class ImageViewerActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
         self._object_id = handle.object_id
-        self._collab = collabwrapper.CollabWrapper(self)
-        self._collab.incoming_file.connect(self.__incoming_file_cb)
-        self._collab.buddy_joined.connect(self.__buddy_joined_cb)
-        self._collab.joined.connect(self.__joined_cb)
+
+        try:
+            self._collab = collabwrapper.CollabWrapper(self)
+            self._collab.incoming_file.connect(self.__incoming_file_cb)
+            self._collab.buddy_joined.connect(self.__buddy_joined_cb)
+            self._collab.joined.connect(self.__joined_cb)
+        except Exception as e:
+            logging.warning("CollabWrapper init failed (no Sugar session?): %s", e)
+            self._collab = None
+
         self._needs_file = False  # Set to true when we join
+        
 
         # Status of temp file used for write_file:
         self._tempfile = None
@@ -104,96 +104,119 @@ class ImageViewerActivity(activity.Activity):
         self.view = ImageView.ImageViewer()
 
         self._image_list = []
-        # Connect to the touch signal for performing drag-by-touch.
-        self.view.add_events(Gdk.EventMask.TOUCH_MASK)
-        self._touch_hid = self.view.connect('touch-event',
-                                            self.__touch_event_cb)
-        self.scrolled_window.add(self.view)
-        self.view.show()
+        
+        # 1. Touch/Drag Controller (replaces TOUCH_MASK)
+        drag_controller = Gtk.GestureDrag()
+        drag_controller.connect('drag-begin', self.__drag_begin_cb)
+        drag_controller.connect('drag-update', self.__drag_update_cb)
+        drag_controller.connect('drag-end', self.__drag_end_cb)
+        self.view.add_controller(drag_controller)
 
-        self.connect('key-press-event', self.__key_press_cb)
+        # 2. Keyboard Controller (replaces key-press-event)
+        key_controller = Gtk.EventControllerKey()
+        key_controller.connect('key-pressed', self.__key_pressed_cb)
+        self.add_controller(key_controller)
 
-        # Connect to the zoom signals for performing
-        # pinch-to-zoom.
-        zoom_controller = SugarGestures.ZoomController()
-        zoom_controller.attach(self, SugarGestures.EventControllerFlags.NONE)
+        # 3. Zoom Controller (replaces SugarGestures)
+        zoom_controller = Gtk.GestureZoom()
+        zoom_controller.connect('begin', self.__zoom_begin_cb)
+        zoom_controller.connect('scale-changed', self.__zoom_scale_changed_cb)
+        zoom_controller.connect('end', self.__zoom_end_cb)
+        self.view.add_controller(zoom_controller)
 
-        zoom_controller.connect('began', self.__zoomtouch_began_cb)
-        zoom_controller.connect('scale-changed', self.__zoomtouch_changed_cb)
-        zoom_controller.connect('ended', self.__zoomtouch_ended_cb)
+        self.scrolled_window.set_child(self.view)
 
         self._progress_alert = None
 
         toolbar_box = ToolbarBox()
         self._add_toolbar_buttons(toolbar_box)
         self.set_toolbar_box(toolbar_box)
-        toolbar_box.show()
 
         if self._object_id is None or not self._jobject.file_path:
             # start new, or resume empty
-            empty_widgets = Gtk.EventBox()
-            empty_widgets.modify_bg(Gtk.StateType.NORMAL,
-                                    style.COLOR_WHITE.get_gdk_color())
+            
+            empty_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            empty_widgets.add_css_class('imageviewer-empty')
+
+            css_provider = Gtk.CssProvider()
+            css_provider.load_from_data(
+                '.imageviewer-empty {{ background-color: {}; }}'.format(
+                    style.COLOR_WHITE.get_html()).encode())
+            Gtk.StyleContext.add_provider_for_display(
+                Gdk.Display.get_default(),
+                css_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            )
 
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             mvbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            vbox.pack_start(mvbox, True, False, 0)
+            
+            mvbox.set_spacing(style.DEFAULT_PADDING)
+            mvbox.set_vexpand(True)
+            mvbox.set_valign(Gtk.Align.CENTER)
+            mvbox.set_halign(Gtk.Align.CENTER)
+
+            vbox.append(mvbox)
 
             image_icon = Icon(pixel_size=style.LARGE_ICON_SIZE,
                               icon_name='imageviewer',
                               stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
                               fill_color=style.COLOR_TRANSPARENT.get_svg())
-            mvbox.pack_start(image_icon, False, False, style.DEFAULT_PADDING)
+            mvbox.append(image_icon)
 
-            label = Gtk.Label('<span foreground="%s"><b>%s</b></span>' %
+            label = Gtk.Label(label='<span foreground="%s"><b>%s</b></span>' %
                               (style.COLOR_BUTTON_GREY.get_html(),
                                _('No image')))
             label.set_use_markup(True)
-            mvbox.pack_start(label, False, False, style.DEFAULT_PADDING)
+            mvbox.append(label)
 
-            empty_widgets.add(vbox)
-            empty_widgets.show_all()
+            empty_widgets.append(vbox)
+            
             self.set_canvas(empty_widgets)
             self.busy()
             GLib.idle_add(self._get_image_list)
         else:
             # opening an image, or our journal object with image
             self.set_canvas(self.scrolled_window)
-            self.scrolled_window.show()
 
-        Gdk.Screen.get_default().connect('size-changed', self._configure_cb)
-        self._collab.setup()
+        self.connect('notify::default-width', self._configure_cb)
 
-    def __touch_event_cb(self, widget, event):
-        coords = event.get_coords()
-        if event.type == Gdk.EventType.TOUCH_BEGIN:
-            self.view.start_dragtouch(coords)
-        elif event.type == Gdk.EventType.TOUCH_UPDATE:
-            self.view.update_dragtouch(coords)
-        elif event.type == Gdk.EventType.TOUCH_END:
-            self.view.finish_dragtouch(coords)
+        if self._collab:
+            self._collab.setup()
 
-    def __zoomtouch_began_cb(self, controller):
-        self.view.start_zoomtouch(controller.get_center())
+    def __drag_begin_cb(self, controller, start_x, start_y):
+        self.view.start_dragtouch((start_x, start_y))
 
-        # Don't listen to touch signals until pinch-to-zoom ends.
-        self.view.disconnect(self._touch_hid)
+    def __drag_update_cb(self, controller, offset_x, offset_y):
+        success, start_x, start_y = controller.get_start_point()
+        if success:
+            self.view.update_dragtouch((start_x + offset_x, start_y + offset_y))
 
-    def __zoomtouch_changed_cb(self, controller, scale):
-        self.view.update_zoomtouch(controller.get_center(), scale)
+    def __drag_end_cb(self, controller, offset_x, offset_y):
+        success, start_x, start_y = controller.get_start_point()
+        if success:
+            self.view.finish_dragtouch((start_x + offset_x, start_y + offset_y))
 
-    def __zoomtouch_ended_cb(self, controller):
+    def __zoom_begin_cb(self, controller, sequence):
+        success, x, y = controller.get_bounding_box_center()
+        if success:
+            self.view.start_zoomtouch((x, y))
+
+    def __zoom_scale_changed_cb(self, controller, scale):
+        success, x, y = controller.get_bounding_box_center()
+        if success:
+            self.view.update_zoomtouch((x, y), scale)
+
+    def __zoom_end_cb(self, controller, sequence):
         self.view.finish_zoomtouch()
-        self._touch_hid = self.view.connect('touch-event',
-                                            self.__touch_event_cb)
 
-    def __key_press_cb(self, widget, event):
-        key_name = Gdk.keyval_name(event.keyval)
+    def __key_pressed_cb(self, controller, keyval, keycode, state):
+        key_name = Gdk.keyval_name(keyval)
         if key_name == "Left":
             self._change_image(-1)
         elif key_name == "Right":
             self._change_image(1)
-        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+        elif state & Gdk.ModifierType.CONTROL_MASK:
             if key_name == "q":
                 self.close()
         return True
@@ -201,8 +224,12 @@ class ImageViewerActivity(activity.Activity):
     def _get_image_list(self):
         value = mime.GENERIC_TYPE_IMAGE
         mime_types = mime.get_generic_type(value).mime_types
-        (self.image_list, self.image_count) = datastore.find({'mime_type':
-                                                             mime_types})
+        try:
+            (self.image_list, self.image_count) = datastore.find({'mime_type':mime_types})
+        except Exception as e:
+            print("Warning: Could not connect to Datastore to fetch images: %s" % e)
+            self.image_list, self.image_count = [], 0
+            
         self.unbusy()
 
         if self.image_count == 0:
@@ -222,7 +249,6 @@ class ImageViewerActivity(activity.Activity):
         self.traverse_update_sensitive()
 
         self.set_canvas(self.scrolled_window)
-        self.scrolled_window.show()
 
         return False
 
@@ -231,69 +257,60 @@ class ImageViewerActivity(activity.Activity):
         self._image_buttons = []
 
         self.activity_button = ActivityToolbarButton(self)
-        toolbar_box.toolbar.insert(self.activity_button, 0)
-        self.activity_button.show()
+        toolbar_box.toolbar.prepend(self.activity_button)
 
         self._zoom_out_button = ToolButton('zoom-out')
         self._zoom_out_button.set_tooltip(_('Zoom out'))
         self._image_buttons.append(self._zoom_out_button)
         self._zoom_out_button.connect('clicked', self.__zoom_out_cb)
-        toolbar_box.toolbar.insert(self._zoom_out_button, -1)
-        self._zoom_out_button.show()
+        toolbar_box.toolbar.append(self._zoom_out_button)
 
         self._zoom_in_button = ToolButton('zoom-in')
         self._zoom_in_button.set_tooltip(_('Zoom in'))
         self._image_buttons.append(self._zoom_in_button)
         self._zoom_in_button.connect('clicked', self.__zoom_in_cb)
-        toolbar_box.toolbar.insert(self._zoom_in_button, -1)
-        self._zoom_in_button.show()
+        toolbar_box.toolbar.append(self._zoom_in_button)
 
         zoom_tofit_button = ToolButton('zoom-best-fit')
         zoom_tofit_button.set_tooltip(_('Fit to window'))
         self._image_buttons.append(zoom_tofit_button)
         zoom_tofit_button.connect('clicked', self.__zoom_tofit_cb)
-        toolbar_box.toolbar.insert(zoom_tofit_button, -1)
-        zoom_tofit_button.show()
+        toolbar_box.toolbar.append(zoom_tofit_button)
 
         zoom_original_button = ToolButton('zoom-original')
         zoom_original_button.set_tooltip(_('Original size'))
         self._image_buttons.append(zoom_original_button)
         zoom_original_button.connect('clicked', self.__zoom_original_cb)
-        toolbar_box.toolbar.insert(zoom_original_button, -1)
-        zoom_original_button.show()
+        toolbar_box.toolbar.append(zoom_original_button)
 
         fullscreen_button = ToolButton('view-fullscreen')
         fullscreen_button.set_tooltip(_('Fullscreen'))
         self._image_buttons.append(fullscreen_button)
         fullscreen_button.connect('clicked', self.__fullscreen_cb)
-        toolbar_box.toolbar.insert(fullscreen_button, -1)
-        fullscreen_button.show()
-
-        self._seps.append(Gtk.SeparatorToolItem())
-        toolbar_box.toolbar.insert(self._seps[-1], -1)
-        self._seps[-1].show()
+        toolbar_box.toolbar.append(fullscreen_button)
+        
+        self._seps.append(Gtk.Separator())
+        toolbar_box.toolbar.append(self._seps[-1])
 
         rotate_anticlockwise_button = ToolButton('rotate_anticlockwise')
         rotate_anticlockwise_button.set_tooltip(_('Rotate anticlockwise'))
         self._image_buttons.append(rotate_anticlockwise_button)
         rotate_anticlockwise_button.connect('clicked',
                                             self.__rotate_anticlockwise_cb)
-        toolbar_box.toolbar.insert(rotate_anticlockwise_button, -1)
-        rotate_anticlockwise_button.show()
+        toolbar_box.toolbar.append(rotate_anticlockwise_button)
 
         rotate_clockwise_button = ToolButton('rotate_clockwise')
         rotate_clockwise_button.set_tooltip(_('Rotate clockwise'))
         self._image_buttons.append(rotate_clockwise_button)
         rotate_clockwise_button.connect('clicked', self.__rotate_clockwise_cb)
-        toolbar_box.toolbar.insert(rotate_clockwise_button, -1)
-        rotate_clockwise_button.show()
+        toolbar_box.toolbar.append(rotate_clockwise_button)
 
         self.list_set_sensitive(self._image_buttons, False)
 
         self._traverse_widgets = []
-        separator = Gtk.SeparatorToolItem()
+        separator = Gtk.Separator()
         self._seps.append(separator)
-        toolbar_box.toolbar.insert(separator, -1)
+        toolbar_box.toolbar.append(separator)
         self._traverse_widgets.append(separator)
 
         self.previous_image_button = ToolButton('go-previous-paired')
@@ -301,30 +318,27 @@ class ImageViewerActivity(activity.Activity):
         self.previous_image_button.props.sensitive = False
         self.previous_image_button.connect('clicked',
                                            self.__previous_image_cb)
-        toolbar_box.toolbar.insert(self.previous_image_button, -1)
+        toolbar_box.toolbar.append(self.previous_image_button)
         self._traverse_widgets.append(self.previous_image_button)
 
         self.next_image_button = ToolButton('go-next-paired')
         self.next_image_button.set_tooltip(_('Next Image'))
         self.next_image_button.props.sensitive = False
         self.next_image_button.connect('clicked', self.__next_image_cb)
-        toolbar_box.toolbar.insert(self.next_image_button, -1)
+        toolbar_box.toolbar.append(self.next_image_button)
         self._traverse_widgets.append(self.next_image_button)
 
         self.list_set_visible(self._traverse_widgets, False)
-
-        separator = Gtk.SeparatorToolItem()
-        separator.props.draw = False
-        separator.set_expand(True)
-        toolbar_box.toolbar.insert(separator, -1)
-        separator.show()
+        
+        separator = Gtk.Box()
+        separator.set_hexpand(True)
+        toolbar_box.toolbar.append(separator)
 
         stop_button = StopButton(self)
-        toolbar_box.toolbar.insert(stop_button, -1)
-        stop_button.show()
+        toolbar_box.toolbar.append(stop_button)
 
-    def _configure_cb(self, event=None):
-        if Gdk.Screen.width() <= style.GRID_CELL_SIZE * 12:
+    def _configure_cb(self, widget=None, pspec=None):
+        if self.get_width() <= style.GRID_CELL_SIZE * 12:
             self.list_set_visible(self._seps, False)
         else:
             self.list_set_visible(self._seps, True)
@@ -503,7 +517,7 @@ class ImageViewerActivity(activity.Activity):
         except Exception:
             pass
         self.set_canvas(self.scrolled_window)
-        self.scrolled_window.show_all()
+        self.scrolled_window.set_visible(True)
         self.list_set_sensitive(self._image_buttons, True)
         return False
 
@@ -530,7 +544,6 @@ class ImageViewerActivity(activity.Activity):
         alert.props.msg = text
         self.add_alert(alert)
         alert.connect('response', self._alert_cancel_cb)
-        alert.show()
 
     def _alert_cancel_cb(self, alert, response_id):
         self.remove_alert(alert)

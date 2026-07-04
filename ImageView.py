@@ -29,7 +29,7 @@ ZOOM_MAX = 10
 ZOOM_MIN = 0.05
 
 
-def _surface_from_file(file_location, ctx):
+def _surface_from_file(file_location):
     pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_location)
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                  pixbuf.get_width(), pixbuf.get_height())
@@ -96,8 +96,8 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._vadj = None
         self._hadj_value_changed_hid = None
         self._vadj_value_changed_hid = None
-
-        self.connect('draw', self.__draw_cb)
+        
+        self.set_draw_func(self.__draw_cb)
 
     def set_file_location(self, file_location):
         self._surface = None
@@ -263,11 +263,9 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
 
     def can_zoom_in(self):
         return self._zoom + ZOOM_STEP < ZOOM_MAX
-        self._update_adjustments()
 
     def can_zoom_out(self):
         return self._zoom - ZOOM_STEP > ZOOM_MIN
-        self._update_adjustments()
 
     def zoom_in(self):
         if not self.can_zoom_in():
@@ -336,7 +334,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         prev_target_point = self._target_point
 
         # Set target point to the relative coordinates of this view.
-        self._target_point = (coords[1], coords[2])
+        self._target_point = (coords[0], coords[1])
 
         self._move_anchor_to_target(prev_target_point)
         self.queue_draw()
@@ -351,7 +349,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
             self.start_dragtouch(coords)
             return
 
-        self._target_point = (coords[1], coords[2])
+        self._target_point = (coords[0], coords[1])
         self._update_adjustments()
         self.queue_draw()
 
@@ -371,7 +369,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
 
         # Set target point to the relative coordinates of this view.
         alloc = self.get_allocation()
-        self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
+        self._target_point = (center[0] - alloc.x, center[1] - alloc.y)
 
         self._move_anchor_to_target(prev_target_point)
         self.queue_draw()
@@ -381,7 +379,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
 
         # Set target point to the relative coordinates of this view.
         alloc = self.get_allocation()
-        self._target_point = (center[1] - alloc.x, center[2] - alloc.y)
+        self._target_point = (center[0] - alloc.x, center[1] - alloc.y)
 
         self.queue_draw()
 
@@ -426,7 +424,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         self._update_adjustments()
         self.queue_draw()
 
-    def __draw_cb(self, widget, ctx):
+    def __draw_cb(self, area, cr, width, height, user_data=None):
 
         # If the image surface is not set, it reads it from the file
         # location.  If the file location is not set yet, it just
@@ -434,7 +432,7 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
         if self._surface is None:
             if self._file_location is None:
                 return
-            self._surface = _surface_from_file(self._file_location, ctx)
+            self._surface = _surface_from_file(self._file_location)
 
         if self._zoom is None:
             self.zoom_to_fit()
@@ -450,17 +448,17 @@ class ImageViewer(Gtk.DrawingArea, Gtk.Scrollable):
             self._center_anchor_point()
             self._update_adjustments()
 
-        ctx.translate(*self._target_point)
+        cr.translate(*self._target_point)
         zoom_absolute = self._zoom * self._zoomtouch_scale
-        ctx.scale(zoom_absolute, zoom_absolute)
+        cr.scale(zoom_absolute, zoom_absolute)
 
-        ctx.translate(self._anchor_point[0] * -1, self._anchor_point[1] * -1)
+        cr.translate(self._anchor_point[0] * -1, self._anchor_point[1] * -1)
 
-        ctx.set_source_surface(self._surface, 0, 0)
+        cr.set_source_surface(self._surface, 0, 0)
 
         # Perform faster draw if the view is zooming or scrolling via
         # mouse or touch.
         if self._in_zoomtouch or self._in_dragtouch or self._in_scrolling:
-            ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+            cr.get_source().set_filter(cairo.FILTER_NEAREST)
 
-        ctx.paint()
+        cr.paint()
